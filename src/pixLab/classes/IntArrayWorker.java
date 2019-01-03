@@ -107,6 +107,7 @@ public class IntArrayWorker
 	public int getCount(int searchFor)
 	{
 		int countTotal = 0;
+		/*
 		for (int row = 0; row < matrix.length; row++)
 		{
 			for(int cols = 0; cols < matrix [0].length; cols++)
@@ -117,7 +118,17 @@ public class IntArrayWorker
 				}
 			}
 		}
-		
+		*/
+		for(int [] row : matrix)
+		{
+			for(int item : row)
+			{
+				if(item == searchFor)
+				{
+					countTotal++;
+				}
+			}
+		}
 		return countTotal;
 	}
 	
