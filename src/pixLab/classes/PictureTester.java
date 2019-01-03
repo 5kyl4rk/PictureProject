@@ -12,7 +12,7 @@ public class PictureTester
   /** Method to test zeroBlue */
   public static void testZeroBlue()
   {
-    Picture beach = new Picture("beach.jpg");
+    Picture beach = new Picture("synthDuck.png");
     beach.explore();
     beach.zeroBlue();
     beach.explore();
@@ -36,7 +36,7 @@ public class PictureTester
   /** Method to test mirrorVertical */
   public static void testMirrorVertical()
   {
-    Picture image = new Picture("kirbo.png");
+    Picture image = new Picture("synthDuck.png");
     image.explore();
     image.mirrorVertical();
     image.explore();
@@ -45,7 +45,7 @@ public class PictureTester
   /** Method to test reverseMirrorVertical */
   public static void testReverseMirrorVertical()
   {
-	  Picture image = new Picture("kirbo.png");
+	  Picture image = new Picture("synthDuck.png");
 	  image.explore();
 	  image.reverseMirrorVertical();
 	  image.explore();
@@ -82,17 +82,17 @@ public class PictureTester
     // uncomment a call here to run a test
     // and comment out the ones you don't want
     // to run
-    testZeroBlue();
+    //testZeroBlue();
     testZeroRed();
-    testZeroGreen();
+    //testZeroGreen();
     //testKeepOnlyBlue();
     //testKeepOnlyRed();
     //testKeepOnlyGreen();
     //testNegate();
     //testGrayscale();
     //testFixUnderwater();
-    testMirrorVertical();
-    testReverseMirrorVertical();
+    //testMirrorVertical();
+    //testReverseMirrorVertical();
     //testMirrorTemple();
     //testMirrorArms();
     //testMirrorGull();

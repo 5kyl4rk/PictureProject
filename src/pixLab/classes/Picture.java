@@ -106,6 +106,8 @@ public class Picture extends SimplePicture
 	  {
 		  for(int col = 0; col < pixels[0].length; col++)
 		  {
+			  //int randomRow = (int)(Math.random() * pixels.length);
+			  //int randomCol = (int)(Math.random() * pixels[0].length);
 			  Pixel currentValue = pixels[row][col];
 			  currentValue.setRed(0);
 		  }
