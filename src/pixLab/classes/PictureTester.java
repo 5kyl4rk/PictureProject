@@ -67,6 +67,14 @@ public class PictureTester
     temple.explore();
   }
   
+  public static void testMirrorGull()
+  {
+	  Picture gull = new Picture("seagull.jpg");
+	  gull.explore();
+	  gull.mirrorGull();
+	  gull.explore();
+  }
+  
   /** Method to test the collage method */
   public static void testCollage()
   {
@@ -91,7 +99,7 @@ public class PictureTester
     // and comment out the ones you don't want
     // to run
     //testZeroBlue();
-    testZeroRed();
+    //testZeroRed();
     //testZeroGreen();
     //testKeepOnlyBlue();
     //testKeepOnlyRed();
@@ -104,7 +112,7 @@ public class PictureTester
     //testReverseMirrorVertical();
     //testMirrorTemple();
     //testMirrorArms();
-    //testMirrorGull();
+    testMirrorGull();
     //testMirrorDiagonal();
     //testCollage();
     //testCopy();
