@@ -42,6 +42,14 @@ public class PictureTester
     image.explore();
   }
   
+  public static void testMirrorHorizontal()
+  {
+	  Picture image = new Picture("snowman.jpg");
+	  image.explore();
+	  image.mirrorHorizontal();
+	  image.explore();
+  }
+  
   /** Method to test reverseMirrorVertical */
   public static void testReverseMirrorVertical()
   {
@@ -92,6 +100,7 @@ public class PictureTester
     //testGrayscale();
     //testFixUnderwater();
     //testMirrorVertical();
+    //testMirrorHorizontal();
     //testReverseMirrorVertical();
     //testMirrorTemple();
     //testMirrorArms();
