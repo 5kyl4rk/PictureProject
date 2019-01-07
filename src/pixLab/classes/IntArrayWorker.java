@@ -134,12 +134,13 @@ public class IntArrayWorker
 	
 	public int getLargest()
 	{
-		int largest = 0;
+		int largest = Integer.MIN_VALUE;
 		for(int row = 0; row < matrix.length; row++)
 		{
 			for(int cols = 0; cols < matrix[0].length; cols++)
 			{
 				int currentElement = matrix[row][cols];
+				
 				if(currentElement > largest)
 				{
 					largest = currentElement;
@@ -153,9 +154,9 @@ public class IntArrayWorker
 	{
 		int colTotal = 0;
 		
-		for(int index = 0; index < matrix.length; index++)
+		for(int row = 0; row < matrix.length; row++)
 		{
-			colTotal += matrix[index][col];
+			colTotal += matrix[row][col];
 		}
 		
 		return colTotal;
