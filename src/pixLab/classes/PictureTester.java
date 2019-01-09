@@ -7,12 +7,15 @@ package pixLab.classes;
  * 
  * @author Barbara Ericson 
  */
+
+import java.awt.Color;
+
 public class PictureTester
 {
   /** Method to test zeroBlue */
   public static void testZeroBlue()
   {
-    Picture beach = new Picture("synthDuck.png");
+    Picture beach = new Picture("kirbo.png");
     beach.explore();
     beach.zeroBlue();
     beach.explore();
@@ -20,7 +23,7 @@ public class PictureTester
   
   public static void testZeroRed()
   {
-	  Picture beach = new Picture("beach.jpg");
+	  Picture beach = new Picture("kirbo.png");
 	  beach.explore();
 	  beach.zeroRed();
 	  beach.explore();
@@ -32,6 +35,25 @@ public class PictureTester
 	  beach.explore();
 	  beach.zeroGreen();
 	  beach.explore();
+  }
+  
+  public static void testGlitch()
+  {
+	  Picture image = new Picture("beach.jpg");
+	  image.explore();
+	  image.glitch();
+	  image.explore();
+  }
+  
+  public static void testChromakey()
+  {
+	  Picture source = new Picture("kirbo.png");
+	  Picture background = new Picture("megalomania.png");
+	  
+	  source.explore();
+	  background.explore();
+	  source.chromakey(background, Color.WHITE);
+	  source.explore();
   }
   /** Method to test mirrorVertical */
   public static void testMirrorVertical()
@@ -101,6 +123,8 @@ public class PictureTester
     //testZeroBlue();
     //testZeroRed();
     //testZeroGreen();
+    testGlitch();
+    testChromakey();
     //testKeepOnlyBlue();
     //testKeepOnlyRed();
     //testKeepOnlyGreen();
@@ -112,7 +136,7 @@ public class PictureTester
     //testReverseMirrorVertical();
     //testMirrorTemple();
     //testMirrorArms();
-    testMirrorGull();
+    //testMirrorGull();
     //testMirrorDiagonal();
     //testCollage();
     //testCopy();

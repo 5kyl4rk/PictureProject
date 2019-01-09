@@ -118,10 +118,48 @@ public class Picture extends SimplePicture
 				// int randomCol = (int)(Math.random() * pixels[0].length);
 				Pixel currentValue = pixels[row][col];
 				currentValue.setRed(0);
+				currentValue.setAlpha(0);
+				currentValue = pixels[row][col];
 			}
 		}
 	}
 
+	public void glitch()
+	{
+		int RED = 0;
+		int GREEN = 1;
+		int BLUE = 2;
+		int pickColor = (int)(Math.random() * 3);
+		
+		Pixel[][] layer1 = /*new Picture(this).*/ this.getPixels2D();
+		
+		
+		for (Pixel[] rowArray: layer1)
+		{
+			for(Pixel pixelObj : rowArray)
+			{
+				if(pickColor == RED)
+				{
+				pixelObj.setGreen(0);
+				pixelObj.setBlue(0);
+				}
+				
+				if(pickColor == GREEN)
+				{
+				pixelObj.setRed(0);
+				pixelObj.setBlue(0);
+				}
+				
+				if(pickColor == BLUE)
+				{
+				pixelObj.setRed(0);
+				pixelObj.setGreen(0);
+				}
+				
+			}
+		}
+		
+	}
 	public void zeroGreen()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -312,6 +350,24 @@ public class Picture extends SimplePicture
 				else
 					leftPixel.setColor(Color.WHITE);
 			}
+		}
+	}
+	
+	public void chromakey(Picture replacement, Color changeColor)
+	{
+		Pixel [][] mainPixels = this.getPixels2D();
+		Pixel [][] replacementPixels = replacement.getPixels2D();
+		
+		for (int row = 0 ; row < mainPixels.length; row++)
+		{
+			for(int col = 0; col < mainPixels[0].length; col++)
+			{
+				if(mainPixels[row][col].colorDistance(changeColor) < 0)
+				{
+					mainPixels[row][col].setColor(replacementPixels[row][col].getColor());
+				}
+			}
+			
 		}
 	}
 
