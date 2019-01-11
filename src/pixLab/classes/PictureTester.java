@@ -49,7 +49,7 @@ public class PictureTester
   {
 	  Picture image = new Picture("eye.png");
 	  image.explore();
-	  image.shiftLeftRight(100);
+	  image.shiftLeftRight(-120);
 	  image.explore();
   }
   
@@ -57,7 +57,7 @@ public class PictureTester
   {
 	  Picture image = new Picture("eye.png");
 	  image.explore();
-	  image.shiftUpDown(50);
+	  image.shiftUpDown(-50);
 	  image.explore();
   }
   public static void testChromakey()
