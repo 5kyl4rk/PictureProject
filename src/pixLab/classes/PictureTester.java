@@ -39,12 +39,27 @@ public class PictureTester
   
   public static void testGlitch()
   {
-	  Picture image = new Picture("beach.jpg");
+	  Picture image = new Picture("squidward.jpg");
 	  image.explore();
 	  image.glitch();
 	  image.explore();
   }
   
+  public static void testShiftLeftRight()
+  {
+	  Picture image = new Picture("eye.png");
+	  image.explore();
+	  image.shiftLeftRight(100);
+	  image.explore();
+  }
+  
+  public static void testShiftUpDown()
+  {
+	  Picture image = new Picture("eye.png");
+	  image.explore();
+	  image.shiftUpDown(50);
+	  image.explore();
+  }
   public static void testChromakey()
   {
 	  Picture source = new Picture("kirbo.png");
@@ -124,7 +139,9 @@ public class PictureTester
     //testZeroRed();
     //testZeroGreen();
     testGlitch();
-    testChromakey();
+    testShiftLeftRight();
+    testShiftUpDown();
+    //testChromakey();
     //testKeepOnlyBlue();
     //testKeepOnlyRed();
     //testKeepOnlyGreen();
