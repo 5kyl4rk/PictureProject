@@ -139,8 +139,8 @@ public class PictureTester
     //testZeroRed();
     //testZeroGreen();
     testGlitch();
-    testShiftLeftRight();
-    testShiftUpDown();
+    //testShiftLeftRight();
+    //testShiftUpDown();
     //testChromakey();
     //testKeepOnlyBlue();
     //testKeepOnlyRed();

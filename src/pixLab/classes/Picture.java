@@ -129,7 +129,7 @@ public class Picture extends SimplePicture
 		int RED = 0;
 		int GREEN = 1;
 		int BLUE = 2;
-		int pickColor = (int)(Math.random() * 3);
+		int pickColor = (int)((Math.random() * 100) % 3);
 		
 		Pixel[][] pixels = this.getPixels2D();
 		Picture layer1Temp = new Picture(this);
@@ -165,12 +165,18 @@ public class Picture extends SimplePicture
 			}
 		}
 		
+		layer2Temp.shiftLeftRight(400);
 		for (int row = 0; row < pixels.length; row++)
 		{
 			for(int col = 0; col < pixels[0].length; col++)
 			{
-				int mergeRed = layer1[row][col].getRed();
+				int mergeRed = layer1[row][col].getRed() + layer2[row][col].getRed();
+				int mergeGreen = layer1[row][col].getGreen() + layer2[row][col].getGreen();
+				int mergeBlue = layer1[row][col].getBlue() + layer2[row][col].getBlue();
 				
+				pixels[row][col].setRed(mergeRed);
+				pixels[row][col].setGreen(mergeGreen);
+				pixels[row][col].setBlue(mergeBlue);
 			}
 		}
 		
