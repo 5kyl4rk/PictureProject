@@ -39,7 +39,7 @@ public class PictureTester
   
   public static void testGlitch()
   {
-	  Picture image = new Picture("squidward.jpg");
+	  Picture image = new Picture("kirbo.png");
 	  image.explore();
 	  image.glitch();
 	  image.explore();

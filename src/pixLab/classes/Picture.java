@@ -126,78 +126,92 @@ public class Picture extends SimplePicture
 
 	public void glitch()
 	{
-		int RED = 0;
-		int GREEN = 1;
-		int BLUE = 2;
-		int pickColor = (int)((Math.random() * 100) % 3);
-		
+		final int RED = 0;
+		final int GREEN = 1;
+		final int BLUE = 2;
+		int pickColor = (int) ((Math.random() * 100) % 3);
+
 		Pixel[][] pixels = this.getPixels2D();
 		Picture layer1Temp = new Picture(this);
 		Picture layer2Temp = new Picture(this);
 		Pixel[][] layer1 = layer1Temp.getPixels2D();
 		Pixel[][] layer2 = layer2Temp.getPixels2D();
-		
-		
+
 		for (int row = 0; row < pixels.length; row++)
 		{
-			for(int col = 0; col < pixels[0].length; col++)
+			for (int col = 0; col < pixels[0].length; col++)
 			{
-				if(pickColor == RED)
+				if (pickColor == RED)
 				{
-				layer2[row][col].setRed(0);
-				layer1[row][col].setGreen(0);
-				layer1[row][col].setBlue(0);
+					layer2[row][col].setRed(0);
+					layer1[row][col].setGreen(0);
+					layer1[row][col].setBlue(0);
 				}
-				
-				if(pickColor == GREEN)
+
+				if (pickColor == GREEN)
 				{
-				layer1[row][col].setRed(0);
-				layer2[row][col].setGreen(0);
-				layer1[row][col].setBlue(0);
+					layer1[row][col].setRed(0);
+					layer2[row][col].setGreen(0);
+					layer1[row][col].setBlue(0);
 				}
-				
-				if(pickColor == BLUE)
+
+				if (pickColor == BLUE)
 				{
-				layer1[row][col].setRed(0);
-				layer1[row][col].setGreen(0);
-				layer2[row][col].setBlue(0);
+					layer1[row][col].setRed(0);
+					layer1[row][col].setGreen(0);
+					layer2[row][col].setBlue(0);
 				}
 			}
 		}
-		
-		layer2Temp.shiftLeftRight(400);
+
+		layer2Temp.shiftLeftRight((int) ((Math.random() * layer2.length) / 4));
 		for (int row = 0; row < pixels.length; row++)
 		{
-			for(int col = 0; col < pixels[0].length; col++)
+			for (int col = 0; col < pixels[0].length; col++)
 			{
 				int mergeRed = layer1[row][col].getRed() + layer2[row][col].getRed();
 				int mergeGreen = layer1[row][col].getGreen() + layer2[row][col].getGreen();
 				int mergeBlue = layer1[row][col].getBlue() + layer2[row][col].getBlue();
-				
+
 				pixels[row][col].setRed(mergeRed);
 				pixels[row][col].setGreen(mergeGreen);
 				pixels[row][col].setBlue(mergeBlue);
 			}
 		}
-		
-		
-		
-		
-		
 	}
-	
+
+	public void scanlines()
+	{
+		Pixel[][] pixels = this.getPixels2D();
+
+		for (int row = 0; row < pixels.length; row +=4)
+		{
+			for (int col = 0; col < pixels[0].length; col++)
+			{
+				if (row % 3 != 0)
+				{
+					pixels[row][col].setRed(0);
+					pixels[row][col].setBlue(0);
+					pixels[row][col].setGreen(0);
+				}
+			}
+
+		}
+
+	}
+
 	public void shiftLeftRight(int amount)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		Picture temp = new Picture(this);
-		Pixel [][] copied = temp.getPixels2D();
-		
+		Pixel[][] copied = temp.getPixels2D();
+
 		int shiftedValue = amount;
 		int width = pixels[0].length;
-		
-		for(int row = 0; row < pixels.length; row++)
+
+		for (int row = 0; row < pixels.length; row++)
 		{
-			for( int col = 0; col < pixels[0].length; col++)
+			for (int col = 0; col < pixels[0].length; col++)
 			{
 				shiftedValue = (col + amount) % width;
 				if (amount < 0)
@@ -205,47 +219,48 @@ public class Picture extends SimplePicture
 					shiftedValue = ((col + amount) % width + width) % width;
 				}
 				copied[row][col].setColor(pixels[row][shiftedValue].getColor());
-				
+
 			}
 		}
-		for (int row = 0; row< pixels.length; row++)
+		for (int row = 0; row < pixels.length; row++)
 		{
-			for (int col= 0; col < pixels[0].length; col++)
+			for (int col = 0; col < pixels[0].length; col++)
 			{
 				pixels[row][col].setColor(copied[row][col].getColor());
 			}
 		}
 	}
-	
+
 	public void shiftUpDown(int amount)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		Picture temp = new Picture(this);
-		Pixel [][] copied = temp.getPixels2D();
-		
+		Pixel[][] copied = temp.getPixels2D();
+
 		int shiftedValue = amount;
 		int height = pixels.length;
-		
+
 		for (int row = 0; row < pixels.length; row++)
 		{
-			for(int col = 0; col < pixels[0].length; col++)
+			for (int col = 0; col < pixels[0].length; col++)
 			{
 				shiftedValue = (row + amount) % height;
 				if (amount < 0)
 				{
 					shiftedValue = ((row + amount) % height + height) % height;
 				}
-				copied [row][col].setColor(pixels[shiftedValue][col].getColor());
+				copied[row][col].setColor(pixels[shiftedValue][col].getColor());
 			}
 		}
-		for(int row = 0; row< pixels.length; row++)
+		for (int row = 0; row < pixels.length; row++)
 		{
-			for(int col = 0; col < pixels[0].length; col++)
+			for (int col = 0; col < pixels[0].length; col++)
 			{
 				pixels[row][col].setColor(copied[row][col].getColor());
 			}
 		}
 	}
+
 	public void zeroGreen()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -338,7 +353,7 @@ public class Picture extends SimplePicture
 				}
 				birdCol = birdTemp;
 			}
-			
+
 			birdCount++;
 		}
 
@@ -438,22 +453,22 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-	
+
 	public void chromakey(Picture replacement, Color changeColor)
 	{
-		Pixel [][] mainPixels = this.getPixels2D();
-		Pixel [][] replacementPixels = replacement.getPixels2D();
-		
-		for (int row = 0 ; row < mainPixels.length; row++)
+		Pixel[][] mainPixels = this.getPixels2D();
+		Pixel[][] replacementPixels = replacement.getPixels2D();
+
+		for (int row = 0; row < mainPixels.length; row++)
 		{
-			for(int col = 0; col < mainPixels[0].length; col++)
+			for (int col = 0; col < mainPixels[0].length; col++)
 			{
-				if(mainPixels[row][col].colorDistance(changeColor) < 0)
+				if (mainPixels[row][col].colorDistance(changeColor) < 0)
 				{
 					mainPixels[row][col].setColor(replacementPixels[row][col].getColor());
 				}
 			}
-			
+
 		}
 	}
 
@@ -464,7 +479,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.zeroBlue();
+		beach.scanlines();
 		beach.explore();
 	}
 
