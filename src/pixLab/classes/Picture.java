@@ -195,11 +195,11 @@ public class Picture extends SimplePicture
 		
 		spread--;
 		thickness++;
-		for (int row = 0; row < pixels.length; row ++)
+		for (int row = 1; row < pixels.length; row ++)
 		{
 			for (int col = 0; col < pixels[0].length; col++)
 			{
-				if (row % thickness > 0)
+				if (row % (thickness + spread) > spread)
 				{
 					pixels[row][col].setRed(0);
 					pixels[row][col].setBlue(0);
@@ -493,7 +493,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.scanlines(2,5);
+		beach.scanlines(3,1);
 		beach.explore();
 	}
 
