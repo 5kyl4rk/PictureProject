@@ -118,7 +118,6 @@ public class Picture extends SimplePicture
 				// int randomCol = (int)(Math.random() * pixels[0].length);
 				Pixel currentValue = pixels[row][col];
 				currentValue.setRed(0);
-				currentValue.setAlpha(0);
 				currentValue = pixels[row][col];
 			}
 		}
@@ -286,21 +285,23 @@ public class Picture extends SimplePicture
 		this.verticalScanlines(spread, thickness, shading);
 	}
 	
-	public void make3D(int RGB)
+	public void make3D(int baseColor)
 	{
-		make3D(RGB, pickRandomNumber(true, 10));
+		make3D(baseColor, pickRandomNumber(true, 10));
 	}
 
-	public void make3D(int RGB, int shift)
+	public void make3D(int baseColor, int shift)
 	{
 		final int RED = 0;
 		final int GREEN = 1;
 		final int BLUE = 2;
-		int pickColor = RGB; 
+		final int CYAN = 3;
+		final int MAGENTA = 4;
+		final int YELLOW = 5; 
 		
-		if(RGB > 2 || RGB < 0)
+		if(baseColor > 5 || baseColor < 0)
 		{
-			pickColor = (int) ((Math.random() * 100) % 3);
+			baseColor = (int) ((Math.random() * 100) % 6);
 		}
 		Pixel[][] pixels = this.getPixels2D();
 		Picture layer1Temp = new Picture(this);
@@ -312,26 +313,46 @@ public class Picture extends SimplePicture
 		{
 			for (int col = 0; col < pixels[0].length; col++)
 			{
-				if (pickColor == RED)
+				if (baseColor == RED)
 				{
 					layer2[row][col].setRed(0);
 					layer1[row][col].setGreen(0);
 					layer1[row][col].setBlue(0);
 				}
 
-				if (pickColor == GREEN)
+				else if (baseColor == GREEN)
 				{
 					layer1[row][col].setRed(0);
 					layer2[row][col].setGreen(0);
 					layer1[row][col].setBlue(0);
 				}
 
-				if (pickColor == BLUE)
+				else if (baseColor == BLUE)
 				{
 					layer1[row][col].setRed(0);
 					layer1[row][col].setGreen(0);
 					layer2[row][col].setBlue(0);
 				}
+				else if (baseColor == CYAN)
+				{
+					layer1[row][col].setRed(0);
+					layer2[row][col].setGreen(0);
+					layer2[row][col].setBlue(0);
+				}
+
+				else if (baseColor == MAGENTA)
+				{
+					layer2[row][col].setRed(0);
+					layer1[row][col].setGreen(0);
+					layer2[row][col].setBlue(0);
+				}
+				else if (baseColor == YELLOW)
+				{
+					layer2[row][col].setRed(0);
+					layer2[row][col].setGreen(0);
+					layer1[row][col].setBlue(0);
+				}
+				
 			}
 		}
 
