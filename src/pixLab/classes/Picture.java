@@ -192,14 +192,11 @@ public class Picture extends SimplePicture
 		{
 			spread = this.getHeight();
 		}
-		
-		spread--;
-		thickness++;
 		for (int row = 1; row < pixels.length; row ++)
 		{
 			for (int col = 0; col < pixels[0].length; col++)
 			{
-				if (row % (thickness + spread) > spread)
+				if (row % (thickness + spread) >= spread)
 				{
 					pixels[row][col].setRed(0);
 					pixels[row][col].setBlue(0);
@@ -227,11 +224,8 @@ public class Picture extends SimplePicture
 		{
 			for (int col = 0; col < pixels[0].length; col++)
 			{
-				shiftedValue = (col + amount) % width;
-				if (amount < 0)
-				{
-					shiftedValue = ((col + amount) % width + width) % width;
-				}
+				shiftedValue = (col + (amount + width)) % width;
+				
 				copied[row][col].setColor(pixels[row][shiftedValue].getColor());
 
 			}
@@ -258,11 +252,8 @@ public class Picture extends SimplePicture
 		{
 			for (int col = 0; col < pixels[0].length; col++)
 			{
-				shiftedValue = (row + amount) % height;
-				if (amount < 0)
-				{
-					shiftedValue = ((row + amount) % height + height) % height;
-				}
+				shiftedValue = (row + (amount + height)) % height;
+	
 				copied[row][col].setColor(pixels[shiftedValue][col].getColor());
 			}
 		}
@@ -493,7 +484,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.scanlines(3,1);
+		beach.shiftLeftRight(-40);
 		beach.explore();
 	}
 
