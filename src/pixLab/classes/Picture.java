@@ -153,9 +153,9 @@ public class Picture extends SimplePicture
 
 	public void glitch()
 	{
-		int pickColor = (int) ((Math.random() * 100) % 3);
+		int pickColor = (int) ((Math.random() * 100) % 6);
 		int width = this.getWidth();
-		this.make3D(pickColor,(int)(Math.random() * width));
+		this.make3D(pickColor,pickRandomNumber(true,width));
 		
 	}
 
@@ -454,7 +454,8 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-
+	
+//<------Mirroring----->
 	/**
 	 * Method that mirrors the picture around a vertical mirror in the center of the
 	 * picture from left to right
@@ -510,7 +511,61 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-
+	public void bleed(int point, int direction)
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel bleedPixel = null;
+		int startPoint;
+		int endPoint;
+		if(direction == 1)
+		{
+			startPoint = point;
+			endPoint = pixels[0].length;
+		}
+		else
+		{
+			startPoint = 0;
+			endPoint = point;
+		}
+		
+		for(int row = 0; row < pixels.length; row++)
+		{
+	
+			for(int col = startPoint; col < endPoint; col++)
+			{
+				bleedPixel = pixels[row][point];
+				pixels[row][col].setColor(bleedPixel.getColor());
+			}
+		}
+	}
+	
+	public void verticalBleed(int point, int direction)
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel bleedPixel = null;
+		int startPoint;
+		int endPoint;
+		if(direction == 1)
+		{
+			startPoint = point;
+			endPoint = pixels.length;
+		}
+		else
+		{
+			startPoint = 0;
+			endPoint = point;
+		}
+		for(int row = startPoint; row < endPoint; row++)
+		{
+			
+			for(int col = 0; col < pixels[0].length; col++)
+			{
+				bleedPixel = pixels[point][col];
+				pixels[row][col].setColor(bleedPixel.getColor());
+			}
+			
+		}
+	}
 	public void mirrorGull()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -659,8 +714,10 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("turtle dad.png");
+		Picture beach = new Picture("beach.jpg");
 		beach.explore();
+		beach.bleed(20,0);
+		beach.verticalBleed(20,0);
 		beach.glitch();
 		beach.explore();
 	}
