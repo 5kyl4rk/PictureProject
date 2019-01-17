@@ -180,64 +180,126 @@ public class Picture extends SimplePicture
 		}
 	}
 
+	public void scanlines()
+	{
+		scanlines(1,1);
+	}
+	public void scanlines(Color shading)
+	{
+		scanlines(1,1,shading);
+	}
+	/**
+	 * adds horizontal lines over the image
+	 * 
+	 * @param spread
+	 *            spacing of the lines <i>(in pixels)</i>
+	 * @param thickness
+	 *            how thick each line is <i>(in pixels)</i>
+	 */
 	public void scanlines(int spread, int thickness)
 	{
+		scanlines(spread, thickness, Color.BLACK);
+	}
+
+	public void scanlines(int spread, int thickness, Color shading)
+	{
 		Pixel[][] pixels = this.getPixels2D();
-		
-		if(spread < 1)
+
+		if (spread < 1)
 		{
 			spread = 1;
 		}
-		if(spread > this.getHeight())
+		if (spread > this.getHeight())
 		{
 			spread = this.getHeight();
 		}
-		for (int row = 1; row < pixels.length; row ++)
+		for (int row = 1; row < pixels.length; row++)
 		{
 			for (int col = 0; col < pixels[0].length; col++)
 			{
 				if (row % (thickness + spread) >= spread)
 				{
-					pixels[row][col].setRed(0);
-					pixels[row][col].setBlue(0);
-					pixels[row][col].setGreen(0);
+					pixels[row][col].setColor(shading);
+					
 				}
 			}
 		}
 	}
+
 	
+	public void verticalScanlines()
+	{
+		verticalScanlines(1,1);
+	}
+	public void verticalScanlines(Color shading)
+	{
+		verticalScanlines(1,1,shading);
+	}
+	/**
+	 * add vertical lines over the image
+	 * 
+	 * @param spread
+	 *            spacing between each lines <i>(in pixels)</i>
+	 * @param thickness
+	 *            how thick each line is <i>(in pixels)</i>
+	 */
 	public void verticalScanlines(int spread, int thickness)
 	{
+		verticalScanlines(spread, thickness, Color.BLACK);
+	}
+
+	public void verticalScanlines(int spread, int thickness, Color shading)
+	{
 		Pixel[][] pixels = this.getPixels2D();
-		
-		if(spread < 1)
+
+		if (spread < 1)
 		{
 			spread = 1;
 		}
-		if(spread > this.getWidth())
+		if (spread > this.getWidth())
 		{
 			spread = this.getWidth();
 		}
-		for(int row = 0; row < pixels.length; row++)
+		for (int row = 0; row < pixels.length; row++)
 		{
-			for(int col = 0; col < pixels[0].length; col++)
+			for (int col = 0; col < pixels[0].length; col++)
 			{
-				if(col % (thickness + spread) >= spread)
+				if (col % (thickness + spread) >= spread)
 				{
-					pixels[row][col].setRed(0);
-					pixels[row][col].setBlue(0);
-					pixels[row][col].setGreen(0);
+					pixels[row][col].setColor(shading);
 				}
 			}
 		}
 	}
 	
+	public void lcd()
+	{
+		lcd(1,1);
+	}
+	public void lcd(Color shading)
+	{
+		lcd(1,1, shading);
+	}
+	/**
+	 * adds a grid pattern to the image
+	 * 
+	 * @param spread
+	 *            size of square <i>(in pixels)</i>
+	 * @param thickness
+	 *            size of lines <i>(in pixels)</i>
+	 */
 	public void lcd(int spread, int thickness)
 	{
-		this.scanlines(spread, thickness);
-		this.verticalScanlines(spread,thickness);
+		this.scanlines(spread, thickness, Color.BLACK);
+		this.verticalScanlines(spread, thickness, Color.BLACK);
 	}
 	
+	public void lcd(int spread, int thickness, Color shading)
+	{
+		this.scanlines(spread, thickness, shading);
+		this.verticalScanlines(spread, thickness, shading);
+	}
+
 	public void shiftLeftRight(int amount)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -252,7 +314,7 @@ public class Picture extends SimplePicture
 			for (int col = 0; col < pixels[0].length; col++)
 			{
 				shiftedValue = (col + (amount + width)) % width;
-				
+
 				copied[row][col].setColor(pixels[row][shiftedValue].getColor());
 
 			}
@@ -280,7 +342,7 @@ public class Picture extends SimplePicture
 			for (int col = 0; col < pixels[0].length; col++)
 			{
 				shiftedValue = (row + (amount + height)) % height;
-	
+
 				copied[row][col].setColor(pixels[shiftedValue][col].getColor());
 			}
 		}
@@ -509,9 +571,9 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("squidward.jpg");
+		Picture beach = new Picture("turtle dad.png");
 		beach.explore();
-		beach.verticalScanlines(1,1);
+		beach.verticalScanlines(1,10);
 		beach.explore();
 	}
 
