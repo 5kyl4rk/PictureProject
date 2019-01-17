@@ -203,13 +203,40 @@ public class Picture extends SimplePicture
 					pixels[row][col].setGreen(0);
 				}
 			}
-
 		}
-
 	}
 	
+	public void verticalScanlines(int spread, int thickness)
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		
+		if(spread < 1)
+		{
+			spread = 1;
+		}
+		if(spread > this.getWidth())
+		{
+			spread = this.getWidth();
+		}
+		for(int row = 0; row < pixels.length; row++)
+		{
+			for(int col = 0; col < pixels[0].length; col++)
+			{
+				if(col % (thickness + spread) >= spread)
+				{
+					pixels[row][col].setRed(0);
+					pixels[row][col].setBlue(0);
+					pixels[row][col].setGreen(0);
+				}
+			}
+		}
+	}
 	
-	
+	public void lcd(int spread, int thickness)
+	{
+		this.scanlines(spread, thickness);
+		this.verticalScanlines(spread,thickness);
+	}
 	
 	public void shiftLeftRight(int amount)
 	{
@@ -482,9 +509,9 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("beach.jpg");
+		Picture beach = new Picture("squidward.jpg");
 		beach.explore();
-		beach.shiftLeftRight(-40);
+		beach.verticalScanlines(1,1);
 		beach.explore();
 	}
 
