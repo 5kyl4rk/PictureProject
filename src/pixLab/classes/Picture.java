@@ -124,70 +124,51 @@ public class Picture extends SimplePicture
 		}
 	}
 
+	public void zeroGreen()
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		for (Pixel[] rowArray : pixels)
+		{
+			for (Pixel currentPixel : rowArray)
+			{
+				currentPixel.setGreen(0);
+			}
+		}
+	}
+
+	private int pickRandomNumber(boolean negativeIsOK, int max)
+	{
+		
+		final int COIN_FLIP = (int)(Math.random() * 2);
+		int randomNumber = (int)(Math.random() * max);
+		if(negativeIsOK)
+		{
+			if(COIN_FLIP == 1)
+			{
+				randomNumber *= -1;
+			}
+		}
+		
+		return randomNumber;
+	}
+
 	public void glitch()
 	{
-		final int RED = 0;
-		final int GREEN = 1;
-		final int BLUE = 2;
 		int pickColor = (int) ((Math.random() * 100) % 3);
-
-		Pixel[][] pixels = this.getPixels2D();
-		Picture layer1Temp = new Picture(this);
-		Picture layer2Temp = new Picture(this);
-		Pixel[][] layer1 = layer1Temp.getPixels2D();
-		Pixel[][] layer2 = layer2Temp.getPixels2D();
-
-		for (int row = 0; row < pixels.length; row++)
-		{
-			for (int col = 0; col < pixels[0].length; col++)
-			{
-				if (pickColor == RED)
-				{
-					layer2[row][col].setRed(0);
-					layer1[row][col].setGreen(0);
-					layer1[row][col].setBlue(0);
-				}
-
-				if (pickColor == GREEN)
-				{
-					layer1[row][col].setRed(0);
-					layer2[row][col].setGreen(0);
-					layer1[row][col].setBlue(0);
-				}
-
-				if (pickColor == BLUE)
-				{
-					layer1[row][col].setRed(0);
-					layer1[row][col].setGreen(0);
-					layer2[row][col].setBlue(0);
-				}
-			}
-		}
-
-		layer2Temp.shiftLeftRight((int) ((Math.random() * layer2.length) / 4));
-		for (int row = 0; row < pixels.length; row++)
-		{
-			for (int col = 0; col < pixels[0].length; col++)
-			{
-				int mergeRed = layer1[row][col].getRed() + layer2[row][col].getRed();
-				int mergeGreen = layer1[row][col].getGreen() + layer2[row][col].getGreen();
-				int mergeBlue = layer1[row][col].getBlue() + layer2[row][col].getBlue();
-
-				pixels[row][col].setRed(mergeRed);
-				pixels[row][col].setGreen(mergeGreen);
-				pixels[row][col].setBlue(mergeBlue);
-			}
-		}
+		
 	}
 
+	// <------Overlays------>
 	public void scanlines()
 	{
-		scanlines(1,1);
+		scanlines(1, 1);
 	}
+
 	public void scanlines(Color shading)
 	{
-		scanlines(1,1,shading);
+		scanlines(1, 1, shading);
 	}
+
 	/**
 	 * adds horizontal lines over the image
 	 * 
@@ -220,21 +201,22 @@ public class Picture extends SimplePicture
 				if (row % (thickness + spread) >= spread)
 				{
 					pixels[row][col].setColor(shading);
-					
+
 				}
 			}
 		}
 	}
 
-	
 	public void verticalScanlines()
 	{
-		verticalScanlines(1,1);
+		verticalScanlines(1, 1);
 	}
+
 	public void verticalScanlines(Color shading)
 	{
-		verticalScanlines(1,1,shading);
+		verticalScanlines(1, 1, shading);
 	}
+
 	/**
 	 * add vertical lines over the image
 	 * 
@@ -271,15 +253,17 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-	
+
 	public void lcd()
 	{
-		lcd(1,1);
+		lcd(1, 1);
 	}
+
 	public void lcd(Color shading)
 	{
-		lcd(1,1, shading);
+		lcd(1, 1, shading);
 	}
+
 	/**
 	 * adds a grid pattern to the image
 	 * 
@@ -293,21 +277,102 @@ public class Picture extends SimplePicture
 		this.scanlines(spread, thickness, Color.BLACK);
 		this.verticalScanlines(spread, thickness, Color.BLACK);
 	}
-	
+
 	public void lcd(int spread, int thickness, Color shading)
 	{
 		this.scanlines(spread, thickness, shading);
 		this.verticalScanlines(spread, thickness, shading);
 	}
+	
+	public void make3D(int RGB)
+	{
+		make3D(RGB, pickRandomNumber(true, 10));
+	}
 
+	public void make3D(int RGB, int shift)
+	{
+		final int RED = 0;
+		final int GREEN = 1;
+		final int BLUE = 2;
+		int pickColor = RGB; 
+		
+		if(RGB > 2 || RGB < 0)
+		{
+			pickColor = (int) ((Math.random() * 100) % 3);
+		}
+		Pixel[][] pixels = this.getPixels2D();
+		Picture layer1Temp = new Picture(this);
+		Picture layer2Temp = new Picture(this);
+		Pixel[][] layer1 = layer1Temp.getPixels2D();
+		Pixel[][] layer2 = layer2Temp.getPixels2D();
+
+		for (int row = 0; row < pixels.length; row++)
+		{
+			for (int col = 0; col < pixels[0].length; col++)
+			{
+				if (pickColor == RED)
+				{
+					layer2[row][col].setRed(0);
+					layer1[row][col].setGreen(0);
+					layer1[row][col].setBlue(0);
+				}
+
+				if (pickColor == GREEN)
+				{
+					layer1[row][col].setRed(0);
+					layer2[row][col].setGreen(0);
+					layer1[row][col].setBlue(0);
+				}
+
+				if (pickColor == BLUE)
+				{
+					layer1[row][col].setRed(0);
+					layer1[row][col].setGreen(0);
+					layer2[row][col].setBlue(0);
+				}
+			}
+		}
+
+		layer2Temp.shiftLeftRight(shift);
+
+		for (int row = 0; row < pixels.length; row++)
+		{
+			for (int col = 0; col < pixels[0].length; col++)
+			{
+				int mergeRed = layer1[row][col].getRed() + layer2[row][col].getRed();
+				int mergeGreen = layer1[row][col].getGreen() + layer2[row][col].getGreen();
+				int mergeBlue = layer1[row][col].getBlue() + layer2[row][col].getBlue();
+
+				pixels[row][col].setRed(mergeRed);
+				pixels[row][col].setGreen(mergeGreen);
+				pixels[row][col].setBlue(mergeBlue);
+			}
+		}
+		
+		
+	}
+	// <------Shifting------>
 	public void shiftLeftRight(int amount)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		Picture temp = new Picture(this);
 		Pixel[][] copied = temp.getPixels2D();
 
-		int shiftedValue = amount;
 		int width = pixels[0].length;
+		
+		if (Math.abs(amount) > width)
+		{
+			if (amount < 0)
+			{
+				amount = (-1 * Math.abs(amount % width));
+			}
+			else
+			{
+				amount = (amount % width);
+			}
+		}
+		
+		int shiftedValue = amount;
 
 		for (int row = 0; row < pixels.length; row++)
 		{
@@ -334,9 +399,21 @@ public class Picture extends SimplePicture
 		Picture temp = new Picture(this);
 		Pixel[][] copied = temp.getPixels2D();
 
-		int shiftedValue = amount;
 		int height = pixels.length;
-
+		if (Math.abs(amount) > height)
+		{
+			if (amount < 0)
+			{
+				amount = (-1 * Math.abs(amount % height));
+			}
+			else
+			{
+				amount = (amount % height);
+			}
+		}
+		
+		int shiftedValue = amount;
+		
 		for (int row = 0; row < pixels.length; row++)
 		{
 			for (int col = 0; col < pixels[0].length; col++)
@@ -351,18 +428,6 @@ public class Picture extends SimplePicture
 			for (int col = 0; col < pixels[0].length; col++)
 			{
 				pixels[row][col].setColor(copied[row][col].getColor());
-			}
-		}
-	}
-
-	public void zeroGreen()
-	{
-		Pixel[][] pixels = this.getPixels2D();
-		for (Pixel[] rowArray : pixels)
-		{
-			for (Pixel currentPixel : rowArray)
-			{
-				currentPixel.setGreen(0);
 			}
 		}
 	}
@@ -573,7 +638,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("turtle dad.png");
 		beach.explore();
-		beach.verticalScanlines(1,10);
+		beach.make3D(0);
 		beach.explore();
 	}
 
