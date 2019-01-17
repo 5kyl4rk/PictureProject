@@ -155,6 +155,8 @@ public class Picture extends SimplePicture
 	public void glitch()
 	{
 		int pickColor = (int) ((Math.random() * 100) % 3);
+		int width = this.getWidth();
+		this.make3D(pickColor,(int)(Math.random() * width));
 		
 	}
 
@@ -638,7 +640,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("turtle dad.png");
 		beach.explore();
-		beach.make3D(0);
+		beach.glitch();
 		beach.explore();
 	}
 
