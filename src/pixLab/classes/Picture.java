@@ -287,7 +287,7 @@ public class Picture extends SimplePicture
 	
 	public void make3D(int baseColor)
 	{
-		make3D(baseColor, pickRandomNumber(true, 10));
+		make3D(baseColor, pickRandomNumber(true, (this.getWidth() / 8)));
 	}
 
 	public void make3D(int baseColor, int shift)
@@ -517,7 +517,7 @@ public class Picture extends SimplePicture
 		Pixel bleedPixel = null;
 		int startPoint;
 		int endPoint;
-		if(direction == 1)
+		if(direction > 1)
 		{
 			startPoint = point;
 			endPoint = pixels[0].length;
@@ -545,7 +545,7 @@ public class Picture extends SimplePicture
 		Pixel bleedPixel = null;
 		int startPoint;
 		int endPoint;
-		if(direction == 1)
+		if(direction > 1)
 		{
 			startPoint = point;
 			endPoint = pixels.length;
@@ -714,11 +714,11 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("beach.jpg");
+		Picture beach = new Picture("kirbo.png");
 		beach.explore();
 		beach.bleed(20,0);
 		beach.verticalBleed(20,0);
-		beach.glitch();
+		beach.make3D(0);
 		beach.explore();
 	}
 
