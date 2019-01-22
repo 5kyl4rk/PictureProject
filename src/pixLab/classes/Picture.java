@@ -106,7 +106,7 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-
+	/**Method to set Red to 0 */
 	public void zeroRed()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -122,7 +122,7 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-
+	/**Method to set Green to 0 */
 	public void zeroGreen()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -134,10 +134,15 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-
+	
+	/**
+	 * Picks a random number 
+	 * @param negativeIsOK the value can be negative
+	 * @param max the highest possible number it can pick <i>(will also be the lowest negative value if allowed)</i>
+	 * @return an Int value that will be either positive or negative
+	 */
 	private int pickRandomNumber(boolean negativeIsOK, int max)
 	{
-		
 		final int COIN_FLIP = (int)(Math.random() * 2);
 		int randomNumber = (int)(Math.random() * max);
 		if(negativeIsOK)
@@ -150,7 +155,10 @@ public class Picture extends SimplePicture
 		
 		return randomNumber;
 	}
-
+	
+	/** 
+	 * Utilizes helper methods to make an image look "glitchy"
+	 */
 	public void glitch()
 	{
 		int pickColor = (int) ((Math.random() * 100) % 6);
@@ -160,11 +168,17 @@ public class Picture extends SimplePicture
 	}
 
 	// <------Overlays------>
+	/**
+	 * displays basic scanlines
+	 */
 	public void scanlines()
 	{
 		scanlines(1, 1);
 	}
-
+	/**
+	 * displays scanlines of a desired color
+	 * @param shading the color of the lines <i>(must be of the Color class)</i>
+	 */
 	public void scanlines(Color shading)
 	{
 		scanlines(1, 1, shading);
@@ -182,7 +196,16 @@ public class Picture extends SimplePicture
 	{
 		scanlines(spread, thickness, Color.BLACK);
 	}
-
+	
+	/**
+	 * adds horizontal lines over the image
+	 * 
+	 * @param spread
+	 *            spacing of the lines <i>(in pixels)</i>
+	 * @param thickness
+	 *            how thick each line is <i>(in pixels)</i>
+	 * @param shading the color of the lines <i>(must be of the Color class)</i>
+	 */
 	public void scanlines(int spread, int thickness, Color shading)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -208,11 +231,17 @@ public class Picture extends SimplePicture
 		}
 	}
 
+	/**
+	 * displays vertical scanlines
+	 */
 	public void verticalScanlines()
 	{
 		verticalScanlines(1, 1);
 	}
-
+	/**
+	 * displays vertical scanlines of a desired color
+	 * @param shading the color of the lines <i>(must be of the Color class)</i>
+	 */
 	public void verticalScanlines(Color shading)
 	{
 		verticalScanlines(1, 1, shading);
@@ -231,6 +260,15 @@ public class Picture extends SimplePicture
 		verticalScanlines(spread, thickness, Color.BLACK);
 	}
 
+	/**
+	 * add vertical lines over the image
+	 * 
+	 * @param spread
+	 *            spacing between each lines <i>(in pixels)</i>
+	 * @param thickness
+	 *            how thick each line is <i>(in pixels)</i>
+	 * @param shading the color of the lines <i>(must be of the Color class)</i>
+	 */
 	public void verticalScanlines(int spread, int thickness, Color shading)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -254,12 +292,17 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-
+	/**
+	 * displays a LCD look
+	 */
 	public void lcd()
 	{
 		lcd(1, 1);
 	}
-
+	/**
+	 * displays a LCD look of a desired color
+	 * @param shading the color of the lines <i>(must be of the Color class)</i>
+	 */
 	public void lcd(Color shading)
 	{
 		lcd(1, 1, shading);
@@ -279,17 +322,51 @@ public class Picture extends SimplePicture
 		this.verticalScanlines(spread, thickness, Color.BLACK);
 	}
 
+	/**
+	 * adds a grid pattern to the image
+	 * 
+	 * @param spread
+	 *            size of square <i>(in pixels)</i>
+	 * @param thickness
+	 *            size of lines <i>(in pixels)</i>
+	 * @param shading the color of the lines <i>(must be of the Color class)</i>          
+	 */
 	public void lcd(int spread, int thickness, Color shading)
 	{
 		this.scanlines(spread, thickness, shading);
 		this.verticalScanlines(spread, thickness, shading);
 	}
 	
+	/**
+	 * Separates the image into two color channels and shifts it slightly 
+	 * @param baseColor the color of the first layer that doesn't shift
+	 * <ul>
+	 * <li><b>Red<b> = 0</li>
+	 * <li><b>Green<b> = 1</li>
+	 * <li><b>Blue<b> = 2</li>
+	 * <li><b>Cyan<b> = 3</li>
+	 * <li><b>Magenta<b> = 4</li>
+	 * <li><b>Yellow<b> = 5</li>
+	 * </ul>
+	 */
 	public void make3D(int baseColor)
 	{
 		make3D(baseColor, pickRandomNumber(true, (this.getWidth() / 8)));
 	}
 
+	/**
+	 * Separates the image into two color channels and shifts it slightly 
+	 * @param shift how much the second layer is shifted <i>(in pixels)</i>
+	 * @param baseColor the color of the first layer that doesn't shift
+	 * <ul>
+	 * <li><b>Red<b> = 0</li>
+	 * <li><b>Green<b> = 1</li>
+	 * <li><b>Blue<b> = 2</li>
+	 * <li><b>Cyan<b> = 3</li>
+	 * <li><b>Magenta<b> = 4</li>
+	 * <li><b>Yellow<b> = 5</li>
+	 * </ul>
+	 */
 	public void make3D(int baseColor, int shift)
 	{
 		final int RED = 0;
