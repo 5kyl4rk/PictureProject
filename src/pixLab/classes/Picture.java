@@ -141,7 +141,7 @@ public class Picture extends SimplePicture
 	 * @param max the highest possible number it can pick <i>(will also be the lowest negative value if allowed)</i>
 	 * @return an Int value that will be either positive or negative
 	 */
-	private int pickRandomNumber(boolean negativeIsOK, int max)
+	public static int pickRandomNumber(boolean negativeIsOK, int max)
 	{
 		final int COIN_FLIP = (int)(Math.random() * 2);
 		int randomNumber = (int)(Math.random() * max);
@@ -823,6 +823,50 @@ public class Picture extends SimplePicture
 		}
 	}
 
+	public void hidePicture(Picture hidden)
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		Pixel[][] hiddenPixels = hidden.getPixels2D();
+		
+		for(int row = 0; row < pixels.length && row < hiddenPixels.length; row++)
+		{
+			for(int col = 0; col < pixels[0].length && col < hiddenPixels[0].length; col++)
+			{
+				//there is a message to hide
+				if(hiddenPixels[row][col].colorDistance(Color.WHITE) > 5)
+				{
+					if(pixels[row][col].getRed() > 0 && pixels[row][col].getRed() % 2 != 1)
+					{
+						pixels[row][col].setRed(pixels[row][col].getRed() - 1);
+					}
+				}
+				else if(pixels[row][col].getRed() >0 && pixels[row][col].getRed() % 2 == 1)
+				{
+					pixels[row][col].setRed(pixels[row][col].getRed() - 1);
+				}
+			}
+		}
+	}
+	
+	public void revealPicture()
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		
+		for(int row = 0; row < pixels.length; row++)
+		{
+			for(int col = 0; col < pixels[0].length; col++)
+			{
+				if(pixels[row][col].getRed() % 2 != 1)
+				{
+					pixels[row][col].setColor(new Color(255,0,68));
+				}
+				else if(pixels[row][col].getRed() % 2 == 1)
+				{
+					pixels[row][col].setColor(new Color(0,255,187));
+				}
+			}
+		}
+	}
 	/*
 	 * Main method for testing - each class in Java can have a main method
 	 */
@@ -830,7 +874,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("knuckles.jpg");
 		beach.explore();
-		beach.glitch();
+		beach.make3D(2,pickRandomNumber(true,beach.getWidth()));
 		beach.explore();
 	}
 

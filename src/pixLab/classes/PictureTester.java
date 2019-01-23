@@ -39,7 +39,7 @@ public class PictureTester
   
   public static void testGlitch()
   {
-	  Picture image = new Picture("kirbo.png");
+	  Picture image = new Picture("synthDuck.png");
 	  image.explore();
 	  image.glitch();
 	  image.explore();
@@ -68,6 +68,19 @@ public class PictureTester
 	  source.explore();
 	  background.explore();
 	  source.chromakey(background, Color.WHITE);
+	  source.explore();
+  }
+  
+  public static void testSteganography()
+  {
+	  Picture source = new Picture("kitten2.jpg");
+	  Picture message = new Picture("shrugBlack.png");
+	  
+	  source.explore();
+	  message.explore();
+	  source.hidePicture(message);
+	  source.explore();
+	  source.revealPicture();
 	  source.explore();
   }
   /** Method to test mirrorVertical */
@@ -139,6 +152,7 @@ public class PictureTester
     //testZeroRed();
     //testZeroGreen();
     testGlitch();
+    testSteganography();
     //testShiftLeftRight();
     //testShiftUpDown();
     //testChromakey();
