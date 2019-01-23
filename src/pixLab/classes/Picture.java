@@ -351,7 +351,7 @@ public class Picture extends SimplePicture
 	 */
 	public void make3D(int baseColor)
 	{
-		make3D(baseColor, pickRandomNumber(true, (this.getWidth() / 8)));
+		make3D(baseColor, (pickRandomNumber(true, (this.getWidth() / 8))) +1);
 	}
 
 	/**
@@ -454,11 +454,16 @@ public class Picture extends SimplePicture
 	// <------Shifting------>
 	public void shiftLeftRight(int amount)
 	{
+		shiftLeftRight(amount, 0, this.getHeight());
+	}
+	public void shiftLeftRight(int amount, int startPoint, int endPoint)
+	{
 		Pixel[][] pixels = this.getPixels2D();
 		Picture temp = new Picture(this);
 		Pixel[][] copied = temp.getPixels2D();
 
 		int width = pixels[0].length;
+		int height = pixels.length;
 		
 		if (Math.abs(amount) > width)
 		{
@@ -472,34 +477,54 @@ public class Picture extends SimplePicture
 			}
 		}
 		
+		if(startPoint < 0)
+		{
+			startPoint = 0;
+		}
+		else if(startPoint >= height)
+		{
+			startPoint = height;
+		}
+		
+		if(endPoint < 0)
+		{
+			endPoint = 0;
+		}
+		else if(endPoint >= height)
+		{
+			endPoint = height;
+		}
+		
 		int shiftedValue = amount;
 
-		for (int row = 0; row < pixels.length; row++)
+		for (int row = startPoint; row < endPoint; row++)
 		{
-			for (int col = 0; col < pixels[0].length; col++)
+			for (int col = 0; col < width; col++)
 			{
 				shiftedValue = (col + (amount + width)) % width;
 
 				copied[row][col].setColor(pixels[row][shiftedValue].getColor());
-
-			}
-		}
-		for (int row = 0; row < pixels.length; row++)
-		{
-			for (int col = 0; col < pixels[0].length; col++)
-			{
+				
 				pixels[row][col].setColor(copied[row][col].getColor());
+
 			}
 		}
 	}
 
+	
 	public void shiftUpDown(int amount)
+	{
+		shiftUpDown(amount, 0, this.getWidth());
+	}
+	public void shiftUpDown(int amount, int startPoint, int endPoint)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		Picture temp = new Picture(this);
 		Pixel[][] copied = temp.getPixels2D();
 
 		int height = pixels.length;
+		int width = pixels[0].length;
+		
 		if (Math.abs(amount) > height)
 		{
 			if (amount < 0)
@@ -511,22 +536,34 @@ public class Picture extends SimplePicture
 				amount = (amount % height);
 			}
 		}
+		if(startPoint < 0)
+		{
+			startPoint = 0;
+		}
+		else if(startPoint >= width)
+		{
+			startPoint = width;
+		}
+		
+		if(endPoint < 0)
+		{
+			endPoint = 0;
+		}
+		else if(endPoint >= width)
+		{
+			endPoint = width;
+		}
 		
 		int shiftedValue = amount;
 		
-		for (int row = 0; row < pixels.length; row++)
+		for (int row = 0; row < height; row++)
 		{
-			for (int col = 0; col < pixels[0].length; col++)
+			for (int col = startPoint; col < endPoint; col++)
 			{
 				shiftedValue = (row + (amount + height)) % height;
 
 				copied[row][col].setColor(pixels[shiftedValue][col].getColor());
-			}
-		}
-		for (int row = 0; row < pixels.length; row++)
-		{
-			for (int col = 0; col < pixels[0].length; col++)
-			{
+				
 				pixels[row][col].setColor(copied[row][col].getColor());
 			}
 		}
@@ -791,11 +828,9 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("kirbo.png");
+		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.bleed(20,0);
-		beach.verticalBleed(20,0);
-		beach.make3D(0);
+		beach.shiftUpDown(40,2,5);
 		beach.explore();
 	}
 
