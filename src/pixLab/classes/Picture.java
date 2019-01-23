@@ -469,7 +469,7 @@ public class Picture extends SimplePicture
 		{
 			if (amount < 0)
 			{
-				amount = (-1 * Math.abs(amount % width));
+				amount = -1 * (Math.abs(amount) % width);
 			}
 			else
 			{
@@ -481,7 +481,7 @@ public class Picture extends SimplePicture
 		{
 			startPoint = 0;
 		}
-		else if(startPoint >= height)
+		else if(startPoint > height)
 		{
 			startPoint = height;
 		}
@@ -490,7 +490,7 @@ public class Picture extends SimplePicture
 		{
 			endPoint = 0;
 		}
-		else if(endPoint >= height)
+		else if(endPoint > height)
 		{
 			endPoint = height;
 		}
@@ -529,7 +529,7 @@ public class Picture extends SimplePicture
 		{
 			if (amount < 0)
 			{
-				amount = (-1 * Math.abs(amount % height));
+				amount = -1 * (Math.abs(amount) % height);
 			}
 			else
 			{
@@ -828,9 +828,9 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("beach.jpg");
+		Picture beach = new Picture("knuckles.jpg");
 		beach.explore();
-		beach.shiftUpDown(40,2,5);
+		beach.glitch();
 		beach.explore();
 	}
 
