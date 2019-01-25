@@ -448,7 +448,21 @@ public class Picture extends SimplePicture
 				pixels[row][col].setBlue(mergeBlue);
 			}
 		}
+	}
+	
+	public void noise()
+	{
+		Pixel[][] pixels = this.getPixels2D();
 		
+		for(Pixel[] rowArray : pixels)
+		{
+			for(Pixel currentPix : rowArray)
+			{
+				currentPix.setRed((currentPix.getRed() + (pickRandomNumber(true, 50))));
+				currentPix.setGreen((currentPix.getGreen() + (pickRandomNumber(true, 50))));
+				currentPix.setBlue((currentPix.getBlue() + (pickRandomNumber(true, 50))));
+			}
+		}
 		
 	}
 	// <------Shifting------>
@@ -888,9 +902,9 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("sans.png");
+		Picture beach = new Picture("knuckles.jpg");
 		beach.explore();
-		beach.shiftLeftRight(100);
+		beach.noise();
 		beach.explore();
 	}
 
