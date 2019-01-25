@@ -504,6 +504,14 @@ public class Picture extends SimplePicture
 				shiftedValue = (col + (amount + width)) % width;
 
 				copied[row][col].setColor(pixels[row][shiftedValue].getColor());
+
+			}
+		}
+		
+		for (int row = 0; row < pixels.length; row++)
+		{
+			for (int col = 0; col < pixels[0].length; col++)
+			{
 				
 				pixels[row][col].setColor(copied[row][col].getColor());
 
@@ -564,7 +572,15 @@ public class Picture extends SimplePicture
 
 				copied[row][col].setColor(pixels[shiftedValue][col].getColor());
 				
+			}
+		}
+		for (int row = 0; row < pixels.length; row++)
+		{
+			for (int col = 0; col < pixels[0].length; col++)
+			{
+				
 				pixels[row][col].setColor(copied[row][col].getColor());
+
 			}
 		}
 	}
@@ -872,9 +888,9 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("knuckles.jpg");
+		Picture beach = new Picture("sans.png");
 		beach.explore();
-		beach.make3D(2,pickRandomNumber(true,beach.getWidth()));
+		beach.shiftLeftRight(100);
 		beach.explore();
 	}
 
