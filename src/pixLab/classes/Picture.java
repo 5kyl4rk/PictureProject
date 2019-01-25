@@ -452,15 +452,24 @@ public class Picture extends SimplePicture
 	
 	public void noise()
 	{
+		noise(50);
+	}
+	public void noise(int hardness)
+	{
 		Pixel[][] pixels = this.getPixels2D();
+		
+		if(hardness > 255)
+		{
+			hardness = 255;
+		}
 		
 		for(Pixel[] rowArray : pixels)
 		{
 			for(Pixel currentPix : rowArray)
 			{
-				currentPix.setRed((currentPix.getRed() + (pickRandomNumber(true, 50))));
-				currentPix.setGreen((currentPix.getGreen() + (pickRandomNumber(true, 50))));
-				currentPix.setBlue((currentPix.getBlue() + (pickRandomNumber(true, 50))));
+				currentPix.setRed((currentPix.getRed() + (pickRandomNumber(true, hardness))));
+				currentPix.setGreen((currentPix.getGreen() + (pickRandomNumber(true, hardness))));
+				currentPix.setBlue((currentPix.getBlue() + (pickRandomNumber(true, hardness))));
 			}
 		}
 		
@@ -902,9 +911,11 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("knuckles.jpg");
+		Picture beach = new Picture("GSC_beta_Meowth.png");
 		beach.explore();
-		beach.noise();
+		beach.glitch();
+		beach.noise(95);
+		beach.scanlines(1,5);
 		beach.explore();
 	}
 
