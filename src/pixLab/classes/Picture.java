@@ -168,8 +168,8 @@ public class Picture extends SimplePicture
 	public void glitch()
 	{
 		int pickColor = (int) ((Math.random() * 100) % 6);
-		int width = this.getWidth();
-		this.make3D(pickColor, pickRandomNumber(true, width));
+		int percent =(int)(Math.round(this.getWidth() * 0.5));
+		this.make3D(pickColor, pickRandomNumber(true, percent));
 
 	}
 
@@ -1061,9 +1061,9 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("ghost.jpg");
 		beach.explore();
-		beach.make3D(0);
+		beach.glitch();
 		beach.explore();
-		beach.write("ghost3d.jpg");
+		
 	}
 
 } // this } is the end of class Picture, put all new methods before this
