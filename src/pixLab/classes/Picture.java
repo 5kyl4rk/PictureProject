@@ -168,7 +168,7 @@ public class Picture extends SimplePicture
 	public void glitch()
 	{
 		int pickColor = (int) ((Math.random() * 100) % 6);
-		int percent =(int)(Math.round(this.getWidth() * 0.5));
+		int percent = (int) (Math.round(this.getWidth() * 0.5));
 		this.make3D(pickColor, pickRandomNumber(true, percent));
 
 	}
@@ -372,7 +372,7 @@ public class Picture extends SimplePicture
 	 */
 	public void make3D(int baseColor)
 	{
-		int smallPercent = (int)(Math.round(this.getWidth() * .03));
+		int smallPercent = (int) (Math.round(this.getWidth() * .03));
 		make3D(baseColor, pickRandomNumber(true, smallPercent));
 	}
 
@@ -589,7 +589,7 @@ public class Picture extends SimplePicture
 
 		noisePercent *= 0.01;
 		int area = (this.getHeight() * this.getWidth());
-		int percentage = (int)(Math.round(noisePercent* area));
+		int percentage = (int) (Math.round(noisePercent * area));
 
 		for (int cycles = 0; cycles < percentage; cycles++)
 		{
@@ -673,6 +673,88 @@ public class Picture extends SimplePicture
 
 				copied[row][col].setColor(pixels[row][shiftedValue].getColor());
 
+			}
+		}
+
+		for (int row = 0; row < pixels.length; row++)
+		{
+			for (int col = 0; col < pixels[0].length; col++)
+			{
+
+				pixels[row][col].setColor(copied[row][col].getColor());
+
+			}
+		}
+	}
+
+	public void shiftLRColor(int amount, int startPoint, int endPoint, int baseColor)
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		Picture temp = new Picture(this);
+		Pixel[][] copied = temp.getPixels2D();
+
+		final int RED = 0;
+		final int GREEN = 1;
+		final int BLUE = 2;
+
+		if (baseColor > 2 || baseColor < 0)
+		{
+			baseColor = (int) (Math.random() * 3);
+		}
+		int width = pixels[0].length;
+		int height = pixels.length;
+
+		if (Math.abs(amount) > width)
+		{
+			if (amount < 0)
+			{
+				amount = -1 * (Math.abs(amount) % width);
+			}
+			else
+			{
+				amount = (amount % width);
+			}
+		}
+
+		if (startPoint < 0)
+		{
+			startPoint = 0;
+		}
+		else if (startPoint > height)
+		{
+			startPoint = height;
+		}
+
+		if (endPoint < 0)
+		{
+			endPoint = 0;
+		}
+		else if (endPoint > height)
+		{
+			endPoint = height;
+		}
+
+		int shiftedValue = amount;
+
+		for (int row = startPoint; row < endPoint; row++)
+		{
+			for (int col = 0; col < width; col++)
+			{
+				shiftedValue = (col + (amount + width)) % width;
+
+				copied[row][col].setColor(pixels[row][shiftedValue].getColor());
+				if (baseColor == 0)
+				{
+					copied[row][col].setRed(0);
+				}
+				else if (baseColor == 1)
+				{
+					copied[row][col].setGreen(0);
+				}
+				else if (baseColor == 2)
+				{
+					copied[row][col].setBlue(0);
+				}
 			}
 		}
 
@@ -1059,11 +1141,14 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("ghost.jpg");
+		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.glitch();
+		beach.make3D(1);
+		beach.grain();
+		beach.shiftLeftRight(-20);
+		beach.bleed(20,0);
 		beach.explore();
-		
+
 	}
 
 } // this } is the end of class Picture, put all new methods before this
