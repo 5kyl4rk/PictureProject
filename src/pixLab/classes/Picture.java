@@ -106,7 +106,8 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-	/**Method to set Red to 0 */
+
+	/** Method to set Red to 0 */
 	public void zeroRed()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -122,7 +123,8 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-	/**Method to set Green to 0 */
+
+	/** Method to set Green to 0 */
 	public void zeroGreen()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -134,37 +136,41 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-	
+
 	/**
-	 * Picks a random number 
-	 * @param negativeIsOK the value can be negative
-	 * @param max the highest possible number it can pick <i>(will also be the lowest negative value if allowed)</i>
+	 * Picks a random number
+	 * 
+	 * @param negativeIsOK
+	 *            the value can be negative
+	 * @param max
+	 *            the highest possible number it can pick <i>(will also be the
+	 *            lowest negative value if allowed)</i>
 	 * @return an Int value that will be either positive or negative
 	 */
 	public static int pickRandomNumber(boolean negativeIsOK, int max)
 	{
-		final int COIN_FLIP = (int)(Math.random() * 2);
-		int randomNumber = (int)(Math.random() * max);
-		if(negativeIsOK)
+		final int COIN_FLIP = (int) (Math.random() * 2);
+		int randomNumber = (int) (Math.random() * max);
+		if (negativeIsOK)
 		{
-			if(COIN_FLIP == 1)
+			if (COIN_FLIP == 1)
 			{
 				randomNumber *= -1;
 			}
 		}
-		
+
 		return randomNumber;
 	}
-	
-	/** 
+
+	/**
 	 * Utilizes helper methods to make an image look "glitchy"
 	 */
 	public void glitch()
 	{
 		int pickColor = (int) ((Math.random() * 100) % 6);
 		int width = this.getWidth();
-		this.make3D(pickColor,pickRandomNumber(true,width));
-		
+		this.make3D(pickColor, pickRandomNumber(true, width));
+
 	}
 
 	// <------Overlays------>
@@ -175,9 +181,12 @@ public class Picture extends SimplePicture
 	{
 		scanlines(1, 1);
 	}
+
 	/**
 	 * displays scanlines of a desired color
-	 * @param shading the color of the lines <i>(must be of the Color class)</i>
+	 * 
+	 * @param shading
+	 *            the color of the lines <i>(must be of the Color class)</i>
 	 */
 	public void scanlines(Color shading)
 	{
@@ -196,7 +205,7 @@ public class Picture extends SimplePicture
 	{
 		scanlines(spread, thickness, Color.BLACK);
 	}
-	
+
 	/**
 	 * adds horizontal lines over the image
 	 * 
@@ -204,7 +213,8 @@ public class Picture extends SimplePicture
 	 *            spacing of the lines <i>(in pixels)</i>
 	 * @param thickness
 	 *            how thick each line is <i>(in pixels)</i>
-	 * @param shading the color of the lines <i>(must be of the Color class)</i>
+	 * @param shading
+	 *            the color of the lines <i>(must be of the Color class)</i>
 	 */
 	public void scanlines(int spread, int thickness, Color shading)
 	{
@@ -238,9 +248,12 @@ public class Picture extends SimplePicture
 	{
 		verticalScanlines(1, 1);
 	}
+
 	/**
 	 * displays vertical scanlines of a desired color
-	 * @param shading the color of the lines <i>(must be of the Color class)</i>
+	 * 
+	 * @param shading
+	 *            the color of the lines <i>(must be of the Color class)</i>
 	 */
 	public void verticalScanlines(Color shading)
 	{
@@ -267,7 +280,8 @@ public class Picture extends SimplePicture
 	 *            spacing between each lines <i>(in pixels)</i>
 	 * @param thickness
 	 *            how thick each line is <i>(in pixels)</i>
-	 * @param shading the color of the lines <i>(must be of the Color class)</i>
+	 * @param shading
+	 *            the color of the lines <i>(must be of the Color class)</i>
 	 */
 	public void verticalScanlines(int spread, int thickness, Color shading)
 	{
@@ -292,6 +306,7 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
+
 	/**
 	 * displays a LCD look
 	 */
@@ -299,9 +314,12 @@ public class Picture extends SimplePicture
 	{
 		lcd(1, 1);
 	}
+
 	/**
 	 * displays a LCD look of a desired color
-	 * @param shading the color of the lines <i>(must be of the Color class)</i>
+	 * 
+	 * @param shading
+	 *            the color of the lines <i>(must be of the Color class)</i>
 	 */
 	public void lcd(Color shading)
 	{
@@ -329,43 +347,49 @@ public class Picture extends SimplePicture
 	 *            size of square <i>(in pixels)</i>
 	 * @param thickness
 	 *            size of lines <i>(in pixels)</i>
-	 * @param shading the color of the lines <i>(must be of the Color class)</i>          
+	 * @param shading
+	 *            the color of the lines <i>(must be of the Color class)</i>
 	 */
 	public void lcd(int spread, int thickness, Color shading)
 	{
 		this.scanlines(spread, thickness, shading);
 		this.verticalScanlines(spread, thickness, shading);
 	}
-	
+
 	/**
-	 * Separates the image into two color channels and shifts it slightly 
-	 * @param baseColor the color of the first layer that doesn't shift
-	 * <ul>
-	 * <li><b>Red<b> = 0</li>
-	 * <li><b>Green<b> = 1</li>
-	 * <li><b>Blue<b> = 2</li>
-	 * <li><b>Cyan<b> = 3</li>
-	 * <li><b>Magenta<b> = 4</li>
-	 * <li><b>Yellow<b> = 5</li>
-	 * </ul>
+	 * Separates the image into two color channels and shifts it slightly
+	 * 
+	 * @param baseColor
+	 *            the color of the first layer that doesn't shift
+	 *            <ul>
+	 *            <li><b>Red<b> = 0</li>
+	 *            <li><b>Green<b> = 1</li>
+	 *            <li><b>Blue<b> = 2</li>
+	 *            <li><b>Cyan<b> = 3</li>
+	 *            <li><b>Magenta<b> = 4</li>
+	 *            <li><b>Yellow<b> = 5</li>
+	 *            </ul>
 	 */
 	public void make3D(int baseColor)
 	{
-		make3D(baseColor, (pickRandomNumber(true, (this.getWidth() / 8))) +1);
+		make3D(baseColor, (pickRandomNumber(true, (this.getWidth() / 8))) + 1);
 	}
 
 	/**
-	 * Separates the image into two color channels and shifts it slightly 
-	 * @param shift how much the second layer is shifted <i>(in pixels)</i>
-	 * @param baseColor the color of the first layer that doesn't shift
-	 * <ul>
-	 * <li><b>Red<b> = 0</li>
-	 * <li><b>Green<b> = 1</li>
-	 * <li><b>Blue<b> = 2</li>
-	 * <li><b>Cyan<b> = 3</li>
-	 * <li><b>Magenta<b> = 4</li>
-	 * <li><b>Yellow<b> = 5</li>
-	 * </ul>
+	 * Separates the image into two color channels and shifts it slightly
+	 * 
+	 * @param shift
+	 *            how much the second layer is shifted <i>(in pixels)</i>
+	 * @param baseColor
+	 *            the color of the first layer that doesn't shift
+	 *            <ul>
+	 *            <li><b>Red<b> = 0</li>
+	 *            <li><b>Green<b> = 1</li>
+	 *            <li><b>Blue<b> = 2</li>
+	 *            <li><b>Cyan<b> = 3</li>
+	 *            <li><b>Magenta<b> = 4</li>
+	 *            <li><b>Yellow<b> = 5</li>
+	 *            </ul>
 	 */
 	public void make3D(int baseColor, int shift)
 	{
@@ -374,9 +398,9 @@ public class Picture extends SimplePicture
 		final int BLUE = 2;
 		final int CYAN = 3;
 		final int MAGENTA = 4;
-		final int YELLOW = 5; 
-		
-		if(baseColor > 5 || baseColor < 0)
+		final int YELLOW = 5;
+
+		if (baseColor > 5 || baseColor < 0)
 		{
 			baseColor = (int) ((Math.random() * 100) % 6);
 		}
@@ -429,7 +453,7 @@ public class Picture extends SimplePicture
 					layer2[row][col].setGreen(0);
 					layer1[row][col].setBlue(0);
 				}
-				
+
 			}
 		}
 
@@ -449,60 +473,136 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-	
-	public void noise()
+
+	public void grain()
 	{
-		noise(50);
+		grain(20);
 	}
-	public void noise(int hardness)
+
+	public void grain(int hardness)
 	{
 		Pixel[][] pixels = this.getPixels2D();
-		
-		if(hardness > 255)
+
+		if (hardness > 255)
 		{
 			hardness = 255;
 		}
-		
-		for(Pixel[] rowArray : pixels)
+
+		for (Pixel[] rowArray : pixels)
 		{
-			for(Pixel currentPix : rowArray)
+			for (Pixel currentPix : rowArray)
 			{
 				currentPix.setRed((currentPix.getRed() + (pickRandomNumber(true, hardness))));
 				currentPix.setGreen((currentPix.getGreen() + (pickRandomNumber(true, hardness))));
 				currentPix.setBlue((currentPix.getBlue() + (pickRandomNumber(true, hardness))));
 			}
 		}
-		
+
 	}
-	public void noise(int hardness, int direction)
+
+	public void grain(int hardness, int direction)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		int negative = 1;
-		if(hardness > 255)
+		if (hardness > 255)
 		{
 			hardness = 255;
 		}
-		if(direction != 0)
+		if (direction != 0)
 		{
 			negative = -1;
 		}
-			
-		for(Pixel[] rowArray : pixels)
+
+		for (Pixel[] rowArray : pixels)
 		{
-			for(Pixel currentPix : rowArray)
+			for (Pixel currentPix : rowArray)
 			{
 				currentPix.setRed((currentPix.getRed() + (pickRandomNumber(false, hardness) * negative)));
 				currentPix.setGreen((currentPix.getGreen() + (pickRandomNumber(false, hardness) * negative)));
 				currentPix.setBlue((currentPix.getBlue() + (pickRandomNumber(false, hardness) * negative)));
 			}
 		}
-		
 	}
+	
+	public void noise()
+	{
+		noise(20);
+	}
+	public void noise(int hardness)
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		if (hardness > 255)
+		{
+			hardness = 255;
+		}
+		
+		
+		for (int row = 0; row < pixels.length; row++)
+		{
+			for (int col = 0; col < pixels[0].length; col++)
+			{
+				
+				int randRow = (int) (Math.random() * pixels.length);
+				int randCol = (int) (Math.random() * pixels[0].length);
+
+				pixels[randRow][randCol].setRed((pixels[randRow][randCol].getRed() + (pickRandomNumber(true, hardness))));
+				pixels[randRow][randCol].setGreen((pixels[randRow][randCol].getGreen() + (pickRandomNumber(true, hardness))));
+				pixels[randRow][randCol].setBlue((pixels[randRow][randCol].getBlue() + (pickRandomNumber(true, hardness))));
+			}
+		}
+	}
+	public void noise(int hardness, int direction)
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		int negative = 1;
+		
+		if (hardness > 255)
+		{
+			hardness = 255;
+		}
+		
+		if (direction != 0)
+		{
+			negative = -1;
+		}
+		for (int row = 0; row < pixels.length; row++)
+		{
+			for (int col = 0; col < pixels[0].length; col++)
+			{
+				
+				int randRow = (int) (Math.random() * pixels.length);
+				int randCol = (int) (Math.random() * pixels[0].length);
+
+				pixels[randRow][randCol].setRed((pixels[randRow][randCol].getRed() + (pickRandomNumber(false, hardness) * negative)));
+				pixels[randRow][randCol].setGreen((pixels[randRow][randCol].getGreen() + (pickRandomNumber(false, hardness) * negative)));
+				pixels[randRow][randCol].setBlue((pixels[randRow][randCol].getBlue() + (pickRandomNumber(false, hardness) * negative)));
+			}
+		}
+
+	}
+
+	public void noise(Color baseColor, double noiseLevel)
+	{
+		Pixel[][] pixels = this.getPixels2D();
+
+		noiseLevel *= 10000;
+
+		for (int cycles = 0; cycles < noiseLevel; cycles++)
+		{
+			int randRow = (int) (Math.random() * pixels.length);
+			int randCol = (int) (Math.random() * pixels[0].length);
+
+			pixels[randRow][randCol].setColor(baseColor);
+
+		}
+	}
+
 	// <------Shifting------>
 	public void shiftLeftRight(int amount)
 	{
 		shiftLeftRight(amount, 0, this.getHeight());
 	}
+
 	public void shiftLeftRight(int amount, int startPoint, int endPoint)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -511,7 +611,7 @@ public class Picture extends SimplePicture
 
 		int width = pixels[0].length;
 		int height = pixels.length;
-		
+
 		if (Math.abs(amount) > width)
 		{
 			if (amount < 0)
@@ -523,25 +623,25 @@ public class Picture extends SimplePicture
 				amount = (amount % width);
 			}
 		}
-		
-		if(startPoint < 0)
+
+		if (startPoint < 0)
 		{
 			startPoint = 0;
 		}
-		else if(startPoint > height)
+		else if (startPoint > height)
 		{
 			startPoint = height;
 		}
-		
-		if(endPoint < 0)
+
+		if (endPoint < 0)
 		{
 			endPoint = 0;
 		}
-		else if(endPoint > height)
+		else if (endPoint > height)
 		{
 			endPoint = height;
 		}
-		
+
 		int shiftedValue = amount;
 
 		for (int row = startPoint; row < endPoint; row++)
@@ -554,23 +654,23 @@ public class Picture extends SimplePicture
 
 			}
 		}
-		
+
 		for (int row = 0; row < pixels.length; row++)
 		{
 			for (int col = 0; col < pixels[0].length; col++)
 			{
-				
+
 				pixels[row][col].setColor(copied[row][col].getColor());
 
 			}
 		}
 	}
 
-	
 	public void shiftUpDown(int amount)
 	{
 		shiftUpDown(amount, 0, this.getWidth());
 	}
+
 	public void shiftUpDown(int amount, int startPoint, int endPoint)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -579,7 +679,7 @@ public class Picture extends SimplePicture
 
 		int height = pixels.length;
 		int width = pixels[0].length;
-		
+
 		if (Math.abs(amount) > height)
 		{
 			if (amount < 0)
@@ -591,26 +691,26 @@ public class Picture extends SimplePicture
 				amount = (amount % height);
 			}
 		}
-		if(startPoint < 0)
+		if (startPoint < 0)
 		{
 			startPoint = 0;
 		}
-		else if(startPoint >= width)
+		else if (startPoint >= width)
 		{
 			startPoint = width;
 		}
-		
-		if(endPoint < 0)
+
+		if (endPoint < 0)
 		{
 			endPoint = 0;
 		}
-		else if(endPoint >= width)
+		else if (endPoint >= width)
 		{
 			endPoint = width;
 		}
-		
+
 		int shiftedValue = amount;
-		
+
 		for (int row = 0; row < height; row++)
 		{
 			for (int col = startPoint; col < endPoint; col++)
@@ -618,21 +718,21 @@ public class Picture extends SimplePicture
 				shiftedValue = (row + (amount + height)) % height;
 
 				copied[row][col].setColor(pixels[shiftedValue][col].getColor());
-				
+
 			}
 		}
 		for (int row = 0; row < pixels.length; row++)
 		{
 			for (int col = 0; col < pixels[0].length; col++)
 			{
-				
+
 				pixels[row][col].setColor(copied[row][col].getColor());
 
 			}
 		}
 	}
-	
-//<------Mirroring----->
+
+	// <------Mirroring----->
 	/**
 	 * Method that mirrors the picture around a vertical mirror in the center of the
 	 * picture from left to right
@@ -688,13 +788,14 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
+
 	public void bleed(int point, int direction)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		Pixel bleedPixel = null;
 		int startPoint;
 		int endPoint;
-		if(direction > 1)
+		if (direction > 1)
 		{
 			startPoint = point;
 			endPoint = pixels[0].length;
@@ -704,25 +805,25 @@ public class Picture extends SimplePicture
 			startPoint = 0;
 			endPoint = point;
 		}
-		
-		for(int row = 0; row < pixels.length; row++)
+
+		for (int row = 0; row < pixels.length; row++)
 		{
-	
-			for(int col = startPoint; col < endPoint; col++)
+
+			for (int col = startPoint; col < endPoint; col++)
 			{
 				bleedPixel = pixels[row][point];
 				pixels[row][col].setColor(bleedPixel.getColor());
 			}
 		}
 	}
-	
+
 	public void verticalBleed(int point, int direction)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		Pixel bleedPixel = null;
 		int startPoint;
 		int endPoint;
-		if(direction > 1)
+		if (direction > 1)
 		{
 			startPoint = point;
 			endPoint = pixels.length;
@@ -732,17 +833,18 @@ public class Picture extends SimplePicture
 			startPoint = 0;
 			endPoint = point;
 		}
-		for(int row = startPoint; row < endPoint; row++)
+		for (int row = startPoint; row < endPoint; row++)
 		{
-			
-			for(int col = 0; col < pixels[0].length; col++)
+
+			for (int col = 0; col < pixels[0].length; col++)
 			{
 				bleedPixel = pixels[point][col];
 				pixels[row][col].setColor(bleedPixel.getColor());
 			}
-			
+
 		}
 	}
+
 	public void mirrorGull()
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -890,54 +992,55 @@ public class Picture extends SimplePicture
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		Pixel[][] hiddenPixels = hidden.getPixels2D();
-		
-		for(int row = 0; row < pixels.length && row < hiddenPixels.length; row++)
+
+		for (int row = 0; row < pixels.length && row < hiddenPixels.length; row++)
 		{
-			for(int col = 0; col < pixels[0].length && col < hiddenPixels[0].length; col++)
+			for (int col = 0; col < pixels[0].length && col < hiddenPixels[0].length; col++)
 			{
-				//there is a message to hide
-				if(hiddenPixels[row][col].colorDistance(Color.WHITE) > 5)
+				// there is a message to hide
+				if (hiddenPixels[row][col].colorDistance(Color.WHITE) > 5)
 				{
-					if(pixels[row][col].getRed() > 0 && pixels[row][col].getRed() % 2 != 1)
+					if (pixels[row][col].getRed() > 0 && pixels[row][col].getRed() % 2 != 1)
 					{
 						pixels[row][col].setRed(pixels[row][col].getRed() - 1);
 					}
 				}
-				else if(pixels[row][col].getRed() >0 && pixels[row][col].getRed() % 2 == 1)
+				else if (pixels[row][col].getRed() > 0 && pixels[row][col].getRed() % 2 == 1)
 				{
 					pixels[row][col].setRed(pixels[row][col].getRed() - 1);
 				}
 			}
 		}
 	}
-	
+
 	public void revealPicture()
 	{
 		Pixel[][] pixels = this.getPixels2D();
-		
-		for(int row = 0; row < pixels.length; row++)
+
+		for (int row = 0; row < pixels.length; row++)
 		{
-			for(int col = 0; col < pixels[0].length; col++)
+			for (int col = 0; col < pixels[0].length; col++)
 			{
-				if(pixels[row][col].getRed() % 2 != 1)
+				if (pixels[row][col].getRed() % 2 != 1)
 				{
-					pixels[row][col].setColor(new Color(255,0,68));
+					pixels[row][col].setColor(new Color(255, 0, 68));
 				}
-				else if(pixels[row][col].getRed() % 2 == 1)
+				else if (pixels[row][col].getRed() % 2 == 1)
 				{
-					pixels[row][col].setColor(new Color(0,255,187));
+					pixels[row][col].setColor(new Color(0, 255, 187));
 				}
 			}
 		}
 	}
+
 	/*
 	 * Main method for testing - each class in Java can have a main method
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("GSC_beta_Meowth.png");
+		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.noise(95);
+		beach.grain();
 		beach.explore();
 	}
 
