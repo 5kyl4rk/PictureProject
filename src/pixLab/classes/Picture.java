@@ -474,6 +474,30 @@ public class Picture extends SimplePicture
 		}
 		
 	}
+	public void noise(int hardness, int direction)
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		int negative = 1;
+		if(hardness > 255)
+		{
+			hardness = 255;
+		}
+		if(direction != 0)
+		{
+			negative = -1;
+		}
+			
+		for(Pixel[] rowArray : pixels)
+		{
+			for(Pixel currentPix : rowArray)
+			{
+				currentPix.setRed((currentPix.getRed() + (pickRandomNumber(false, hardness) * negative)));
+				currentPix.setGreen((currentPix.getGreen() + (pickRandomNumber(false, hardness) * negative)));
+				currentPix.setBlue((currentPix.getBlue() + (pickRandomNumber(false, hardness) * negative)));
+			}
+		}
+		
+	}
 	// <------Shifting------>
 	public void shiftLeftRight(int amount)
 	{
@@ -913,9 +937,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("GSC_beta_Meowth.png");
 		beach.explore();
-		beach.glitch();
 		beach.noise(95);
-		beach.scanlines(1,5);
 		beach.explore();
 	}
 
