@@ -523,11 +523,12 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-	
+
 	public void noise()
 	{
 		noise(20);
 	}
+
 	public void noise(int hardness)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -535,13 +536,12 @@ public class Picture extends SimplePicture
 		{
 			hardness = 255;
 		}
-		
-		
+
 		for (int row = 0; row < pixels.length; row++)
 		{
 			for (int col = 0; col < pixels[0].length; col++)
 			{
-				
+
 				int randRow = (int) (Math.random() * pixels.length);
 				int randCol = (int) (Math.random() * pixels[0].length);
 
@@ -551,16 +551,17 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
+
 	public void noise(int hardness, int direction)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		int negative = 1;
-		
+
 		if (hardness > 255)
 		{
 			hardness = 255;
 		}
-		
+
 		if (direction != 0)
 		{
 			negative = -1;
@@ -569,7 +570,7 @@ public class Picture extends SimplePicture
 		{
 			for (int col = 0; col < pixels[0].length; col++)
 			{
-				
+
 				int randRow = (int) (Math.random() * pixels.length);
 				int randCol = (int) (Math.random() * pixels[0].length);
 
@@ -585,15 +586,34 @@ public class Picture extends SimplePicture
 	{
 		Pixel[][] pixels = this.getPixels2D();
 
-		noiseLevel *= 10000;
+		noiseLevel *= 0.01;
+		int area = (this.getHeight() * this.getWidth());
+		int percentage = (int)(Math.round(noiseLevel* area));
 
-		for (int cycles = 0; cycles < noiseLevel; cycles++)
+		for (int cycles = 0; cycles < percentage; cycles++)
 		{
 			int randRow = (int) (Math.random() * pixels.length);
 			int randCol = (int) (Math.random() * pixels[0].length);
 
 			pixels[randRow][randCol].setColor(baseColor);
 
+		}
+	}
+
+	public void dissolve(double noiseLevel)
+	{
+		Pixel[][] pixels = this.getPixels2D();
+
+		noiseLevel *= 10000;
+
+		for (int cycles = 0; cycles < noiseLevel; cycles++)
+		{
+			int randRow = (int) (Math.random() * pixels.length);
+			int randCol = (int) (Math.random() * pixels[0].length);
+			int randRow2 = (int) (Math.random() * pixels.length);
+			int randCol2 = (int) (Math.random() * pixels[0].length);
+
+			pixels[randRow][randCol].setColor(pixels[randRow2][randCol2].getColor());
 		}
 	}
 
@@ -1038,9 +1058,11 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("beach.jpg");
+		Picture beach = new Picture("sans.png");
 		beach.explore();
-		beach.grain();
+		beach.glitch();
+		beach.glitch();
+		beach.noise(Color.white, 1);
 		beach.explore();
 	}
 
