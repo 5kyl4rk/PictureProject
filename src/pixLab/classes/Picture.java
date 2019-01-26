@@ -372,7 +372,8 @@ public class Picture extends SimplePicture
 	 */
 	public void make3D(int baseColor)
 	{
-		make3D(baseColor, (pickRandomNumber(true, (this.getWidth() / 8))) + 1);
+		int smallPercent = (int)(Math.round(this.getWidth() * .03));
+		make3D(baseColor, pickRandomNumber(true, smallPercent));
 	}
 
 	/**
@@ -582,13 +583,13 @@ public class Picture extends SimplePicture
 
 	}
 
-	public void noise(Color baseColor, double noiseLevel)
+	public void noise(Color baseColor, double noisePercent)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 
-		noiseLevel *= 0.01;
+		noisePercent *= 0.01;
 		int area = (this.getHeight() * this.getWidth());
-		int percentage = (int)(Math.round(noiseLevel* area));
+		int percentage = (int)(Math.round(noisePercent* area));
 
 		for (int cycles = 0; cycles < percentage; cycles++)
 		{
@@ -1058,12 +1059,11 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("sans.png");
+		Picture beach = new Picture("ghost.jpg");
 		beach.explore();
-		beach.glitch();
-		beach.glitch();
-		beach.noise(Color.white, 1);
+		beach.make3D(0);
 		beach.explore();
+		beach.write("ghost3d.jpg");
 	}
 
 } // this } is the end of class Picture, put all new methods before this
