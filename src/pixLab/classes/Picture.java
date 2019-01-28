@@ -686,7 +686,10 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-
+	public void rowColor(int startPoint,int endPoint, int baseColor)
+	{
+		shiftLRColor(0, startPoint, endPoint, baseColor);
+	}
 	public void shiftLRColor(int amount, int startPoint, int endPoint, int baseColor)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -696,7 +699,10 @@ public class Picture extends SimplePicture
 		final int RED = 0;
 		final int GREEN = 1;
 		final int BLUE = 2;
-
+		final int CYAN = 3;
+		final int MAGENTA = 4;
+		final int YELLOW = 5;
+		
 		if (baseColor > 2 || baseColor < 0)
 		{
 			baseColor = (int) (Math.random() * 3);
