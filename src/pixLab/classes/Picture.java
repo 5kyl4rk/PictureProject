@@ -165,11 +165,51 @@ public class Picture extends SimplePicture
 	/**
 	 * Utilizes helper methods to make an image look "glitchy"
 	 */
-	public void glitch()
+	public void glitch(boolean overlaysOn)
 	{
 		int pickColor = (int) ((Math.random() * 100) % 6);
-		int percent = (int) (Math.round(this.getWidth() * 0.5));
-		this.make3D(pickColor, pickRandomNumber(true, percent));
+		int shiftPercent = (int) (Math.round(this.getWidth() * 0.5));
+		this.make3D(pickColor, pickRandomNumber(true, shiftPercent));
+
+		int height = this.getHeight();
+		int width = this.getWidth();
+		int shiftRange = (int) (Math.round(height * 0.30));
+		int shiftValue = (int) (Math.round(width * 0.25));
+		for (int cycles = 0; cycles < 5; cycles++)
+		{
+			int pointA = pickRandomNumber(false, height);
+			int pointB = pointA + (pickRandomNumber(false, shiftRange));
+			int randoShift = pickRandomNumber(false, shiftValue);
+			pickColor = (int) ((Math.random() * 100) % 6);
+
+			shiftLRColor(randoShift, pointA, pointB, pickColor);
+		}
+
+		if (overlaysOn)
+		{
+			int pickOverlay = (int) (Math.random() * 5);
+
+			if (pickOverlay == 0)
+			{
+				this.scanlines();
+			}
+			else if (pickOverlay == 1)
+			{
+				this.verticalScanlines();
+			}
+			else if (pickOverlay == 2)
+			{
+				this.lcd();
+			}
+			else if (pickOverlay == 3)
+			{
+				this.grain();
+			}
+			else if (pickOverlay == 4)
+			{
+				this.noise();
+			}
+		}
 
 	}
 
@@ -475,6 +515,102 @@ public class Picture extends SimplePicture
 		}
 	}
 
+	public void scramble3D(int baseColor, int times)
+	{
+		final int RED = 0;
+		final int GREEN = 1;
+		final int BLUE = 2;
+		final int CYAN = 3;
+		final int MAGENTA = 4;
+		final int YELLOW = 5;
+
+		if (baseColor > 5 || baseColor < 0)
+		{
+			baseColor = (int) ((Math.random() * 100) % 6);
+		}
+		Pixel[][] pixels = this.getPixels2D();
+		Picture layer1Temp = new Picture(this);
+		Picture layer2Temp = new Picture(this);
+		Pixel[][] layer1 = layer1Temp.getPixels2D();
+		Pixel[][] layer2 = layer2Temp.getPixels2D();
+
+		for (int row = 0; row < pixels.length; row++)
+		{
+			for (int col = 0; col < pixels[0].length; col++)
+			{
+				if (baseColor == RED)
+				{
+					layer2[row][col].setRed(0);
+					layer1[row][col].setGreen(0);
+					layer1[row][col].setBlue(0);
+				}
+
+				else if (baseColor == GREEN)
+				{
+					layer1[row][col].setRed(0);
+					layer2[row][col].setGreen(0);
+					layer1[row][col].setBlue(0);
+				}
+
+				else if (baseColor == BLUE)
+				{
+					layer1[row][col].setRed(0);
+					layer1[row][col].setGreen(0);
+					layer2[row][col].setBlue(0);
+				}
+				else if (baseColor == CYAN)
+				{
+					layer1[row][col].setRed(0);
+					layer2[row][col].setGreen(0);
+					layer2[row][col].setBlue(0);
+				}
+
+				else if (baseColor == MAGENTA)
+				{
+					layer2[row][col].setRed(0);
+					layer1[row][col].setGreen(0);
+					layer2[row][col].setBlue(0);
+				}
+				else if (baseColor == YELLOW)
+				{
+					layer2[row][col].setRed(0);
+					layer2[row][col].setGreen(0);
+					layer1[row][col].setBlue(0);
+				}
+
+			}
+		}
+
+		int height = this.getHeight();
+		int width = this.getWidth();
+		for (int cycles = 0; cycles < times; cycles++)
+		{
+
+			int shiftRange = (int) (Math.round(height * 0.30));
+			int shiftValue = (int) (Math.round(width * 0.25));
+			int pointA = pickRandomNumber(false, height);
+			int pointB = pointA + (pickRandomNumber(false, shiftRange));
+			int randoShift = pickRandomNumber(false, shiftValue);
+			int pickColor = (int) ((Math.random() * 100) % 6);
+
+			layer2Temp.shiftLRColor(randoShift, pointA, pointB, pickColor);
+		}
+
+		for (int row = 0; row < pixels.length; row++)
+		{
+			for (int col = 0; col < pixels[0].length; col++)
+			{
+				int mergeRed = layer1[row][col].getRed() + layer2[row][col].getRed();
+				int mergeGreen = layer1[row][col].getGreen() + layer2[row][col].getGreen();
+				int mergeBlue = layer1[row][col].getBlue() + layer2[row][col].getBlue();
+
+				pixels[row][col].setRed(mergeRed);
+				pixels[row][col].setGreen(mergeGreen);
+				pixels[row][col].setBlue(mergeBlue);
+			}
+		}
+	}
+
 	public void grain()
 	{
 		grain(20);
@@ -686,10 +822,12 @@ public class Picture extends SimplePicture
 			}
 		}
 	}
-	public void rowColor(int startPoint,int endPoint, int baseColor)
+
+	public void rowColor(int startPoint, int endPoint, int baseColor)
 	{
 		shiftLRColor(0, startPoint, endPoint, baseColor);
 	}
+
 	public void shiftLRColor(int amount, int startPoint, int endPoint, int baseColor)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -702,7 +840,7 @@ public class Picture extends SimplePicture
 		final int CYAN = 3;
 		final int MAGENTA = 4;
 		final int YELLOW = 5;
-		
+
 		if (baseColor > 2 || baseColor < 0)
 		{
 			baseColor = (int) (Math.random() * 3);
@@ -749,15 +887,30 @@ public class Picture extends SimplePicture
 				shiftedValue = (col + (amount + width)) % width;
 
 				copied[row][col].setColor(pixels[row][shiftedValue].getColor());
-				if (baseColor == 0)
+				if (baseColor == RED)
+				{
+					copied[row][col].setBlue(0);
+					copied[row][col].setGreen(0);
+				}
+				else if (baseColor == GREEN)
+				{
+					copied[row][col].setBlue(0);
+					copied[row][col].setRed(0);
+				}
+				else if (baseColor == BLUE)
+				{
+					copied[row][col].setRed(0);
+					copied[row][col].setGreen(0);
+				}
+				else if (baseColor == CYAN)
 				{
 					copied[row][col].setRed(0);
 				}
-				else if (baseColor == 1)
+				else if (baseColor == MAGENTA)
 				{
 					copied[row][col].setGreen(0);
 				}
-				else if (baseColor == 2)
+				else if (baseColor == YELLOW)
 				{
 					copied[row][col].setBlue(0);
 				}
@@ -837,6 +990,101 @@ public class Picture extends SimplePicture
 
 				pixels[row][col].setColor(copied[row][col].getColor());
 
+			}
+		}
+	}
+
+	public void colColor(int startPoint, int endPoint, int baseColor)
+	{
+		shiftUDColor(0, startPoint, endPoint, baseColor);
+	}
+
+	public void shiftUDColor(int amount, int startPoint, int endPoint, int baseColor)
+	{
+		Pixel[][] pixels = this.getPixels2D();
+		Picture temp = new Picture(this);
+		Pixel[][] copied = temp.getPixels2D();
+
+		final int RED = 0;
+		final int GREEN = 1;
+		final int BLUE = 2;
+		final int CYAN = 3;
+		final int MAGENTA = 4;
+		final int YELLOW = 5;
+
+		if (baseColor > 2 || baseColor < 0)
+		{
+			baseColor = (int) (Math.random() * 3);
+		}
+		int width = pixels[0].length;
+		int height = pixels.length;
+
+		if (Math.abs(amount) > height)
+		{
+			if (amount < 0)
+			{
+				amount = -1 * (Math.abs(amount) % height);
+			}
+			else
+			{
+				amount = (amount % height);
+			}
+		}
+
+		if (startPoint < 0)
+		{
+			startPoint = 0;
+		}
+		else if (startPoint > width)
+		{
+			startPoint = width;
+		}
+
+		if (endPoint < 0)
+		{
+			endPoint = 0;
+		}
+		else if (endPoint > width)
+		{
+			endPoint = width;
+		}
+
+		int shiftedValue = amount;
+
+		for (int row = 0; row < height; row++)
+		{
+			for (int col = startPoint; col < endPoint; col++)
+			{
+				shiftedValue = (col + (amount + height)) % height;
+
+				copied[row][col].setColor(pixels[shiftedValue][col].getColor());
+				if (baseColor == RED)
+				{
+					copied[row][col].setBlue(0);
+					copied[row][col].setGreen(0);
+				}
+				else if (baseColor == GREEN)
+				{
+					copied[row][col].setBlue(0);
+					copied[row][col].setRed(0);
+				}
+				else if (baseColor == BLUE)
+				{
+					copied[row][col].setRed(0);
+					copied[row][col].setGreen(0);
+				}
+				else if (baseColor == CYAN)
+				{
+					copied[row][col].setRed(0);
+				}
+				else if (baseColor == MAGENTA)
+				{
+					copied[row][col].setGreen(0);
+				}
+				else if (baseColor == YELLOW)
+				{
+					copied[row][col].setBlue(0);
+				}
 			}
 		}
 	}
@@ -1149,10 +1397,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.make3D(1);
-		beach.grain();
-		beach.shiftLeftRight(-20);
-		beach.bleed(20,0);
+		beach.scramble3D(3,5);
 		beach.explore();
 
 	}

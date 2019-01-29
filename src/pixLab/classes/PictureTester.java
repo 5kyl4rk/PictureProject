@@ -41,7 +41,7 @@ public class PictureTester
   {
 	  Picture image = new Picture("synthDuck.png");
 	  image.explore();
-	  image.glitch();
+	  image.glitch(false);
 	  image.explore();
   }
   
