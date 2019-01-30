@@ -176,7 +176,7 @@ public class Picture extends SimplePicture
 
 		int height = this.getHeight();
 		int width = this.getWidth();
-		int shiftRange = (int) (Math.round(height * 0.30));
+		int shiftRange = (int) (Math.round(height * 0.1));
 		int shiftValue = (int) (Math.round(width * 0.25));
 		for (int cycles = 0; cycles < 5; cycles++)
 		{
@@ -185,7 +185,7 @@ public class Picture extends SimplePicture
 			int randoShift = pickRandomNumber(false, shiftValue);
 			pickColor = (int) ((Math.random() * 100) % 6);
 
-			shiftLRColor(randoShift, pointA, pointB, pickColor);
+			rowColor( pointA, pointB, pickColor);
 		}
 
 		if (overlaysOn)
@@ -1526,8 +1526,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.scramble3D(6, 5);
-		beach.noise(10);
+		beach.glitch(true);
 		beach.explore();
 
 	}
