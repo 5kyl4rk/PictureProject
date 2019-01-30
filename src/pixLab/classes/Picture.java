@@ -590,10 +590,10 @@ public class Picture extends SimplePicture
 			int shiftValue = (int) (Math.round(width * 0.25));
 			int pointA = pickRandomNumber(false, height);
 			int pointB = pointA + (pickRandomNumber(false, shiftRange));
-			int randoShift = pickRandomNumber(false, shiftValue);
+			int randoShift = pickRandomNumber(true, shiftValue);
 			int pickColor = (int) ((Math.random() * 100) % 6);
 
-			layer2Temp.shiftLRColor(randoShift, pointA, pointB, pickColor);
+			layer2Temp.shiftLeftRight(randoShift, pointA, pointB);
 		}
 
 		for (int row = 0; row < pixels.length; row++)
@@ -1397,7 +1397,9 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.scramble3D(3,5);
+		beach.scramble3D(6,5);
+		beach.scramble3D(2,4);
+		beach.noise(10);
 		beach.explore();
 
 	}
