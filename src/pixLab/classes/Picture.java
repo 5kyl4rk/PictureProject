@@ -164,6 +164,9 @@ public class Picture extends SimplePicture
 
 	/**
 	 * Utilizes helper methods to make an image look "glitchy"
+	 * 
+	 * @param overlaysOn
+	 *            picks a random overlay to apply to the image
 	 */
 	public void glitch(boolean overlaysOn)
 	{
@@ -515,7 +518,59 @@ public class Picture extends SimplePicture
 		}
 	}
 
-	public void scramble3D(int baseColor, int times)
+	/**
+	 * Makes two layers of opposite color channels with the second layer being
+	 * "scrambled"
+	 * 
+	 * @param baseColor
+	 *            the color of the first layer that doesn't shift
+	 *            <ul>
+	 *            <li><b>Red<b> = 0</li>
+	 *            <li><b>Green<b> = 1</li>
+	 *            <li><b>Blue<b> = 2</li>
+	 *            <li><b>Cyan<b> = 3</li>
+	 *            <li><b>Magenta<b> = 4</li>
+	 *            <li><b>Yellow<b> = 5</li>
+	 *            </ul>
+	 * @param times
+	 *            how many times the second layer gets shifted
+	 * @param slightShiftOn
+	 *            Shifts the second layer slightly before "scramble" to ensure the
+	 *            whole image gets a 3D effect
+	 */
+	public void scramble3D(int baseColor, int times, boolean slightShiftOn)
+	{
+		int slightShift = pickRandomNumber(true, ((int) (Math.round(this.getWidth() * .05))));
+		if (slightShiftOn)
+		{
+			this.scramble3D(baseColor, times, slightShift);
+		}
+		else
+		{
+			this.scramble3D(baseColor, times, 0);
+		}
+	}
+
+	/**
+	 * Makes two layers of opposite color channels with the second layer being
+	 * "scrambled"
+	 * 
+	 * @param baseColor
+	 *            the color of the first layer that doesn't shift
+	 *            <ul>
+	 *            <li><b>Red<b> = 0</li>
+	 *            <li><b>Green<b> = 1</li>
+	 *            <li><b>Blue<b> = 2</li>
+	 *            <li><b>Cyan<b> = 3</li>
+	 *            <li><b>Magenta<b> = 4</li>
+	 *            <li><b>Yellow<b> = 5</li>
+	 *            </ul>
+	 * @param times
+	 *            how many times the second layer gets shifted
+	 * @param shift
+	 *            how much the second layer should be shifted before scramble
+	 */
+	public void scramble3D(int baseColor, int times, int shift)
 	{
 		final int RED = 0;
 		final int GREEN = 1;
@@ -533,7 +588,8 @@ public class Picture extends SimplePicture
 		Picture layer2Temp = new Picture(this);
 		Pixel[][] layer1 = layer1Temp.getPixels2D();
 		Pixel[][] layer2 = layer2Temp.getPixels2D();
-
+		int height = this.getHeight();
+		int width = this.getWidth();
 		for (int row = 0; row < pixels.length; row++)
 		{
 			for (int col = 0; col < pixels[0].length; col++)
@@ -581,17 +637,19 @@ public class Picture extends SimplePicture
 			}
 		}
 
-		int height = this.getHeight();
-		int width = this.getWidth();
+		int shiftRange = (int) (Math.round(height * 0.30));
+		int shiftValue = (int) (Math.round(width * 0.25));
+
+		layer2Temp.shiftLeftRight(shift);
+
+		int pointA = 0;
+		int pointB = 0;
 		for (int cycles = 0; cycles < times; cycles++)
 		{
 
-			int shiftRange = (int) (Math.round(height * 0.30));
-			int shiftValue = (int) (Math.round(width * 0.25));
-			int pointA = pickRandomNumber(false, height);
-			int pointB = pointA + (pickRandomNumber(false, shiftRange));
+			pointA = pickRandomNumber(false, height);
+			pointB = pointA + (pickRandomNumber(false, shiftRange));
 			int randoShift = pickRandomNumber(true, shiftValue);
-			int pickColor = (int) ((Math.random() * 100) % 6);
 
 			layer2Temp.shiftLeftRight(randoShift, pointA, pointB);
 		}
@@ -611,11 +669,21 @@ public class Picture extends SimplePicture
 		}
 	}
 
+	/**
+	 * makes the image look slightly grainy
+	 */
 	public void grain()
 	{
 		grain(20);
 	}
 
+	/**
+	 * increase/decrease each color channel for <i>every</i> pixel
+	 * 
+	 * @param hardness
+	 *            the max value that will either be added or subtracted randomly to
+	 *            each color channel of the pixel
+	 */
 	public void grain(int hardness)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -637,7 +705,20 @@ public class Picture extends SimplePicture
 
 	}
 
-	public void grain(int hardness, int direction)
+	/**
+	 * increase/decrease each color channel for <i><b>every</b></i> pixel
+	 * 
+	 * @param hardness
+	 *            the max value that will either be added or subtracted to each
+	 *            color channel of the pixel
+	 * @param exposure
+	 *            makes it lighter or darker
+	 *            <ul>
+	 *            <li><b>0</b> = increase the color channel (makes it brighter)</li>
+	 *            <li><b>1</b> = decreases the color channel (makes it darker)</li>
+	 *            </ul>
+	 */
+	public void grain(int hardness, int exposure)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		int negative = 1;
@@ -645,7 +726,7 @@ public class Picture extends SimplePicture
 		{
 			hardness = 255;
 		}
-		if (direction != 0)
+		if (exposure != 0)
 		{
 			negative = -1;
 		}
@@ -661,11 +742,21 @@ public class Picture extends SimplePicture
 		}
 	}
 
+	/**
+	 * makes the image slightly noise
+	 */
 	public void noise()
 	{
 		noise(20);
 	}
 
+	/**
+	 * increase/decrease each color channel for <i><b>random</b></i> pixels
+	 * 
+	 * @param hardness
+	 *            the max value that will either be added or subtracted to each
+	 *            color channel of the pixel
+	 */
 	public void noise(int hardness)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -689,7 +780,20 @@ public class Picture extends SimplePicture
 		}
 	}
 
-	public void noise(int hardness, int direction)
+	/**
+	 * increase/decrease each color channel for <i><b>random</b></i> pixels
+	 * 
+	 * @param hardness
+	 *            the max value that will either be added or subtracted to each
+	 *            color channel of the pixel
+	 * @param exposure
+	 *            makes it lighter or darker
+	 *            <ul>
+	 *            <li><b>0</b> = increase the color channel (makes it brighter)</li>
+	 *            <li><b>1</b> = decreases the color channel (makes it darker)</li>
+	 *            </ul>
+	 */
+	public void noise(int hardness, int exposure)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		int negative = 1;
@@ -699,7 +803,7 @@ public class Picture extends SimplePicture
 			hardness = 255;
 		}
 
-		if (direction != 0)
+		if (exposure != 0)
 		{
 			negative = -1;
 		}
@@ -719,6 +823,15 @@ public class Picture extends SimplePicture
 
 	}
 
+	/**
+	 * Randomly makes a pixel become a certain color
+	 * 
+	 * @param baseColor
+	 *            the color to change the pixel <i>(must be of the Color class)</i>
+	 * @param noisePercent
+	 *            how much of the image will be potential affected <br>
+	 *            <i>(ex: 20 = 20% of the image could be changed)</i>
+	 */
 	public void noise(Color baseColor, double noisePercent)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -755,11 +868,27 @@ public class Picture extends SimplePicture
 	}
 
 	// <------Shifting------>
+	/**
+	 * shifts the image by a certain amount
+	 * 
+	 * @param amount
+	 *            how much the image will shift <i>(in pixels)</i>
+	 */
 	public void shiftLeftRight(int amount)
 	{
 		shiftLeftRight(amount, 0, this.getHeight());
 	}
 
+	/**
+	 * shifts a specific range by a certain amount
+	 * 
+	 * @param amount
+	 *            how much the image will shift <i>(in pixels)</i>
+	 * @param startPoint
+	 *            the being point of the selection
+	 * @param endPoint
+	 *            the end of the selection
+	 */
 	public void shiftLeftRight(int amount, int startPoint, int endPoint)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -1397,8 +1526,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.scramble3D(6,5);
-		beach.scramble3D(2,4);
+		beach.scramble3D(6, 5);
 		beach.noise(10);
 		beach.explore();
 
