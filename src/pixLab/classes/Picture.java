@@ -170,9 +170,9 @@ public class Picture extends SimplePicture
 	 */
 	public void glitch(boolean overlaysOn)
 	{
-		int pickColor = (int) ((Math.random() * 100) % 6);
+		int pick3DColor = (int) ((Math.random() * 100) % 6);
 		int shiftPercent = (int) (Math.round(this.getWidth() * 0.5));
-		this.make3D(pickColor, pickRandomNumber(true, shiftPercent));
+		this.make3D(pick3DColor, pickRandomNumber(true, shiftPercent),0);
 
 		int height = this.getHeight();
 		int width = this.getWidth();
@@ -183,7 +183,12 @@ public class Picture extends SimplePicture
 			int pointA = pickRandomNumber(false, height);
 			int pointB = pointA + (pickRandomNumber(false, shiftRange));
 			int randoShift = pickRandomNumber(false, shiftValue);
-			pickColor = (int) ((Math.random() * 100) % 6);
+			int pickColor = (int) ((Math.random() * 100) % 6);
+			if((pickColor + 3) % 6 == pick3DColor)
+			{
+				pickColor = (int) ((Math.random() * 100) % 6);	
+			}
+			
 
 			rowColor( pointA, pointB, pickColor);
 		}
@@ -416,7 +421,7 @@ public class Picture extends SimplePicture
 	public void make3D(int baseColor)
 	{
 		int smallPercent = (int) (Math.round(this.getWidth() * .03));
-		make3D(baseColor, pickRandomNumber(true, smallPercent));
+		make3D(baseColor, pickRandomNumber(true, smallPercent),0);
 	}
 
 	/**
@@ -435,7 +440,7 @@ public class Picture extends SimplePicture
 	 *            <li><b>Yellow<b> = 5</li>
 	 *            </ul>
 	 */
-	public void make3D(int baseColor, int shift)
+	public void make3D(int baseColor, int shift, int direction)
 	{
 		final int RED = 0;
 		final int GREEN = 1;
@@ -500,9 +505,21 @@ public class Picture extends SimplePicture
 
 			}
 		}
-
+		if(direction == 1)
+		{
+			layer2Temp.shiftUpDown(shift);
+		}
+		else if(direction == 2)
+		{
+			layer2Temp.shiftUpDown(shift);
+			layer2Temp.shiftLeftRight(shift);
+		}
+		else
+		{
 		layer2Temp.shiftLeftRight(shift);
-
+		}
+		
+		
 		for (int row = 0; row < pixels.length; row++)
 		{
 			for (int col = 0; col < pixels[0].length; col++)
@@ -578,7 +595,7 @@ public class Picture extends SimplePicture
 		final int CYAN = 3;
 		final int MAGENTA = 4;
 		final int YELLOW = 5;
-
+		
 		if (baseColor > 5 || baseColor < 0)
 		{
 			baseColor = (int) ((Math.random() * 100) % 6);
@@ -1526,7 +1543,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.glitch(true);
+		beach.make3D(1,-3,0);
 		beach.explore();
 
 	}
