@@ -178,7 +178,8 @@ public class Picture extends SimplePicture
 		this.make3D(pick3DColor, pickRandomNumber(true, shiftPercent), pickDirection3D);
 
 		// applies dead pixels
-		int selectRange = (int) (Math.round(height * 0.1));
+		int selectRangeH = (int) (Math.round(height * 0.1));
+		int selectRangeW = (int) (Math.round(width *0.1));
 		int pickDirectionColor = pickRandomNumber(false, 2);
 		int pointA = 0;
 		int pointB = 0;
@@ -193,13 +194,13 @@ public class Picture extends SimplePicture
 			if (pickDirectionColor == 0)
 			{
 				pointA = pickRandomNumber(false, height);
-				pointB = pointA + (pickRandomNumber(false, selectRange));
+				pointB = pointA + (pickRandomNumber(false, selectRangeH));
 				rowColor(pointA, pointB, pickColor);
 			}
 			else
 			{
 				pointA = pickRandomNumber(false, width);
-				pointB = pointA + (pickRandomNumber(false, selectRange));
+				pointB = pointA + (pickRandomNumber(false, selectRangeW));
 				colColor(pointA, pointB, pickColor);
 			}
 		}
@@ -207,7 +208,7 @@ public class Picture extends SimplePicture
 		// applies noise
 		int pickEffect = pickRandomNumber(false, 2);
 		int totalArea = width * height;
-		int pickHardness = pickRandomNumber(false, 256);
+		int pickHardness = pickRandomNumber(false, 100);
 		if (pickEffect == 0)
 		{
 			this.grain(pickHardness);
@@ -781,8 +782,8 @@ public class Picture extends SimplePicture
 	{
 		int area = (this.getHeight() * this.getWidth());
 		int percentage = (int) (Math.round(.20 * area));
-		
-		noise(20,percentage);
+
+		noise(20, percentage);
 	}
 
 	/**
@@ -792,7 +793,7 @@ public class Picture extends SimplePicture
 	 *            the max value that will either be added or subtracted to each
 	 *            color channel of the pixel
 	 */
-	public void noise(int hardness,double noisePercent)
+	public void noise(int hardness, double noisePercent)
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		int negative = 1;
@@ -801,7 +802,6 @@ public class Picture extends SimplePicture
 		{
 			hardness = 255;
 		}
-
 
 		noisePercent *= 0.01;
 		int area = (this.getHeight() * this.getWidth());
@@ -812,10 +812,9 @@ public class Picture extends SimplePicture
 			int randRow = (int) (Math.random() * pixels.length);
 			int randCol = (int) (Math.random() * pixels[0].length);
 
-				pixels[randRow][randCol].setRed((pixels[randRow][randCol].getRed() + (pickRandomNumber(true, hardness))));
-				pixels[randRow][randCol].setGreen((pixels[randRow][randCol].getGreen() + (pickRandomNumber(true, hardness))));
-				pixels[randRow][randCol].setBlue((pixels[randRow][randCol].getBlue() + (pickRandomNumber(true, hardness))));
-			}
+			pixels[randRow][randCol].setRed((pixels[randRow][randCol].getRed() + (pickRandomNumber(true, hardness))));
+			pixels[randRow][randCol].setGreen((pixels[randRow][randCol].getGreen() + (pickRandomNumber(true, hardness))));
+			pixels[randRow][randCol].setBlue((pixels[randRow][randCol].getBlue() + (pickRandomNumber(true, hardness))));
 		}
 	}
 
@@ -1565,7 +1564,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.make3D(1, -3, 2);
+		beach.glitch();
 		beach.explore();
 
 	}
