@@ -1632,7 +1632,7 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("wall turtle.jpg");
+		Picture beach = new Picture("yellow.jpg");
 		beach.explore();
 		beach.glitch();
 		beach.explore();
