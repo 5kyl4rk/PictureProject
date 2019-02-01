@@ -1222,7 +1222,7 @@ public class Picture extends SimplePicture
 		{
 			for (int col = startPoint; col < endPoint; col++)
 			{
-				shiftedValue = (col + (amount + height)) % height;
+				shiftedValue = (row + (amount + height)) % height;
 
 				copied[row][col].setColor(pixels[shiftedValue][col].getColor());
 				if (baseColor == RED)
@@ -1252,6 +1252,16 @@ public class Picture extends SimplePicture
 				{
 					copied[row][col].setBlue(0);
 				}
+			}
+		}
+		
+		for (int row = 0; row < pixels.length; row++)
+		{
+			for (int col = 0; col < pixels[0].length; col++)
+			{
+
+				pixels[row][col].setColor(copied[row][col].getColor());
+
 			}
 		}
 	}
@@ -1564,7 +1574,7 @@ public class Picture extends SimplePicture
 	{
 		Picture beach = new Picture("beach.jpg");
 		beach.explore();
-		beach.glitch();
+		beach.shiftUDColor(20,29,34,2);
 		beach.explore();
 
 	}
