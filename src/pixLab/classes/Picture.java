@@ -1633,17 +1633,20 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("yellow.jpg");
+		Picture beach = new Picture("photo.png");
 		beach.explore();
 		beach.glitch();
 		beach.explore();
 		String[] option = { "Yes", "No" };
 		int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+		System.out.println(save);
 		if (save == 0)
 		{
-			if (!beach.write(beach.getTitle() + "-glitched" + beach.getExtension()))
+			String nameGlitch = JOptionPane.showInputDialog(null, "What do you want to save it as?");
+			if (beach.write(nameGlitch+"-glitched."+beach.getExtension()))
 			{
-				JOptionPane.showMessageDialog(null,"Error: couldn't save image");
+				System.out.println("./savedImages/"+beach.getTitle()+ "-glitched."+beach.getExtension());
+				JOptionPane.showMessageDialog(null,"Save successful");
 			}
 
 		}
