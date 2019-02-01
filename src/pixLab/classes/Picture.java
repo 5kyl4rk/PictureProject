@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import java.text.*;
 import java.util.*;
 import java.util.List; // resolves problem with java.awt.List and java.util.List
+import javax.swing.*;
 
 /**
  * A class that represents a picture. This class inherits from SimplePicture and
@@ -178,11 +179,11 @@ public class Picture extends SimplePicture
 		int pick3DEffect = pickRandomNumber(false, 2);
 		int randoCycle = pickRandomNumber(false, 6);
 		int pickDirection3D = pickRandomNumber(false, 3);
-		
+
 		if (pick3DEffect == 0)
 		{
 			// shifts only the second
-			
+
 			this.make3D(pick3DColor, shift3D, pickDirection3D);
 		}
 		else
@@ -227,41 +228,41 @@ public class Picture extends SimplePicture
 		}
 		else
 		{
-			int bleedPercentage = (int)(Math.round(width * 0.07));
-			int bleedPercentageV = (int)(Math.round(height * .07));
-			if(pickDirection3D == 0)
+			int bleedPercentage = (int) (Math.round(width * 0.07));
+			int bleedPercentageV = (int) (Math.round(height * .07));
+			if (pickDirection3D == 0)
 			{
-				if(shift3D > 0)
+				if (shift3D > 0)
 				{
-					this.bleed(pickRandomNumber(false,bleedPercentage),0);
+					this.bleed(pickRandomNumber(false, bleedPercentage), 0);
 				}
 				else
 				{
-					this.bleed((width-pickRandomNumber(false,bleedPercentage)), 1);
+					this.bleed((width - pickRandomNumber(false, bleedPercentage)), 1);
 				}
 			}
-			else if(pickDirection3D == 1)
+			else if (pickDirection3D == 1)
 			{
-				if(shift3D > 0)
+				if (shift3D > 0)
 				{
-					this.verticalBleed(pickRandomNumber(false,bleedPercentageV),0);
+					this.verticalBleed(pickRandomNumber(false, bleedPercentageV), 0);
 				}
 				else
 				{
-					this.verticalBleed((height-pickRandomNumber(false,bleedPercentageV)), 1);
+					this.verticalBleed((height - pickRandomNumber(false, bleedPercentageV)), 1);
 				}
 			}
 			else
 			{
-				if(shift3D > 0)
+				if (shift3D > 0)
 				{
-					this.bleed(pickRandomNumber(false,bleedPercentage),0);
-					this.verticalBleed(pickRandomNumber(false,bleedPercentageV),0);
+					this.bleed(pickRandomNumber(false, bleedPercentage), 0);
+					this.verticalBleed(pickRandomNumber(false, bleedPercentageV), 0);
 				}
 				else
 				{
-					this.bleed((width - pickRandomNumber(false,bleedPercentageV)),1);
-					this.verticalBleed((height - pickRandomNumber(false,bleedPercentageV)), 1);
+					this.bleed((width - pickRandomNumber(false, bleedPercentageV)), 1);
+					this.verticalBleed((height - pickRandomNumber(false, bleedPercentageV)), 1);
 				}
 			}
 		}
@@ -1636,6 +1637,13 @@ public class Picture extends SimplePicture
 		beach.explore();
 		beach.glitch();
 		beach.explore();
+		String[] option = { "Yes", "No" };
+		int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+		if(save == 0)
+		{
+			beach.write(beach.getTitle()+"-glitched"+beach.getExtension()
+			);
+		}
 
 	}
 
