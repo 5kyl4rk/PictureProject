@@ -173,38 +173,98 @@ public class Picture extends SimplePicture
 		int height = this.getHeight();
 		int width = this.getWidth();
 		int pick3DColor = (int) ((Math.random() * 100) % 6);
-		int shiftPercent = (int) (Math.round(width * 0.5));
+		int shiftPercent = (int) (Math.round(width * 0.5)); // can only shift at a max of half the image size
+		int shift3D = pickRandomNumber(true, shiftPercent);
+		int pick3DEffect = pickRandomNumber(false, 2);
+		int randoCycle = pickRandomNumber(false, 6);
 		int pickDirection3D = pickRandomNumber(false, 3);
-		this.make3D(pick3DColor, pickRandomNumber(true, shiftPercent), pickDirection3D);
-
-		// applies dead pixels
-		int selectRangeH = (int) (Math.round(height * 0.1));
-		int selectRangeW = (int) (Math.round(width *0.1));
-		int pickDirectionColor = pickRandomNumber(false, 2);
-		int pointA = 0;
-		int pointB = 0;
-		for (int cycles = 0; cycles < 5; cycles++)
+		
+		if (pick3DEffect == 0)
 		{
+			// shifts only the second
+			
+			this.make3D(pick3DColor, shift3D, pickDirection3D);
+		}
+		else
+		{
+			// shifts the second layer randomly
 
-			int pickColor = (int) ((Math.random() * 100) % 6);
-			if ((pickColor + 3) % 6 == pick3DColor)
+			this.scramble3D(pick3DColor, randoCycle, shift3D);
+		}
+
+		int determineFirstEffect = pickRandomNumber(false, 2);
+
+		if (determineFirstEffect == 0)
+		{
+			// applies dead pixels
+			randoCycle = pickRandomNumber(false, 6);
+			int selectRangeH = (int) (Math.round(height * 0.05));
+			int selectRangeW = (int) (Math.round(width * 0.05));
+			int pickDirectionColor = pickRandomNumber(false, 2);
+			int pointA = 0;
+			int pointB = 0;
+			for (int cycles = 0; cycles < randoCycle; cycles++)
 			{
-				pickColor = (int) ((Math.random() * 100) % 6);
+
+				int pickColor = (int) ((Math.random() * 100) % 6);
+				/*
+				 * if ((pickColor + 3) % 6 == pick3DColor) { pickColor = (int) ((Math.random() *
+				 * 100) % 6); }
+				 */
+				if (pickDirectionColor == 0)
+				{
+					pointA = pickRandomNumber(false, height);
+					pointB = pointA + (pickRandomNumber(false, selectRangeH));
+					rowColor(pointA, pointB, pickColor);
+				}
+				else
+				{
+					pointA = pickRandomNumber(false, width);
+					pointB = pointA + (pickRandomNumber(false, selectRangeW));
+					colColor(pointA, pointB, pickColor);
+				}
 			}
-			if (pickDirectionColor == 0)
+		}
+		else
+		{
+			int bleedPercentage = (int)(Math.round(width * 0.07));
+			int bleedPercentageV = (int)(Math.round(height * .07));
+			if(pickDirection3D == 0)
 			{
-				pointA = pickRandomNumber(false, height);
-				pointB = pointA + (pickRandomNumber(false, selectRangeH));
-				rowColor(pointA, pointB, pickColor);
+				if(shift3D > 0)
+				{
+					this.bleed(pickRandomNumber(false,bleedPercentage),0);
+				}
+				else
+				{
+					this.bleed((width-pickRandomNumber(false,bleedPercentage)), 1);
+				}
+			}
+			else if(pickDirection3D == 1)
+			{
+				if(shift3D > 0)
+				{
+					this.verticalBleed(pickRandomNumber(false,bleedPercentageV),0);
+				}
+				else
+				{
+					this.verticalBleed((height-pickRandomNumber(false,bleedPercentageV)), 1);
+				}
 			}
 			else
 			{
-				pointA = pickRandomNumber(false, width);
-				pointB = pointA + (pickRandomNumber(false, selectRangeW));
-				colColor(pointA, pointB, pickColor);
+				if(shift3D > 0)
+				{
+					this.bleed(pickRandomNumber(false,bleedPercentage),0);
+					this.verticalBleed(pickRandomNumber(false,bleedPercentageV),0);
+				}
+				else
+				{
+					this.bleed((width - pickRandomNumber(false,bleedPercentageV)),1);
+					this.verticalBleed((height - pickRandomNumber(false,bleedPercentageV)), 1);
+				}
 			}
 		}
-
 		// applies noise
 		int pickEffect = pickRandomNumber(false, 2);
 		int totalArea = width * height;
@@ -233,7 +293,7 @@ public class Picture extends SimplePicture
 		}
 		else if (pickOverlay == 2)
 		{
-			this.lcd(pickSpread, pickThick);
+			this.lcd(1, pickThick);
 		}
 
 	}
@@ -1254,7 +1314,7 @@ public class Picture extends SimplePicture
 				}
 			}
 		}
-		
+
 		for (int row = 0; row < pixels.length; row++)
 		{
 			for (int col = 0; col < pixels[0].length; col++)
@@ -1329,7 +1389,7 @@ public class Picture extends SimplePicture
 		Pixel bleedPixel = null;
 		int startPoint;
 		int endPoint;
-		if (direction > 1)
+		if (direction > 0)
 		{
 			startPoint = point;
 			endPoint = pixels[0].length;
@@ -1357,7 +1417,7 @@ public class Picture extends SimplePicture
 		Pixel bleedPixel = null;
 		int startPoint;
 		int endPoint;
-		if (direction > 1)
+		if (direction > 0)
 		{
 			startPoint = point;
 			endPoint = pixels.length;
@@ -1572,9 +1632,9 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("beach.jpg");
+		Picture beach = new Picture("wall turtle.jpg");
 		beach.explore();
-		beach.shiftUDColor(20,29,34,2);
+		beach.glitch();
 		beach.explore();
 
 	}
