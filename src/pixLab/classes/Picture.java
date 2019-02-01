@@ -1639,10 +1639,13 @@ public class Picture extends SimplePicture
 		beach.explore();
 		String[] option = { "Yes", "No" };
 		int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
-		if(save == 0)
+		if (save == 0)
 		{
-			beach.write(beach.getTitle()+"-glitched"+beach.getExtension()
-			);
+			if (!beach.write(beach.getTitle() + "-glitched" + beach.getExtension()))
+			{
+				JOptionPane.showMessageDialog(null,"Error: couldn't save image");
+			}
+
 		}
 
 	}
