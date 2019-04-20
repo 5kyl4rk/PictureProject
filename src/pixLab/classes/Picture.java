@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.font.*;
 import java.awt.geom.*;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.text.*;
 import java.util.*;
 import java.util.List; // resolves problem with java.awt.List and java.util.List
@@ -1633,22 +1634,54 @@ public class Picture extends SimplePicture
 	 */
 	public static void main(String[] args)
 	{
-		Picture beach = new Picture("photo.png");
-		beach.explore();
-		beach.glitch();
-		beach.explore();
-		String[] option = { "Yes", "No" };
-		int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
-		System.out.println(save);
-		if (save == 0)
+		JFileChooser explorer = new JFileChooser("./src/pixLab/images");
+		boolean anotherImage = true;
+		while (anotherImage)
 		{
-			String nameGlitch = JOptionPane.showInputDialog(null, "What do you want to save it as?");
-			if (beach.write(nameGlitch+"-glitched."+beach.getExtension()))
+			explorer.setDialogTitle("What image do you want to load?");
+			String fileName = FileChooser.pickPath(explorer);
+			File loadFolder = new File(fileName);
+			Picture image = new Picture(fileName);
+			image.explore();
+			image.scanlines();
+			image.make3D(1);
+			image.explore();
+			String[] option = { "Yes", "No" };
+			int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option,
+					option[0]);
+			System.out.println(save);
+			if (save == 0)
 			{
-				System.out.println("./savedImages/"+beach.getTitle()+ "-glitched."+beach.getExtension());
-				JOptionPane.showMessageDialog(null,"Save successful");
-			}
 
+				explorer.setDialogTitle("Where do you want to save?");
+				File saveFolder = new File("./savedImages");
+				String nameGlitch = image.getTitle().substring(0, image.getTitle().indexOf(image.getExtension()) - 1) + "-glitched." + image.getExtension();
+				File saveFile = new File(explorer.getCurrentDirectory().getAbsolutePath() + nameGlitch);
+				explorer.setCurrentDirectory(saveFolder);
+				explorer.setSelectedFile(saveFile);
+				int result = explorer.showSaveDialog(null);
+
+				if (result == JFileChooser.APPROVE_OPTION)
+				{
+					if (image.write(explorer.getSelectedFile().getAbsolutePath()))
+						;
+					{
+						System.out.println(nameGlitch);
+						JOptionPane.showMessageDialog(null, "Save successful");
+					}
+				}
+
+			}
+			int load = JOptionPane.showOptionDialog(null, "Do you want to load another image?", "Load?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option,
+					option[0]);
+			if(load == 1 || load < 0)
+			{
+				anotherImage = false;
+			}
+			else
+			{
+				explorer.setCurrentDirectory(loadFolder);
+			}
 		}
 
 	}
