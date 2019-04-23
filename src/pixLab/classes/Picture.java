@@ -1656,19 +1656,19 @@ public class Picture extends SimplePicture
 				{
 
 					explorer.setDialogTitle("Where do you want to save?");
-					File saveFolder = new File("./savedImages");
+					File saveFolder = new File("./savedImages/");
 					String nameGlitch = "-glitched"+extention;
-					File saveFile = new File("workplease.png");
-					explorer.setCurrentDirectory(saveFolder);
+					File saveFile = new File(nameGlitch);
+					explorer.setCurrentDirectory(saveFolder.getAbsoluteFile());
 					explorer.setSelectedFile(saveFile);
 					int result = explorer.showSaveDialog(null);
 
 					if (result == JFileChooser.APPROVE_OPTION)
 					{
-						if (image.write(explorer.getCurrentDirectory().getAbsolutePath()))
+						if (image.write(explorer.getSelectedFile().getAbsolutePath()))
 							;
 						{
-							// System.out.println(nameGlitch);
+							System.out.println(explorer.getSelectedFile().getPath());
 							JOptionPane.showMessageDialog(null, "Save successful");
 						}
 					}
