@@ -1665,10 +1665,17 @@ public class Picture extends SimplePicture
 
 					if (result == JFileChooser.APPROVE_OPTION)
 					{
-						if (image.write(explorer.getSelectedFile().getAbsolutePath()))
+						String writeTo = explorer.getSelectedFile().getAbsolutePath();
+						//freaking Mac doesn't recognize '.'
+						if(writeTo.indexOf(".") < writeTo.length()-4)
+						{
+							String temp = writeTo.substring(0,writeTo.indexOf("."));
+							writeTo = temp+writeTo.substring(writeTo.indexOf(".")+2);
+						}
+						if (image.write(writeTo))
 							;
 						{
-							System.out.println(explorer.getSelectedFile().getPath());
+							System.out.println(writeTo);
 							JOptionPane.showMessageDialog(null, "Save successful");
 						}
 					}
