@@ -32,7 +32,7 @@ public class PixController
 
 	public void start()
 	{
-		loadImage();
+		
 	}
 
 	public void loadImage()
@@ -83,6 +83,12 @@ public class PixController
 			}
 
 		}
+	}
+	
+	public void glitch()
+	{
+		activeImage.glitch();
+		appFrame.updateDisplay();
 	}
 	
 	public DigitalPicture getPicture()

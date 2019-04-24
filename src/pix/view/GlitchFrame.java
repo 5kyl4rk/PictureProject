@@ -20,14 +20,16 @@ public class GlitchFrame extends JFrame
 	private void setupFrame()
 	{
 		this.setContentPane(appPanel);
-		this.setMinimumSize(new Dimension(100,100));
+		this.setMinimumSize(appPanel.getToolPanelSize());
 		this.setResizable(true);
 		this.setVisible(true);
 	}
 	
 	public void updateDisplay()
 	{
-		this.setSize(app.getPictureSize());
+		int extraPadding = (int)(appPanel.getToolPanelSize().getWidth()+app.getPictureSize().width);
+		this.setSize(extraPadding,app.getPictureSize().height);
+		//this.setMinimumSize(new Dimension());//need more infomation on expected size constriants before attempting
 		appPanel.updateDisplay();
 	}
 }
