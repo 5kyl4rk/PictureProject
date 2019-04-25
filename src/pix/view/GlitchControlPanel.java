@@ -52,6 +52,8 @@ public class GlitchControlPanel extends JPanel
 		this.add(glitch);
 		this.add(compareChanges);
 		compareChanges.setVisible(false);
+		save.setVisible(false);
+		glitch.setVisible(false);
 	}
 
 	private void setupLayout()
@@ -66,6 +68,7 @@ public class GlitchControlPanel extends JPanel
 			public void actionPerformed(ActionEvent click)
 			{
 				app.loadImage();
+				showTools(true);
 			}
 		});
 
@@ -84,6 +87,7 @@ public class GlitchControlPanel extends JPanel
 				app.glitch();
 				compareChanges.setVisible(true);
 				repaint();
+				save.setVisible(true);
 				edited = true;
 			}
 		});
@@ -97,6 +101,8 @@ public class GlitchControlPanel extends JPanel
 					app.setCurrentImage(app.getOriginal());
 					app.updateDisplay();
 					compareChanges.setText("Show Edited");
+					save.setVisible(false);
+					showTools(false);
 					repaint();
 					edited = false;
 				}
@@ -105,6 +111,8 @@ public class GlitchControlPanel extends JPanel
 					app.setCurrentImage(app.getAltered());
 					app.updateDisplay();
 					compareChanges.setText("Show Original");
+					save.setVisible(true);
+					showTools(true);
 					repaint();
 					edited = true;
 				}
@@ -112,6 +120,11 @@ public class GlitchControlPanel extends JPanel
 		});
 	}
 
+	private void showTools(boolean state)
+	{
+		glitch.setVisible(state);
+		repaint();
+	}
 	public Dimension getControlSize()
 	{
 		return this.getPreferredSize();
