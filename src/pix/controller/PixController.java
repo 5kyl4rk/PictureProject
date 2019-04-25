@@ -11,10 +11,11 @@ import pixLab.classes.*;
 public class PixController
 {
 	private Picture activeImage;
+	private Picture originalImage;
+	private Picture alteredImage;
 	private File saveFolder;
 	private String recentLoadPath;
 	private String recentSavePath;
-	private JFileChooser explorer;
 	private String extention;
 	private GlitchFrame appFrame;
 	private Dimension currentSize;
@@ -25,6 +26,8 @@ public class PixController
 		recentLoadPath = "./src/pixLab/images";
 		recentSavePath = "./savedImages/";
 		activeImage = new Picture();
+		
+		
 		extention = ".jpg";
 		currentSize = new Dimension();
 
@@ -45,6 +48,7 @@ public class PixController
 		{
 			//new File(fileName);
 			activeImage.load(fileName);
+			originalImage = new Picture(activeImage);
 			extention = fileName.substring(fileName.lastIndexOf("."));
 			appFrame.updateDisplay();
 		}
@@ -87,18 +91,40 @@ public class PixController
 	
 	public void glitch()
 	{
+		
 		activeImage.glitch();
+		alteredImage = new Picture(activeImage);
 		appFrame.updateDisplay();
 	}
 	
-	public DigitalPicture getPicture()
+	public DigitalPicture getCurrentImage()
 	{
 		return activeImage;
+	}
+	
+	public DigitalPicture getOriginal()
+	{
+		return originalImage;
+	}
+	
+	public DigitalPicture getAltered()
+	{
+		return alteredImage;
+	}
+	
+	public void setCurrentImage(DigitalPicture imageToDisplay)
+	{
+		activeImage = (Picture) imageToDisplay;
 	}
 	
 	public Dimension getPictureSize()
 	{
 		currentSize.setSize(activeImage.getWidth(),activeImage.getHeight());
 		return currentSize;
+	}
+	
+	public void updateDisplay()
+	{
+		appFrame.updateDisplay();
 	}
 }

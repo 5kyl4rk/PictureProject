@@ -4,6 +4,7 @@ import pixLab.classes.PictureFrame;
 import pix.controller.PixController;
 
 import java.awt.Dimension;
+import java.awt.Image;
 
 import javax.swing.*;
 import pixLab.classes.DigitalPicture;
@@ -15,6 +16,7 @@ public class GlitchMasterPanel extends JPanel
 	private ImageIcon image;
 	private SpringLayout appLayout;
 	private GlitchControlPanel tools;
+	private Image current;
 
 	public GlitchMasterPanel(PixController app)
 	{
@@ -44,12 +46,14 @@ public class GlitchMasterPanel extends JPanel
 
 	private void updateImage()
 	{
-		image.setImage(app.getPicture().getImage());
+		image.setImage(app.getCurrentImage().getImage());
 	}
+	
 	
 	protected void updateDisplay()
 	{
 		updateImage();
+		repaint();
 	}
 	
 	public Dimension getToolPanelSize()

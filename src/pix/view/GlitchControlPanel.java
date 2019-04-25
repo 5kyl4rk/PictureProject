@@ -12,7 +12,10 @@ public class GlitchControlPanel extends JPanel
 	private PixController app;
 	private JButton load;
 	private JButton save;
-	private JButton glitch;//subjected to change, for testing purposes
+	private JButton glitch;// subjected to change, for testing purposes
+	private JButton compareChanges;
+	private boolean edited;
+
 	private SpringLayout appLayout;
 
 	public GlitchControlPanel(PixController app)
@@ -21,10 +24,14 @@ public class GlitchControlPanel extends JPanel
 
 		this.app = app;
 
+		edited = false;
 		load = new JButton("Load");
 		save = new JButton("Save");
 		glitch = new JButton("Glitch");
+		compareChanges = new JButton("Show Original");
 		appLayout = new SpringLayout();
+		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 23, SpringLayout.WEST, this);
+		appLayout.putConstraint(SpringLayout.SOUTH, compareChanges, -45, SpringLayout.SOUTH, this);
 		appLayout.putConstraint(SpringLayout.NORTH, glitch, 93, SpringLayout.SOUTH, load);
 		appLayout.putConstraint(SpringLayout.WEST, glitch, 44, SpringLayout.WEST, this);
 		appLayout.putConstraint(SpringLayout.WEST, save, 0, SpringLayout.EAST, load);
@@ -39,10 +46,12 @@ public class GlitchControlPanel extends JPanel
 	private void setupPanel()
 	{
 		this.setLayout(appLayout);
-		this.setPreferredSize(new Dimension(180,300));
+		this.setPreferredSize(new Dimension(180, 300));
 		this.add(load);
 		this.add(save);
 		this.add(glitch);
+		this.add(compareChanges);
+		compareChanges.setVisible(false);
 	}
 
 	private void setupLayout()
@@ -59,7 +68,7 @@ public class GlitchControlPanel extends JPanel
 				app.loadImage();
 			}
 		});
-		
+
 		save.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent click)
@@ -67,16 +76,42 @@ public class GlitchControlPanel extends JPanel
 				app.saveImage();
 			}
 		});
-		
-		load.addActionListener(new ActionListener()
+
+		glitch.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent click)
 			{
 				app.glitch();
+				compareChanges.setVisible(true);
+				repaint();
+				edited = true;
+			}
+		});
+
+		compareChanges.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				if (edited == true)
+				{
+					app.setCurrentImage(app.getOriginal());
+					app.updateDisplay();
+					compareChanges.setText("Show Edited");
+					repaint();
+					edited = false;
+				}
+				else
+				{
+					app.setCurrentImage(app.getAltered());
+					app.updateDisplay();
+					compareChanges.setText("Show Original");
+					repaint();
+					edited = true;
+				}
 			}
 		});
 	}
-	
+
 	public Dimension getControlSize()
 	{
 		return this.getPreferredSize();

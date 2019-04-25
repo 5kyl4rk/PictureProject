@@ -31,5 +31,6 @@ public class GlitchFrame extends JFrame
 		this.setSize(extraPadding,app.getPictureSize().height);
 		//this.setMinimumSize(new Dimension());//need more infomation on expected size constriants before attempting
 		appPanel.updateDisplay();
+		
 	}
 }
