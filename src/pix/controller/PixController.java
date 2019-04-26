@@ -143,4 +143,8 @@ public class PixController
 	{
 		appFrame.updateDisplay();
 	}
+	public GlitchFrame getFrame()
+	{
+		return appFrame;
+	}
 }
