@@ -19,6 +19,8 @@ public class PixController
 	private String extention;
 	private GlitchFrame appFrame;
 	private Dimension currentSize;
+	private Picture lastChange;
+	private boolean fileLoaded;
 
 	public PixController()
 	{
@@ -26,8 +28,7 @@ public class PixController
 		recentLoadPath = "./src/pixLab/images";
 		recentSavePath = "./savedImages/";
 		activeImage = new Picture();
-		
-		
+		fileLoaded = false;
 		extention = ".jpg";
 		currentSize = new Dimension();
 
@@ -35,7 +36,7 @@ public class PixController
 
 	public void start()
 	{
-		
+
 	}
 
 	public void loadImage()
@@ -43,14 +44,15 @@ public class PixController
 		JFileChooser explorer = new JFileChooser(recentLoadPath);
 		explorer.setDialogTitle("What image do you want to load?");
 		int result = explorer.showOpenDialog(null);
-		String fileName = explorer.getSelectedFile().getAbsolutePath();
 		if (result == JFileChooser.APPROVE_OPTION)
 		{
-			//new File(fileName);
+			// new File(fileName);
+			String fileName = explorer.getSelectedFile().getAbsolutePath();
 			activeImage.load(fileName);
 			originalImage = new Picture(activeImage);
 			extention = fileName.substring(fileName.lastIndexOf("."));
 			appFrame.updateDisplay();
+			fileLoaded = true;
 		}
 
 	}
@@ -58,8 +60,7 @@ public class PixController
 	public void saveImage()
 	{
 		String[] option = { "Yes", "No" };
-		int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option,
-				option[0]);
+		int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 		if (save == 0)
 		{
 			JFileChooser explorer = new JFileChooser(recentSavePath);
@@ -88,41 +89,56 @@ public class PixController
 
 		}
 	}
-	
+
 	public void glitch()
 	{
-		
+		copyLastEdit();
 		activeImage.glitch();
 		alteredImage = new Picture(activeImage);
 		appFrame.updateDisplay();
 	}
-	
+
 	public DigitalPicture getCurrentImage()
 	{
 		return activeImage;
 	}
-	
+
 	public DigitalPicture getOriginal()
 	{
 		return originalImage;
 	}
-	
+
 	public DigitalPicture getAltered()
 	{
 		return alteredImage;
 	}
+
+	public DigitalPicture getLastChange()
+	{
+		return lastChange;
+	}
 	
+	public boolean getFileLoaded()
+	{
+		return fileLoaded;
+	}
+
 	public void setCurrentImage(DigitalPicture imageToDisplay)
 	{
 		activeImage = (Picture) imageToDisplay;
 	}
-	
+
 	public Dimension getPictureSize()
 	{
-		currentSize.setSize(activeImage.getWidth(),activeImage.getHeight());
+		currentSize.setSize(activeImage.getWidth(), activeImage.getHeight());
 		return currentSize;
 	}
-	
+
+	private void copyLastEdit()
+	{
+		lastChange = new Picture(activeImage);
+	}
+
 	public void updateDisplay()
 	{
 		appFrame.updateDisplay();

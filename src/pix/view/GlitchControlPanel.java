@@ -14,7 +14,9 @@ public class GlitchControlPanel extends JPanel
 	private JButton save;
 	private JButton glitch;// subjected to change, for testing purposes
 	private JButton compareChanges;
-	private boolean edited;
+	private boolean canEdit;
+	private boolean revertMade;
+	private JButton undoRedo;
 
 	private SpringLayout appLayout;
 
@@ -24,12 +26,17 @@ public class GlitchControlPanel extends JPanel
 
 		this.app = app;
 
-		edited = false;
+		revertMade = false;
+		canEdit = false;
 		load = new JButton("Load");
 		save = new JButton("Save");
 		glitch = new JButton("Glitch");
+		undoRedo = new JButton("Undo");
+
 		compareChanges = new JButton("Show Original");
 		appLayout = new SpringLayout();
+		appLayout.putConstraint(SpringLayout.NORTH, undoRedo, 6, SpringLayout.SOUTH, compareChanges);
+		appLayout.putConstraint(SpringLayout.EAST, undoRedo, 0, SpringLayout.EAST, glitch);
 		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 23, SpringLayout.WEST, this);
 		appLayout.putConstraint(SpringLayout.SOUTH, compareChanges, -45, SpringLayout.SOUTH, this);
 		appLayout.putConstraint(SpringLayout.NORTH, glitch, 93, SpringLayout.SOUTH, load);
@@ -38,7 +45,6 @@ public class GlitchControlPanel extends JPanel
 		appLayout.putConstraint(SpringLayout.NORTH, save, 10, SpringLayout.NORTH, this);
 		appLayout.putConstraint(SpringLayout.NORTH, load, 0, SpringLayout.NORTH, save);
 		appLayout.putConstraint(SpringLayout.WEST, load, 10, SpringLayout.WEST, this);
-		appLayout.putConstraint(SpringLayout.EAST, save, -10, SpringLayout.EAST, this);
 		setupPanel();
 		setupListeners();
 	}
@@ -51,9 +57,10 @@ public class GlitchControlPanel extends JPanel
 		this.add(save);
 		this.add(glitch);
 		this.add(compareChanges);
+		this.add(undoRedo);
 		compareChanges.setVisible(false);
 		save.setVisible(false);
-		glitch.setVisible(false);
+		showTools(false);
 	}
 
 	private void setupLayout()
@@ -67,8 +74,14 @@ public class GlitchControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
+
 				app.loadImage();
-				showTools(true);
+				if (app.getFileLoaded())
+				{
+					undoRedo.setEnabled(false);
+					compareChanges.setVisible(false);
+					showTools(true);
+				}
 			}
 		});
 
@@ -88,7 +101,8 @@ public class GlitchControlPanel extends JPanel
 				compareChanges.setVisible(true);
 				repaint();
 				save.setVisible(true);
-				edited = true;
+				canEdit = true;
+				restartUndoRedo();
 			}
 		});
 
@@ -96,7 +110,7 @@ public class GlitchControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				if (edited == true)
+				if (canEdit == true)
 				{
 					app.setCurrentImage(app.getOriginal());
 					app.updateDisplay();
@@ -104,7 +118,8 @@ public class GlitchControlPanel extends JPanel
 					save.setVisible(false);
 					showTools(false);
 					repaint();
-					edited = false;
+					canEdit = false;
+					restartUndoRedo();
 				}
 				else
 				{
@@ -114,7 +129,31 @@ public class GlitchControlPanel extends JPanel
 					save.setVisible(true);
 					showTools(true);
 					repaint();
-					edited = true;
+					canEdit = true;
+				}
+			}
+		});
+
+		undoRedo.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				if (canEdit == true)
+				{
+					if (!revertMade)
+					{
+						app.setCurrentImage(app.getLastChange());
+						app.updateDisplay();
+						undoRedo.setText("Redo");
+						repaint();
+						revertMade = true;
+					}
+					else
+					{
+						app.setCurrentImage(app.getAltered());
+						app.updateDisplay();
+						restartUndoRedo();
+					}
 				}
 			}
 		});
@@ -123,8 +162,18 @@ public class GlitchControlPanel extends JPanel
 	private void showTools(boolean state)
 	{
 		glitch.setVisible(state);
+		undoRedo.setVisible(state);
 		repaint();
 	}
+
+	private void restartUndoRedo()
+	{
+		revertMade = false;
+		undoRedo.setText("Undo");
+		undoRedo.setEnabled(true);
+		repaint();
+	}
+
 	public Dimension getControlSize()
 	{
 		return this.getPreferredSize();

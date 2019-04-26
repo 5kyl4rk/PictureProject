@@ -21,6 +21,8 @@ public class GlitchFrame extends JFrame
 	{
 		this.setContentPane(appPanel);
 		this.setMinimumSize(appPanel.getToolPanelSize());
+		this.setLocationRelativeTo(null);
+
 		this.setResizable(true);
 		this.setVisible(true);
 	}
