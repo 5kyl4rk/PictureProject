@@ -16,7 +16,7 @@ public class PixController
 	private File saveFolder;
 	private String recentLoadPath;
 	private String recentSavePath;
-	private String extention;
+	private String extension;
 	private GlitchFrame appFrame;
 	private Dimension currentSize;
 	private Picture lastChange;
@@ -29,7 +29,7 @@ public class PixController
 		recentSavePath = "./savedImages/";
 		activeImage = new Picture();
 		fileLoaded = false;
-		extention = ".jpg";
+		extension = ".jpg";
 		currentSize = new Dimension();
 
 	}
@@ -38,7 +38,10 @@ public class PixController
 	{
 
 	}
-
+	//===== IO Handling =====
+	/**
+	 * Allows user to open an image file
+	 */
 	public void loadImage()
 	{
 		JFileChooser explorer = new JFileChooser(recentLoadPath);
@@ -50,13 +53,16 @@ public class PixController
 			String fileName = explorer.getSelectedFile().getAbsolutePath();
 			activeImage.load(fileName);
 			originalImage = new Picture(activeImage);
-			extention = fileName.substring(fileName.lastIndexOf("."));
+			extension = fileName.substring(fileName.lastIndexOf("."));
 			appFrame.updateDisplay();
 			fileLoaded = true;
 		}
 
 	}
 
+	/**
+	 * Saves the current image into a selected directory
+	 */
 	public void saveImage()
 	{
 		String[] option = { "Yes", "No" };
@@ -65,7 +71,7 @@ public class PixController
 		{
 			JFileChooser explorer = new JFileChooser(recentSavePath);
 			explorer.setDialogTitle("Where do you want to save?");
-			String nameGlitch = "-glitched" + extention;
+			String nameGlitch = "-glitched" + extension;
 			File saveFile = new File(nameGlitch);
 			explorer.setSelectedFile(saveFile);
 
@@ -90,6 +96,10 @@ public class PixController
 		}
 	}
 
+	//===== Image Altering =====
+	/**
+	 * Uses the {@link pixLab.classes.Picture#glitch() glitch()} method from Picture
+	 */
 	public void glitch()
 	{
 		copyLastEdit();
@@ -97,13 +107,28 @@ public class PixController
 		alteredImage = new Picture(activeImage);
 		appFrame.updateDisplay();
 	}
+	
+	/**
+	 * Uses the {@link pixLab.classes.Picture#make3D(int, int, int) make3D()} method from Picture
+	 */
 	public void make3D(int shiftValue)
 	{
 		activeImage.make3D(0,shiftValue,0);
 		alteredImage = new Picture(activeImage);
 		appFrame.updateDisplay();
 	}
+	
+	private void copyLastEdit()
+	{
+		lastChange = new Picture(activeImage);
+	}
 
+	public void updateDisplay()
+	{
+		appFrame.updateDisplay();
+	}
+
+	//===== Get/Set =====
 	public DigitalPicture getCurrentImage()
 	{
 		return activeImage;
@@ -140,15 +165,6 @@ public class PixController
 		return currentSize;
 	}
 
-	private void copyLastEdit()
-	{
-		lastChange = new Picture(activeImage);
-	}
-
-	public void updateDisplay()
-	{
-		appFrame.updateDisplay();
-	}
 	public GlitchFrame getFrame()
 	{
 		return appFrame;
