@@ -92,11 +92,12 @@ public class GlitchControlPanel extends JPanel
 			{
 
 				app.loadImage();
-				if (app.getFileLoaded())
+				if (app.isFileLoaded())
 				{
 					undoRedo.setEnabled(false);
 					compareChanges.setVisible(false);
 					showTools(true);
+					sidebar.updateDimensions();
 				}
 			}
 		});

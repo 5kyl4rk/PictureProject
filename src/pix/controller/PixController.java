@@ -97,6 +97,12 @@ public class PixController
 		alteredImage = new Picture(activeImage);
 		appFrame.updateDisplay();
 	}
+	public void make3D(int shiftValue)
+	{
+		activeImage.make3D(0,shiftValue,0);
+		alteredImage = new Picture(activeImage);
+		appFrame.updateDisplay();
+	}
 
 	public DigitalPicture getCurrentImage()
 	{
@@ -118,7 +124,7 @@ public class PixController
 		return lastChange;
 	}
 	
-	public boolean getFileLoaded()
+	public boolean isFileLoaded()
 	{
 		return fileLoaded;
 	}
