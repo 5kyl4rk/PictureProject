@@ -1,6 +1,7 @@
 package pix.view;
 
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -10,6 +11,9 @@ import pix.controller.PixController;
 public class GlitchControlPanel extends JPanel
 {
 	private PixController app;
+	private JPanel saveLoadPanel;
+	private JPanel glitchPanel;
+	private JPanel switchPanel;
 	private JButton load;
 	private JButton save;
 	private JButton glitch;// subjected to change, for testing purposes
@@ -30,6 +34,9 @@ public class GlitchControlPanel extends JPanel
 
 		revertMade = false;
 		canEdit = false;
+		saveLoadPanel = new JPanel(new GridLayout(1,0));
+		glitchPanel = new JPanel(new GridLayout(0,1));
+		switchPanel = new JPanel(new GridLayout(1,0));
 		load = new JButton("Load");
 		save = new JButton("Save");
 		glitch = new JButton("Glitch");
@@ -39,6 +46,47 @@ public class GlitchControlPanel extends JPanel
 
 		compareChanges = new JButton("Show Original");
 		appLayout = new SpringLayout();
+		appLayout.putConstraint(SpringLayout.WEST, glitchPanel, 20, SpringLayout.WEST, compareChanges);
+		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
+		appLayout.putConstraint(SpringLayout.SOUTH, compareChanges, -6, SpringLayout.NORTH, switchPanel);
+		appLayout.putConstraint(SpringLayout.NORTH, glitchPanel, 30, SpringLayout.SOUTH, saveLoadPanel);
+		appLayout.putConstraint(SpringLayout.SOUTH, switchPanel, 0, SpringLayout.SOUTH, this);
+		appLayout.putConstraint(SpringLayout.EAST, switchPanel, 0, SpringLayout.EAST, saveLoadPanel);
+		
+		
+		
+
+		sidebar = new UniversalEditingTools(app);
+		setupPanel();
+		//setupLayout();
+		setupListeners();
+	}
+
+	private void setupPanel()
+	{
+		this.setLayout(appLayout);
+		this.setPreferredSize(new Dimension(180, 300));
+		switchPanel.setPreferredSize(new Dimension(180,50));
+		glitchPanel.setPreferredSize(new Dimension(90,100));
+		saveLoadPanel.setPreferredSize(new Dimension(180,50));
+		this.add(switchPanel);
+		this.add(saveLoadPanel);
+		this.add(glitchPanel);
+		this.add(compareChanges);
+		saveLoadPanel.add(load);
+		saveLoadPanel.add(save);
+		glitchPanel.add(glitch);
+		switchPanel.add(undoRedo);
+		glitchPanel.add(make3D);
+		switchPanel.add(restart);
+		compareChanges.setVisible(false);
+		save.setVisible(false);
+		restart.setVisible(false);
+		showTools(false);
+	}
+
+	private void setupLayout()
+	{
 		appLayout.putConstraint(SpringLayout.NORTH, restart, 6, SpringLayout.SOUTH, compareChanges);
 		appLayout.putConstraint(SpringLayout.WEST, restart, 0, SpringLayout.WEST, save);
 		appLayout.putConstraint(SpringLayout.EAST, restart, 2, SpringLayout.EAST, compareChanges);
@@ -48,40 +96,12 @@ public class GlitchControlPanel extends JPanel
 		appLayout.putConstraint(SpringLayout.NORTH, make3D, 1, SpringLayout.SOUTH, glitch);
 		appLayout.putConstraint(SpringLayout.WEST, make3D, 0, SpringLayout.WEST, glitch);
 		appLayout.putConstraint(SpringLayout.EAST, make3D, 0, SpringLayout.EAST, glitch);
-		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 23, SpringLayout.WEST, this);
-		appLayout.putConstraint(SpringLayout.SOUTH, compareChanges, -45, SpringLayout.SOUTH, this);
 		appLayout.putConstraint(SpringLayout.NORTH, glitch, 93, SpringLayout.SOUTH, load);
 		appLayout.putConstraint(SpringLayout.WEST, glitch, 44, SpringLayout.WEST, this);
 		appLayout.putConstraint(SpringLayout.WEST, save, 0, SpringLayout.EAST, load);
 		appLayout.putConstraint(SpringLayout.NORTH, save, 10, SpringLayout.NORTH, this);
 		appLayout.putConstraint(SpringLayout.NORTH, load, 0, SpringLayout.NORTH, save);
 		appLayout.putConstraint(SpringLayout.WEST, load, 10, SpringLayout.WEST, this);
-
-		sidebar = new UniversalEditingTools(app);
-		setupPanel();
-		setupListeners();
-	}
-
-	private void setupPanel()
-	{
-		this.setLayout(appLayout);
-		this.setPreferredSize(new Dimension(180, 300));
-		this.add(load);
-		this.add(save);
-		this.add(glitch);
-		this.add(compareChanges);
-		this.add(undoRedo);
-		this.add(make3D);
-		this.add(restart);
-		compareChanges.setVisible(false);
-		save.setVisible(false);
-		restart.setVisible(false);
-		showTools(false);
-	}
-
-	private void setupLayout()
-	{
-
 	}
 
 	private void setupListeners()
