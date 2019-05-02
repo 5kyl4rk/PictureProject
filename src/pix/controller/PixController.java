@@ -2,7 +2,7 @@ package pix.controller;
 
 import java.awt.Dimension;
 import java.io.File;
-
+import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import pix.view.GlitchFrame;
@@ -16,6 +16,7 @@ public class PixController
 	private String recentLoadPath;
 	private String recentSavePath;
 	private String extension;
+	private ArrayList<Picture> editLog;
 	private GlitchFrame appFrame;
 	private Dimension currentSize;
 	private Picture lastChange;
@@ -31,6 +32,7 @@ public class PixController
 		fileLoaded = false;
 		extension = ".jpg";
 		currentSize = new Dimension();
+		editLog = new ArrayList<Picture>();
 		appFrame = new GlitchFrame(this);
 	
 
