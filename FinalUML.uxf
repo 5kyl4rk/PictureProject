@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.2">
+  <zoom_level>10</zoom_level>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>110</x>
+      <y>180</y>
+      <w>590</w>
+      <h>530</h>
+    </coordinates>
+    <panel_attributes>pixLab
+/(Original Source)/
+--
+group=1
+layer=-1
+transparency=60
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>230</y>
+      <w>160</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>ColorChooser
+--
+_+ pickAColor(): Color_
+
+group=1
+transparency=0
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>120</x>
+      <y>300</y>
+      <w>340</w>
+      <h>350</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+DigitalPicture
+--
++ getFileName() : String
++ getTitle() : String
++ setTitle() : void
++ getWidth() : int
++ getHeight() : int
++ getImage() : Image
++ getBufferedImage() : BufferedImage
++ getBasicPixel(int x, int y) : int
++ setBasicPixel(int x, int y, int rgb) : void
++ getPixel(int x, int y) : Pixel
++ getPixels() : Pixel[]
++ getPixels2D() : Pixel[][]
++ load(Image image) : void
++ load(String fileName) : boolean
++ show() : void
++ explore() : void
++ write(String fileName) : boolean
+
+group=1
+transparency=0</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>

@@ -13,24 +13,26 @@ public class PixController
 	private Picture activeImage;
 	private Picture originalImage;
 	private Picture alteredImage;
-	private File saveFolder;
 	private String recentLoadPath;
 	private String recentSavePath;
 	private String extension;
 	private GlitchFrame appFrame;
 	private Dimension currentSize;
 	private Picture lastChange;
+	private String startPath;
 	private boolean fileLoaded;
 
 	public PixController()
 	{
-		appFrame = new GlitchFrame(this);
-		recentLoadPath = "./src/pixLab/images";
-		recentSavePath = "./savedImages/";
-		activeImage = new Picture();
+		
+		startPath = System.getProperty("user.dir");
+		recentLoadPath = startPath+"/src/pixLab/images";
+		recentSavePath = startPath+"/savedImages/";
 		fileLoaded = false;
 		extension = ".jpg";
 		currentSize = new Dimension();
+		appFrame = new GlitchFrame(this);
+	
 
 	}
 
@@ -49,9 +51,10 @@ public class PixController
 		int result = explorer.showOpenDialog(null);
 		if (result == JFileChooser.APPROVE_OPTION)
 		{
-			// new File(fileName);
+	
 			String fileName = explorer.getSelectedFile().getAbsolutePath();
-			activeImage.load(fileName);
+			recentLoadPath = explorer.getCurrentDirectory().toString();
+			activeImage = new Picture (fileName);
 			originalImage = new Picture(activeImage);
 			extension = fileName.substring(fileName.lastIndexOf("."));
 			appFrame.updateDisplay();
@@ -80,15 +83,10 @@ public class PixController
 			if (result == JFileChooser.APPROVE_OPTION)
 			{
 				String writeTo = explorer.getSelectedFile().getAbsolutePath();
-				// freaking Mac doesn't recognize '.'
-				if (writeTo.indexOf(".") < writeTo.length() - 4)
-				{
-					String temp = writeTo.substring(0, writeTo.indexOf("."));
-					writeTo = temp + writeTo.substring(writeTo.indexOf(".") + 2);
-				}
+				
 				if (activeImage.write(writeTo))
 				{
-					System.out.println(writeTo);
+					recentSavePath = explorer.getCurrentDirectory().toString();
 					JOptionPane.showMessageDialog(null, "Save successful");
 				}
 			}
