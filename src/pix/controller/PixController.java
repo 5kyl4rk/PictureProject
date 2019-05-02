@@ -89,6 +89,10 @@ public class PixController
 					recentSavePath = explorer.getCurrentDirectory().toString();
 					JOptionPane.showMessageDialog(null, "Save successful");
 				}
+				else
+				{
+					JOptionPane.showMessageDialog(null, "Error saving");
+				}
 			}
 
 		}
