@@ -49,7 +49,7 @@ public class PixController
 	{
 		JFileChooser explorer = new JFileChooser(recentLoadPath);
 		explorer.setDialogTitle("What image do you want to load?");
-		int result = explorer.showOpenDialog(null);
+		int result = explorer.showOpenDialog(this.getFrame());
 		if (result == JFileChooser.APPROVE_OPTION)
 		{
 
@@ -57,6 +57,7 @@ public class PixController
 			recentLoadPath = explorer.getCurrentDirectory().toString();
 			activeImage = new Picture(fileName);
 			originalImage = new Picture(activeImage);
+			addToLog(originalImage);
 			extension = fileName.substring(fileName.lastIndexOf("."));
 			appFrame.updateDisplay();
 			fileLoaded = true;
@@ -79,7 +80,7 @@ public class PixController
 			File saveFile = new File(nameGlitch);
 			explorer.setSelectedFile(saveFile);
 
-			int result = explorer.showSaveDialog(null);
+			int result = explorer.showSaveDialog(this.getFrame());
 
 			if (result == JFileChooser.APPROVE_OPTION)
 			{
@@ -88,11 +89,11 @@ public class PixController
 				if (activeImage.write(writeTo))
 				{
 					recentSavePath = explorer.getCurrentDirectory().toString();
-					JOptionPane.showMessageDialog(null, "Save successful");
+					JOptionPane.showMessageDialog(this.getFrame(), "Save successful");
 				}
 				else
 				{
-					JOptionPane.showMessageDialog(null, "Error saving");
+					JOptionPane.showMessageDialog(this.getFrame(), "Error saving");
 				}
 			}
 
@@ -116,7 +117,17 @@ public class PixController
 	 */
 	public void make3D(int shiftValue)
 	{
-		activeImage.make3D(0, shiftValue, 0);
+		Picture temp = activeImage;
+		if(shiftValue != 0)
+		{
+			temp.make3D(0, shiftValue, 0);
+		}
+		else
+		{
+			temp = getLastEdit();
+		}
+		
+		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 	}
 
@@ -143,6 +154,11 @@ public class PixController
 	{
 		appFrame.updateDisplay();
 	}
+	
+	public void recenter()
+	{
+		appFrame.recenter();
+	}
 
 	// ===== Get/Set =====
 	public Picture getCurrentImage()
@@ -157,7 +173,7 @@ public class PixController
 
 	public Picture getLastEdit()
 	{
-		return editLog.get(editLog.size() - 1);
+		return editLog.get(0);
 	}
 
 	public Picture getLastEdit(int index)

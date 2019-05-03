@@ -39,10 +39,13 @@ public class GlitchFrame extends JFrame
 		{
 			height = (int) app.getPictureSize().getHeight();
 		}
-		this.setSize(width+(3*appPanel.getPadding()),height+(2*appPanel.getPadding()));
-		//this.setMinimumSize(new Dimension());//need more infomation on expected size constriants before attempting
-		this.setLocationRelativeTo(null);
-		appPanel.updateDisplay();
+		this.setSize(width+(3*appPanel.getPadding()), height+(2 * appPanel.getPadding()));
 		
+		appPanel.updateDisplay();
+	}
+	
+	public void recenter()
+	{
+		this.setLocationRelativeTo(null);
 	}
 }
