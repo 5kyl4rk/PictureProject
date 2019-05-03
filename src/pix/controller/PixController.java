@@ -12,29 +12,27 @@ public class PixController
 {
 	private Picture activeImage;
 	private Picture originalImage;
-	private Picture alteredImage;
 	private String recentLoadPath;
 	private String recentSavePath;
 	private String extension;
 	private ArrayList<Picture> editLog;
 	private GlitchFrame appFrame;
 	private Dimension currentSize;
-	private Picture lastChange;
 	private String startPath;
+	private final int MAX_MEMORY = 5; //in theory, this could be a greater number, but it has to stop somewhere
 	private boolean fileLoaded;
 
 	public PixController()
 	{
-		
+
 		startPath = System.getProperty("user.dir");
-		recentLoadPath = startPath+"/src/pixLab/images";
-		recentSavePath = startPath+"/savedImages/";
+		recentLoadPath = startPath + "/src/pixLab/images";
+		recentSavePath = startPath + "/savedImages/";
 		fileLoaded = false;
 		extension = ".jpg";
 		currentSize = new Dimension();
 		editLog = new ArrayList<Picture>();
 		appFrame = new GlitchFrame(this);
-	
 
 	}
 
@@ -42,7 +40,8 @@ public class PixController
 	{
 
 	}
-	//===== IO Handling =====
+
+	// ===== IO Handling =====
 	/**
 	 * Allows user to open an image file
 	 */
@@ -53,10 +52,10 @@ public class PixController
 		int result = explorer.showOpenDialog(null);
 		if (result == JFileChooser.APPROVE_OPTION)
 		{
-	
+
 			String fileName = explorer.getSelectedFile().getAbsolutePath();
 			recentLoadPath = explorer.getCurrentDirectory().toString();
-			activeImage = new Picture (fileName);
+			activeImage = new Picture(fileName);
 			originalImage = new Picture(activeImage);
 			extension = fileName.substring(fileName.lastIndexOf("."));
 			appFrame.updateDisplay();
@@ -85,7 +84,7 @@ public class PixController
 			if (result == JFileChooser.APPROVE_OPTION)
 			{
 				String writeTo = explorer.getSelectedFile().getAbsolutePath();
-				
+
 				if (activeImage.write(writeTo))
 				{
 					recentSavePath = explorer.getCurrentDirectory().toString();
@@ -100,31 +99,44 @@ public class PixController
 		}
 	}
 
-	//===== Image Altering =====
+	// ===== Image Altering =====
 	/**
 	 * Uses the {@link pixLab.classes.Picture#glitch() glitch()} method from Picture
 	 */
 	public void glitch()
 	{
-		copyLastEdit();
 		activeImage.glitch();
-		alteredImage = new Picture(activeImage);
+		addToLog(activeImage);
 		appFrame.updateDisplay();
 	}
-	
+
 	/**
-	 * Uses the {@link pixLab.classes.Picture#make3D(int, int, int) make3D()} method from Picture
+	 * Uses the {@link pixLab.classes.Picture#make3D(int, int, int) make3D()} method
+	 * from Picture
 	 */
 	public void make3D(int shiftValue)
 	{
-		activeImage.make3D(0,shiftValue,0);
-		alteredImage = new Picture(activeImage);
+		activeImage.make3D(0, shiftValue, 0);
 		appFrame.updateDisplay();
 	}
-	
-	private void copyLastEdit()
+
+	private void addToLog(Picture editToAdd)
 	{
-		lastChange = new Picture(activeImage);
+		Picture temp = new Picture(editToAdd);
+		editLog.add(0, temp);
+
+		if (editLog.size() > MAX_MEMORY)
+		{
+			editLog.remove(getLogSize() - 1);
+		}
+	}
+	
+	public void clearLog()
+	{
+		for(int index = 0; index < editLog.size(); index++)
+		{
+			editLog.remove(index);
+		}
 	}
 
 	public void updateDisplay()
@@ -132,33 +144,47 @@ public class PixController
 		appFrame.updateDisplay();
 	}
 
-	//===== Get/Set =====
-	public DigitalPicture getCurrentImage()
+	// ===== Get/Set =====
+	public Picture getCurrentImage()
 	{
 		return activeImage;
 	}
 
-	public DigitalPicture getOriginal()
+	public Picture getOriginal()
 	{
 		return originalImage;
 	}
 
-	public DigitalPicture getAltered()
+	public Picture getLastEdit()
 	{
-		return alteredImage;
+		return editLog.get(editLog.size() - 1);
 	}
 
-	public DigitalPicture getLastChange()
+	public Picture getLastEdit(int index)
 	{
-		return lastChange;
+		if (index < 0)
+		{
+			index = 0;
+		}
+		else if (index >= editLog.size())
+		{
+			index = editLog.size() - 1;
+		}
+
+		return editLog.get(index);
 	}
-	
+
+	public int getLogSize()
+	{
+		return editLog.size();
+	}
+
 	public boolean isFileLoaded()
 	{
 		return fileLoaded;
 	}
 
-	public void setCurrentImage(DigitalPicture imageToDisplay)
+	public void setCurrentImage(Picture imageToDisplay)
 	{
 		activeImage = (Picture) imageToDisplay;
 	}

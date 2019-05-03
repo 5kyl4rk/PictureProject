@@ -18,6 +18,7 @@ public class GlitchMasterPanel extends JPanel
 	private GlitchControlPanel tools;
 	private Image current;
 	private int padding;
+	private JScrollPane controlPane;
 
 	public GlitchMasterPanel(PixController app)
 	{
@@ -27,28 +28,44 @@ public class GlitchMasterPanel extends JPanel
 		appLayout = new SpringLayout();
 		displayImage = new JLabel(image);
 		padding = 10;
-		appLayout.putConstraint(SpringLayout.NORTH, displayImage, padding, SpringLayout.NORTH, this);
-		appLayout.putConstraint(SpringLayout.WEST, displayImage, padding, SpringLayout.WEST, this);
-		appLayout.putConstraint(SpringLayout.SOUTH, displayImage, -padding, SpringLayout.SOUTH, this);
 		tools = new GlitchControlPanel(app);
-		appLayout.putConstraint(SpringLayout.NORTH, tools, 0, SpringLayout.NORTH, displayImage);
-		appLayout.putConstraint(SpringLayout.WEST, tools, padding, SpringLayout.EAST, displayImage);
-		appLayout.putConstraint(SpringLayout.SOUTH, tools, 0, SpringLayout.SOUTH, displayImage);
-		appLayout.putConstraint(SpringLayout.EAST, tools, -padding, SpringLayout.EAST, this);
 		
+		controlPane = new JScrollPane();
+
 		setupPanel();
+		setupLayout();
+		setupScrollPane();
 	}
 
 	private void setupPanel()
 	{
 		this.setLayout(appLayout);
 		this.add(displayImage);
-		this.add(tools);
+		this.add(controlPane);
 	}
 
+	private void setupLayout()
+	{
+		appLayout.putConstraint(SpringLayout.NORTH, controlPane, 0, SpringLayout.NORTH, displayImage);
+		appLayout.putConstraint(SpringLayout.WEST, controlPane, padding, SpringLayout.EAST, displayImage);
+		appLayout.putConstraint(SpringLayout.EAST, controlPane, -padding, SpringLayout.EAST, this);
+		appLayout.putConstraint(SpringLayout.NORTH, displayImage, padding, SpringLayout.NORTH, this);
+		appLayout.putConstraint(SpringLayout.WEST, displayImage, padding, SpringLayout.WEST, this);
+		appLayout.putConstraint(SpringLayout.SOUTH, displayImage, -padding, SpringLayout.SOUTH, this);
+		
+		
+	}
+	
 	private void updateImage()
 	{
 		image.setImage(app.getCurrentImage().getImage());
+	}
+	
+	private void setupScrollPane()
+	{
+		controlPane.setViewportView(tools);
+		controlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		controlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 	}
 	
 	

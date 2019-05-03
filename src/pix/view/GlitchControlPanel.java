@@ -25,6 +25,7 @@ public class GlitchControlPanel extends JPanel
 	private JButton make3D;
 	private UniversalEditingTools sidebar;//
 	private SpringLayout appLayout;
+	
 
 	public GlitchControlPanel(PixController app)
 	{
@@ -43,22 +44,13 @@ public class GlitchControlPanel extends JPanel
 		undoRedo = new JButton("Undo");
 		make3D = new JButton("3D");
 		restart = new JButton("Restart");
-
+		
 		compareChanges = new JButton("Show Original");
 		appLayout = new SpringLayout();
-		appLayout.putConstraint(SpringLayout.WEST, glitchPanel, 20, SpringLayout.WEST, compareChanges);
-		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
-		appLayout.putConstraint(SpringLayout.SOUTH, compareChanges, -6, SpringLayout.NORTH, switchPanel);
-		appLayout.putConstraint(SpringLayout.NORTH, glitchPanel, 30, SpringLayout.SOUTH, saveLoadPanel);
-		appLayout.putConstraint(SpringLayout.SOUTH, switchPanel, 0, SpringLayout.SOUTH, this);
-		appLayout.putConstraint(SpringLayout.EAST, switchPanel, 0, SpringLayout.EAST, saveLoadPanel);
-		
-		
-		
-
 		sidebar = new UniversalEditingTools(app);
+		
 		setupPanel();
-		//setupLayout();
+		setupLayout();
 		setupListeners();
 	}
 
@@ -87,21 +79,12 @@ public class GlitchControlPanel extends JPanel
 
 	private void setupLayout()
 	{
-		appLayout.putConstraint(SpringLayout.NORTH, restart, 6, SpringLayout.SOUTH, compareChanges);
-		appLayout.putConstraint(SpringLayout.WEST, restart, 0, SpringLayout.WEST, save);
-		appLayout.putConstraint(SpringLayout.EAST, restart, 2, SpringLayout.EAST, compareChanges);
-		appLayout.putConstraint(SpringLayout.NORTH, undoRedo, 6, SpringLayout.SOUTH, compareChanges);
-		appLayout.putConstraint(SpringLayout.WEST, undoRedo, 0, SpringLayout.WEST, load);
-		appLayout.putConstraint(SpringLayout.EAST, undoRedo, 54, SpringLayout.WEST, compareChanges);
-		appLayout.putConstraint(SpringLayout.NORTH, make3D, 1, SpringLayout.SOUTH, glitch);
-		appLayout.putConstraint(SpringLayout.WEST, make3D, 0, SpringLayout.WEST, glitch);
-		appLayout.putConstraint(SpringLayout.EAST, make3D, 0, SpringLayout.EAST, glitch);
-		appLayout.putConstraint(SpringLayout.NORTH, glitch, 93, SpringLayout.SOUTH, load);
-		appLayout.putConstraint(SpringLayout.WEST, glitch, 44, SpringLayout.WEST, this);
-		appLayout.putConstraint(SpringLayout.WEST, save, 0, SpringLayout.EAST, load);
-		appLayout.putConstraint(SpringLayout.NORTH, save, 10, SpringLayout.NORTH, this);
-		appLayout.putConstraint(SpringLayout.NORTH, load, 0, SpringLayout.NORTH, save);
-		appLayout.putConstraint(SpringLayout.WEST, load, 10, SpringLayout.WEST, this);
+		appLayout.putConstraint(SpringLayout.WEST, glitchPanel, 20, SpringLayout.WEST, compareChanges);
+		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
+		appLayout.putConstraint(SpringLayout.SOUTH, compareChanges, -6, SpringLayout.NORTH, switchPanel);
+		appLayout.putConstraint(SpringLayout.NORTH, glitchPanel, 30, SpringLayout.SOUTH, saveLoadPanel);
+		appLayout.putConstraint(SpringLayout.SOUTH, switchPanel, 0, SpringLayout.SOUTH, this);
+		appLayout.putConstraint(SpringLayout.EAST, switchPanel, 0, SpringLayout.EAST, saveLoadPanel);
 	}
 
 	private void setupListeners()
@@ -165,7 +148,7 @@ public class GlitchControlPanel extends JPanel
 				}
 				else
 				{
-					app.setCurrentImage(app.getAltered());
+					app.setCurrentImage(app.getLastEdit());
 					app.updateDisplay();
 					compareChanges.setText("Show Original");
 					save.setVisible(true);
@@ -184,7 +167,8 @@ public class GlitchControlPanel extends JPanel
 				{
 					if (!revertMade)
 					{
-						app.setCurrentImage(app.getLastChange());
+				
+						app.setCurrentImage(app.getLastEdit(1));
 						app.updateDisplay();
 						undoRedo.setText("Redo");
 						repaint();
@@ -192,7 +176,7 @@ public class GlitchControlPanel extends JPanel
 					}
 					else
 					{
-						app.setCurrentImage(app.getAltered());
+						app.setCurrentImage(app.getLastEdit());
 						app.updateDisplay();
 						restartUndoRedo();
 					}
@@ -208,6 +192,7 @@ public class GlitchControlPanel extends JPanel
 				{
 
 					app.setCurrentImage(app.getOriginal());
+					app.clearLog();
 					app.updateDisplay();
 					repaint();
 					restartUndoRedo();
@@ -217,6 +202,7 @@ public class GlitchControlPanel extends JPanel
 		});
 	}
 
+	
 	private void showTools(boolean state)
 	{
 		glitch.setVisible(state);
