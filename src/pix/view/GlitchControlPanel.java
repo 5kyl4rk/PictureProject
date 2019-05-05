@@ -20,12 +20,13 @@ public class GlitchControlPanel extends JPanel
 	private JButton compareChanges;
 	private boolean canEdit;
 	private boolean revertMade;
-	private JButton undoRedo;
+	private int currentEditIndex;
+	private JButton undo;
+	private JButton redo;
 	private JButton restart;
 	private JButton make3D;
 	private UniversalEditingTools sidebar;//
 	private SpringLayout appLayout;
-	
 
 	public GlitchControlPanel(PixController app)
 	{
@@ -35,20 +36,21 @@ public class GlitchControlPanel extends JPanel
 
 		revertMade = false;
 		canEdit = false;
-		saveLoadPanel = new JPanel(new GridLayout(1,0));
-		glitchPanel = new JPanel(new GridLayout(0,1));
-		switchPanel = new JPanel(new GridLayout(1,0));
+		saveLoadPanel = new JPanel(new GridLayout(1, 0));
+		glitchPanel = new JPanel(new GridLayout(0, 1));
+		switchPanel = new JPanel(new GridLayout(1, 0));
 		load = new JButton("Load");
 		save = new JButton("Save");
 		glitch = new JButton("Glitch");
-		undoRedo = new JButton("Undo");
+		undo = new JButton("Undo");
+		redo = new JButton("Redo");
 		make3D = new JButton("3D");
 		restart = new JButton("Restart");
-		
+		currentEditIndex = 0;
 		compareChanges = new JButton("Show Original");
 		appLayout = new SpringLayout();
 		sidebar = new UniversalEditingTools(app);
-		
+
 		setupPanel();
 		setupLayout();
 		setupListeners();
@@ -58,9 +60,9 @@ public class GlitchControlPanel extends JPanel
 	{
 		this.setLayout(appLayout);
 		this.setPreferredSize(new Dimension(180, 300));
-		switchPanel.setPreferredSize(new Dimension(180,50));
-		glitchPanel.setPreferredSize(new Dimension(90,100));
-		saveLoadPanel.setPreferredSize(new Dimension(180,50));
+		switchPanel.setPreferredSize(new Dimension(180, 50));
+		glitchPanel.setPreferredSize(new Dimension(90, 100));
+		saveLoadPanel.setPreferredSize(new Dimension(180, 50));
 		this.add(switchPanel);
 		this.add(saveLoadPanel);
 		this.add(glitchPanel);
@@ -68,8 +70,9 @@ public class GlitchControlPanel extends JPanel
 		saveLoadPanel.add(load);
 		saveLoadPanel.add(save);
 		glitchPanel.add(glitch);
-		switchPanel.add(undoRedo);
+		switchPanel.add(undo);
 		glitchPanel.add(make3D);
+		switchPanel.add(redo);
 		switchPanel.add(restart);
 		compareChanges.setVisible(false);
 		save.setVisible(false);
@@ -98,7 +101,9 @@ public class GlitchControlPanel extends JPanel
 				if (app.isFileLoaded())
 				{
 					app.recenter();
-					undoRedo.setEnabled(false);
+					app.clearStack();
+					undo.setEnabled(false);
+					redo.setEnabled(false);
 					compareChanges.setVisible(false);
 					showTools(true);
 					sidebar.updateDimensions();
@@ -161,27 +166,51 @@ public class GlitchControlPanel extends JPanel
 			}
 		});
 
-		undoRedo.addActionListener(new ActionListener()
+		undo.addActionListener(new ActionListener()
 		{
 			public void actionPerformed(ActionEvent click)
 			{
 				if (canEdit == true)
 				{
-					if (!revertMade)
+					if(currentEditIndex < app.getStackSize()-1)
 					{
-				
-						app.setCurrentImage(app.getLastEdit(1));
-						app.updateDisplay();
-						undoRedo.setText("Redo");
-						repaint();
-						revertMade = true;
+					currentEditIndex++;//TODO: prevent index from touching out of bounds
+					app.setCurrentImage(app.getLastEdit(currentEditIndex));
+
 					}
 					else
 					{
-						app.setCurrentImage(app.getLastEdit());
-						app.updateDisplay();
-						restartUndoRedo();
+						undo.setEnabled(false);
+						redo.setEnabled(true);
 					}
+					
+					app.updateDisplay();
+					repaint();
+
+				}
+			}
+		});
+
+		redo.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				if (canEdit == true)
+				{
+					if(currentEditIndex > 0)
+					{
+					currentEditIndex--;
+					app.setCurrentImage(app.getLastEdit(currentEditIndex));
+					
+					}
+					else
+					{
+						redo.setEnabled(false);
+						undo.setEnabled(true);
+					}
+					
+					app.updateDisplay();
+					repaint();
 				}
 			}
 		});
@@ -194,7 +223,7 @@ public class GlitchControlPanel extends JPanel
 				{
 
 					app.setCurrentImage(app.getOriginal());
-					app.clearLog();
+					app.clearStack();
 					app.updateDisplay();
 					repaint();
 					restartUndoRedo();
@@ -204,20 +233,18 @@ public class GlitchControlPanel extends JPanel
 		});
 	}
 
-	
 	private void showTools(boolean state)
 	{
 		glitch.setVisible(state);
 		make3D.setVisible(state);
-		undoRedo.setVisible(state);
+		undo.setVisible(state);
 		repaint();
 	}
 
 	private void restartUndoRedo()
 	{
 		revertMade = false;
-		undoRedo.setText("Undo");
-		undoRedo.setEnabled(true);
+		undo.setEnabled(true);
 		repaint();
 	}
 
@@ -227,6 +254,7 @@ public class GlitchControlPanel extends JPanel
 		restart.setVisible(true);
 		save.setVisible(true);
 		canEdit = true;
+		currentEditIndex = 0;
 		repaint();
 		restartUndoRedo();
 	}

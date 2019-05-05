@@ -15,12 +15,13 @@ public class PixController
 	private String recentLoadPath;
 	private String recentSavePath;
 	private String extension;
-	private ArrayList<Picture> editLog;
+	private ArrayList<Picture> editStack;
 	private GlitchFrame appFrame;
 	private Dimension currentSize;
 	private String startPath;
-	private final int MAX_MEMORY = 5; //in theory, this could be a greater number, but it has to stop somewhere
+	private final int MAX_MEMORY = 6; //in theory, this could be a greater number, but it has to stop somewhere
 	private boolean fileLoaded;
+	private int logTracker;
 
 	public PixController()
 	{
@@ -31,8 +32,10 @@ public class PixController
 		fileLoaded = false;
 		extension = ".jpg";
 		currentSize = new Dimension();
-		editLog = new ArrayList<Picture>();
+		editStack = new ArrayList<Picture>();
 		appFrame = new GlitchFrame(this);
+		originalImage = new Picture();
+		logTracker = 0;
 
 	}
 
@@ -56,8 +59,8 @@ public class PixController
 			String fileName = explorer.getSelectedFile().getAbsolutePath();
 			recentLoadPath = explorer.getCurrentDirectory().toString();
 			activeImage = new Picture(fileName);
-			originalImage = new Picture(activeImage);
-			addToLog(originalImage);
+			originalImage = new Picture(fileName);
+			addToStack(originalImage);
 			extension = fileName.substring(fileName.lastIndexOf("."));
 			appFrame.updateDisplay();
 			fileLoaded = true;
@@ -106,8 +109,10 @@ public class PixController
 	 */
 	public void glitch()
 	{
-		activeImage.glitch();
-		addToLog(activeImage);
+		Picture temp = new Picture(activeImage);
+		temp.glitch();
+		addToStack(temp);
+		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 	}
 
@@ -117,7 +122,7 @@ public class PixController
 	 */
 	public void make3D(int shiftValue)
 	{
-		Picture temp = activeImage;
+		Picture temp = getLastEdit();
 		if(shiftValue != 0)
 		{
 			temp.make3D(0, shiftValue, 0);
@@ -131,23 +136,27 @@ public class PixController
 		appFrame.updateDisplay();
 	}
 
-	private void addToLog(Picture editToAdd)
+	private void addToStack(Picture editToAdd)
 	{
 		Picture temp = new Picture(editToAdd);
-		editLog.add(0, temp);
+		
+		temp.setTitle("temp"+logTracker);
+		logTracker++;
+		editStack.add(0, temp);
 
-		if (editLog.size() > MAX_MEMORY)
+		if (editStack.size() >= MAX_MEMORY)
 		{
-			editLog.remove(getLogSize() - 1);
+			editStack.remove(getStackSize() - 1);
 		}
 	}
 	
-	public void clearLog()
+	public void clearStack()
 	{
-		for(int index = 0; index < editLog.size(); index++)
+		for(int index = 0; index < editStack.size(); index++)
 		{
-			editLog.remove(index);
+			editStack.remove(index);
 		}
+		editStack.add(originalImage);
 	}
 
 	public void updateDisplay()
@@ -173,7 +182,7 @@ public class PixController
 
 	public Picture getLastEdit()
 	{
-		return editLog.get(0);
+		return editStack.get(0);
 	}
 
 	public Picture getLastEdit(int index)
@@ -182,17 +191,17 @@ public class PixController
 		{
 			index = 0;
 		}
-		else if (index >= editLog.size())
+		else if (index >= editStack.size())
 		{
-			index = editLog.size() - 1;
+			index = editStack.size() - 1;
 		}
 
-		return editLog.get(index);
+		return editStack.get(index);
 	}
 
-	public int getLogSize()
+	public int getStackSize()
 	{
-		return editLog.size();
+		return editStack.size();
 	}
 
 	public boolean isFileLoaded()
@@ -202,7 +211,7 @@ public class PixController
 
 	public void setCurrentImage(Picture imageToDisplay)
 	{
-		activeImage = (Picture) imageToDisplay;
+		activeImage = imageToDisplay;
 	}
 
 	public Dimension getPictureSize()
