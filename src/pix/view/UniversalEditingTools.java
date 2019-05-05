@@ -58,10 +58,24 @@ public class UniversalEditingTools extends JPanel
 	{
 		xAxis.addChangeListener(new ChangeListener()
 		{
+			int lastValue = 0;
 			public void stateChanged(ChangeEvent slide)
 			{
 				changeX.setText(xAxis.getValue() + "");
 				app.make3D(xAxis.getValue());
+//				if(xAxis.getValue() > lastValue)
+//				{
+//				app.make3D(1);
+//				}
+//				else if(xAxis.getValue() < lastValue)
+//				{
+//					app.make3D(-1);
+//				}
+//				else
+//				{
+//					app.make3D(0);
+//				}
+//				lastValue = xAxis.getValue();
 			}
 		});
 		changeX.addActionListener(new ActionListener()
@@ -78,7 +92,7 @@ public class UniversalEditingTools extends JPanel
 	{
 		width = (int) app.getPictureSize().getWidth();
 		height = (int) app.getPictureSize().getHeight();
-		xAxis.setMaximum(width / 4);
-		xAxis.setMinimum(-width / 4);
+		xAxis.setMaximum(width / 2);
+		xAxis.setMinimum(-width / 2);
 	}
 }
