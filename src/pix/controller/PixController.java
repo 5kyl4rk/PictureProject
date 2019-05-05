@@ -122,18 +122,18 @@ public class PixController
 	 */
 	public void make3D(int shiftValue)
 	{
-		Picture temp = getLastEdit();
-		if(shiftValue != 0)
+		Picture temp = new Picture (activeImage);
+		if(shiftValue > 0)
 		{
-			temp.make3D(0, shiftValue, 0);
+			temp.make3D(0, 1, 0);
 		}
 		else
 		{
 			temp = getLastEdit();
 		}
-		
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
+		temp = null;
 	}
 
 	private void addToStack(Picture editToAdd)
