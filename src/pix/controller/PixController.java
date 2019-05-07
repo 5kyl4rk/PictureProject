@@ -1,7 +1,7 @@
 package pix.controller;
 
 import java.awt.Dimension;
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -22,6 +22,7 @@ public class PixController
 	private final int MAX_MEMORY = 6; //in theory, this could be a greater number, but it has to stop somewhere
 	private boolean fileLoaded;
 	private int logTracker;
+	private String pictureTitle;
 
 	public PixController()
 	{
@@ -30,6 +31,7 @@ public class PixController
 		recentLoadPath = startPath + "/src/pixLab/images";
 		recentSavePath = startPath + "/savedImages/";
 		fileLoaded = false;
+		pictureTitle = "owo";
 		extension = ".jpg";
 		currentSize = new Dimension();
 		editStack = new ArrayList<Picture>();
@@ -60,8 +62,13 @@ public class PixController
 			recentLoadPath = explorer.getCurrentDirectory().toString();
 			activeImage = new Picture(fileName);
 			originalImage = new Picture(fileName);
+			
+			clearStack();
 			addToStack(originalImage);
+			
 			extension = fileName.substring(fileName.lastIndexOf("."));
+			this.setPictureTitle(findActualFileName(fileName));
+			
 			appFrame.updateDisplay();
 			fileLoaded = true;
 		}
@@ -79,7 +86,7 @@ public class PixController
 		{
 			JFileChooser explorer = new JFileChooser(recentSavePath);
 			explorer.setDialogTitle("Where do you want to save?");
-			String nameGlitch = "-glitched" + extension;
+			String nameGlitch = getPictureTitle() + "-glitched" + extension;
 			File saveFile = new File(nameGlitch);
 			explorer.setSelectedFile(saveFile);
 
@@ -124,14 +131,6 @@ public class PixController
 	{
 		Picture temp = new Picture (getLastEdit());
 		temp.make3D(0,shiftValue,0);
-//		if(shiftValue > 0)
-//		{
-//			temp.make3D(0, 1, 0);
-//		}
-//		else
-//		{
-//			temp = getLastEdit();
-//		}
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 	}
@@ -150,14 +149,21 @@ public class PixController
 		}
 	}
 	
-	public void clearStack()
+	public void restartStack()
+	{
+		clearStack();
+		
+		editStack.add(originalImage);
+	}
+	
+	private void clearStack()
 	{
 		for(int index = 0; index < editStack.size(); index++)
 		{
 			editStack.remove(index);
 		}
-		editStack.add(originalImage);
 	}
+
 
 	public void updateDisplay()
 	{
@@ -167,6 +173,16 @@ public class PixController
 	public void recenter()
 	{
 		appFrame.recenter();
+	}
+	
+	private String findActualFileName(String path)
+	{
+		String directory = File.separator;
+		int start = path.lastIndexOf(directory);
+		int end = path.lastIndexOf(extension);
+		String name = path.substring(start+1,end);
+		
+		return name;
 	}
 
 	// ===== Get/Set =====
@@ -218,6 +234,16 @@ public class PixController
 	{
 		currentSize.setSize(activeImage.getWidth(), activeImage.getHeight());
 		return currentSize;
+	}
+	
+	public void setPictureTitle(String name)
+	{
+		pictureTitle = name;
+	}
+	
+	public String getPictureTitle()
+	{
+		return pictureTitle;
 	}
 
 	public GlitchFrame getFrame()

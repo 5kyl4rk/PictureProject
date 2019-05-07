@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import pix.controller.PixController;
+import pix.view.editTools.UniversalEditingTools;
 
 public class GlitchControlPanel extends JPanel
 {
@@ -101,7 +102,7 @@ public class GlitchControlPanel extends JPanel
 				if (app.isFileLoaded())
 				{
 					app.recenter();
-					app.clearStack();
+					app.restartStack();
 					undo.setEnabled(false);
 					redo.setEnabled(false);
 					compareChanges.setVisible(false);
@@ -223,7 +224,7 @@ public class GlitchControlPanel extends JPanel
 				{
 
 					app.setCurrentImage(app.getOriginal());
-					app.clearStack();
+					app.restartStack();
 					app.updateDisplay();
 					repaint();
 					restartUndoRedo();

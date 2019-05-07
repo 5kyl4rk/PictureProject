@@ -1,4 +1,4 @@
-package pix.view;
+package pix.view.editTools;
 
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -58,24 +58,10 @@ public class UniversalEditingTools extends JPanel
 	{
 		xAxis.addChangeListener(new ChangeListener()
 		{
-			int lastValue = 0;
 			public void stateChanged(ChangeEvent slide)
 			{
 				changeX.setText(xAxis.getValue() + "");
 				app.make3D(xAxis.getValue());
-//				if(xAxis.getValue() > lastValue)
-//				{
-//				app.make3D(1);
-//				}
-//				else if(xAxis.getValue() < lastValue)
-//				{
-//					app.make3D(-1);
-//				}
-//				else
-//				{
-//					app.make3D(0);
-//				}
-//				lastValue = xAxis.getValue();
 			}
 		});
 		changeX.addActionListener(new ActionListener()
@@ -88,7 +74,7 @@ public class UniversalEditingTools extends JPanel
 		});
 	}
 
-	protected void updateDimensions()
+	public void updateDimensions()
 	{
 		width = (int) app.getPictureSize().getWidth();
 		height = (int) app.getPictureSize().getHeight();
