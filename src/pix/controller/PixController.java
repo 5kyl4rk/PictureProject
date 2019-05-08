@@ -22,6 +22,7 @@ public class PixController
 	private final int MAX_MEMORY = 6; // in theory, this could be a greater number, but it has to stop somewhere
 	private boolean fileLoaded;
 	private int logTracker;
+	private int currentStackIndex;
 	private String pictureTitle;
 
 	public PixController()
@@ -39,21 +40,22 @@ public class PixController
 		appIO = new IOController(this);
 		print = new BasicDebug();
 		print.setState(true);
+		currentStackIndex = 0;
 		logTracker = 0;
 
 	}
 
 	public void start()
 	{
-		
+
 	}
-	
+
 	// ==== IO Handling ====
 	public void loadImage()
 	{
 		appIO.loadImage();
 	}
-	
+
 	public void saveImage()
 	{
 		appIO.saveImage();
@@ -67,7 +69,7 @@ public class PixController
 	{
 		Picture temp = new Picture(activeImage);
 		temp.glitch();
-		addToStack(temp);
+		addToStack(currentStackIndex, temp);
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 	}
@@ -84,12 +86,23 @@ public class PixController
 		appFrame.updateDisplay();
 	}
 
-	protected void addToStack(Picture editToAdd)
+	public void addToStack(Picture editToAdd)
+	{
+		addToStack(0,editToAdd);
+	}
+
+	public void addToStack(int index, Picture editToAdd)
 	{
 		Picture temp = new Picture(editToAdd);
 
 		temp.setTitle("temp" + logTracker);
 		logTracker++;
+
+		for (int stackIndex = 0; stackIndex < index; stackIndex++)
+		{
+			editStack.remove(stackIndex);
+		}
+
 		editStack.add(0, temp);
 
 		if (editStack.size() >= MAX_MEMORY)
@@ -97,6 +110,7 @@ public class PixController
 			editStack.remove(getStackSize() - 1);
 		}
 	}
+
 
 	public void restartStack()
 	{
@@ -133,6 +147,20 @@ public class PixController
 		return name;
 	}
 	
+	public void restartStackIndex()
+	{
+		currentStackIndex = 0;
+	}
+	public void goUpStack()
+	{
+		currentStackIndex--;
+	}
+	
+	public void goDownStack()
+	{
+		currentStackIndex++;
+	}
+
 	public void print(String words)
 	{
 		print.out(words);
@@ -204,6 +232,11 @@ public class PixController
 		currentSize.setSize(activeImage.getWidth(), activeImage.getHeight());
 		return currentSize;
 	}
+	
+	public int getCurrentStackIndex()
+	{
+		return currentStackIndex;
+	}
 
 	public void setRecentSavePath(String path)
 	{
@@ -228,31 +261,32 @@ public class PixController
 	{
 		fileLoaded = state;
 	}
+
 	public void setCurrentImage(Picture imageToDisplay)
 	{
 		activeImage = new Picture(imageToDisplay);
 	}
-	
+
 	public void setCurrentImage(String imageToLoad)
 	{
 		activeImage = new Picture(imageToLoad);
 	}
-	
+
 	public void setOriginalImage(Picture image)
 	{
 		originalImage = new Picture(image);
 	}
-	
+
 	public void setOriginalImage(String imageToLoad)
 	{
 		originalImage = new Picture(imageToLoad);
 	}
 
-
 	public void setPictureTitle(String name)
 	{
 		pictureTitle = name;
 	}
+	
 
 	public void setExtension(String end)
 	{

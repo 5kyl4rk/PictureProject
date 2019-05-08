@@ -21,7 +21,6 @@ public class GlitchControlPanel extends JPanel
 	private JButton compareChanges;
 	private boolean canEdit;
 	private boolean revertMade;
-	private int currentEditIndex;
 	private JButton undo;
 	private JButton redo;
 	private JButton restart;
@@ -47,7 +46,6 @@ public class GlitchControlPanel extends JPanel
 		redo = new JButton("Redo");
 		make3D = new JButton("3D");
 		restart = new JButton("Restart");
-		currentEditIndex = 0;
 		compareChanges = new JButton("Show Original");
 		appLayout = new SpringLayout();
 		appLayout.putConstraint(SpringLayout.SOUTH, restart, -10, SpringLayout.NORTH, switchPanel);
@@ -176,20 +174,16 @@ public class GlitchControlPanel extends JPanel
 			{
 				if (canEdit == true)
 				{
-					if(currentEditIndex < app.getStackSize()-1)
+					if(app.getCurrentStackIndex() < app.getStackSize()-1)
 					{
-					currentEditIndex++;
+					app.goDownStack(); 
 					redo.setEnabled(true);
-
-					app.print("Undo: "+currentEditIndex);
-					app.setCurrentImage(app.getLastEdit(currentEditIndex));
+					app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
 
 					}
 					
-					if(currentEditIndex == app.getStackSize() - 1)
+					if(app.getCurrentStackIndex()  == app.getStackSize() - 1)
 					{
-						app.print("Stack Size: "+ app.getStackSize());
-
 						undo.setEnabled(false);
 					}
 					
@@ -206,17 +200,15 @@ public class GlitchControlPanel extends JPanel
 			{
 				if (canEdit == true)
 				{
-					if(currentEditIndex > 0)
+					if(app.getCurrentStackIndex()  > 0)
 					{
-					currentEditIndex--;
-					app.print("Redo: "+currentEditIndex);
+					app.goUpStack();
 					undo.setEnabled(true);
-					app.setCurrentImage(app.getLastEdit(currentEditIndex));
+					app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
 					
 					}
-					if(currentEditIndex == 0)
+					if(app.getCurrentStackIndex()  == 0)
 					{
-						app.print("Stack Size: "+ app.getStackSize());
 						redo.setEnabled(false);
 					}
 					
@@ -266,7 +258,7 @@ public class GlitchControlPanel extends JPanel
 		restart.setVisible(true);
 		save.setVisible(true);
 		canEdit = true;
-		currentEditIndex = 0;
+		app.restartStackIndex();
 		repaint();
 		restartUndoRedo();
 	}
