@@ -179,13 +179,18 @@ public class GlitchControlPanel extends JPanel
 					if(currentEditIndex < app.getStackSize()-1)
 					{
 					currentEditIndex++;
+					redo.setEnabled(true);
+
+					app.print("Undo: "+currentEditIndex);
 					app.setCurrentImage(app.getLastEdit(currentEditIndex));
 
 					}
-					else
+					
+					if(currentEditIndex == app.getStackSize() - 1)
 					{
+						app.print("Stack Size: "+ app.getStackSize());
+
 						undo.setEnabled(false);
-						redo.setEnabled(true);
 					}
 					
 					app.updateDisplay();
@@ -204,13 +209,15 @@ public class GlitchControlPanel extends JPanel
 					if(currentEditIndex > 0)
 					{
 					currentEditIndex--;
+					app.print("Redo: "+currentEditIndex);
+					undo.setEnabled(true);
 					app.setCurrentImage(app.getLastEdit(currentEditIndex));
 					
 					}
-					else
+					if(currentEditIndex == 0)
 					{
+						app.print("Stack Size: "+ app.getStackSize());
 						redo.setEnabled(false);
-						undo.setEnabled(true);
 					}
 					
 					app.updateDisplay();
