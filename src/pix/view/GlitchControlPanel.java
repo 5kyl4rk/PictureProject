@@ -50,6 +50,12 @@ public class GlitchControlPanel extends JPanel
 		currentEditIndex = 0;
 		compareChanges = new JButton("Show Original");
 		appLayout = new SpringLayout();
+		appLayout.putConstraint(SpringLayout.SOUTH, restart, -10, SpringLayout.NORTH, switchPanel);
+		appLayout.putConstraint(SpringLayout.SOUTH, compareChanges, 0, SpringLayout.NORTH, restart);
+		appLayout.putConstraint(SpringLayout.EAST, restart, 0, SpringLayout.EAST, compareChanges);
+		appLayout.putConstraint(SpringLayout.WEST, restart, 0, SpringLayout.WEST, compareChanges);
+		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
+		appLayout.putConstraint(SpringLayout.WEST, glitchPanel, 40, SpringLayout.WEST, this);
 		sidebar = new UniversalEditingTools(app);
 
 		setupPanel();
@@ -60,7 +66,7 @@ public class GlitchControlPanel extends JPanel
 	private void setupPanel()
 	{
 		this.setLayout(appLayout);
-		this.setPreferredSize(new Dimension(180, 300));
+		this.setPreferredSize(new Dimension(180, 350));
 		switchPanel.setPreferredSize(new Dimension(180, 50));
 		glitchPanel.setPreferredSize(new Dimension(90, 100));
 		saveLoadPanel.setPreferredSize(new Dimension(180, 50));
@@ -74,7 +80,7 @@ public class GlitchControlPanel extends JPanel
 		switchPanel.add(undo);
 		glitchPanel.add(make3D);
 		switchPanel.add(redo);
-		switchPanel.add(restart);
+		this.add(restart);
 		compareChanges.setVisible(false);
 		save.setVisible(false);
 		restart.setVisible(false);
@@ -83,9 +89,6 @@ public class GlitchControlPanel extends JPanel
 
 	private void setupLayout()
 	{
-		appLayout.putConstraint(SpringLayout.WEST, glitchPanel, 20, SpringLayout.WEST, compareChanges);
-		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
-		appLayout.putConstraint(SpringLayout.SOUTH, compareChanges, -6, SpringLayout.NORTH, switchPanel);
 		appLayout.putConstraint(SpringLayout.NORTH, glitchPanel, 30, SpringLayout.SOUTH, saveLoadPanel);
 		appLayout.putConstraint(SpringLayout.SOUTH, switchPanel, 0, SpringLayout.SOUTH, this);
 		appLayout.putConstraint(SpringLayout.EAST, switchPanel, 0, SpringLayout.EAST, saveLoadPanel);
@@ -175,7 +178,7 @@ public class GlitchControlPanel extends JPanel
 				{
 					if(currentEditIndex < app.getStackSize()-1)
 					{
-					currentEditIndex++;//TODO: prevent index from touching out of bounds
+					currentEditIndex++;
 					app.setCurrentImage(app.getLastEdit(currentEditIndex));
 
 					}
@@ -239,6 +242,7 @@ public class GlitchControlPanel extends JPanel
 		glitch.setVisible(state);
 		make3D.setVisible(state);
 		undo.setVisible(state);
+		redo.setVisible(state);
 		repaint();
 	}
 

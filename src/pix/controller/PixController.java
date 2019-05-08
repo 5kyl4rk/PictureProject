@@ -3,13 +3,13 @@ package pix.controller;
 import java.awt.Dimension;
 import java.io.*;
 import java.util.ArrayList;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import pix.view.GlitchFrame;
 import pixLab.classes.*;
 
 public class PixController
 {
+	private BasicDebug print;
+	private IOController appIO;
 	private Picture activeImage;
 	private Picture originalImage;
 	private String recentLoadPath;
@@ -19,7 +19,7 @@ public class PixController
 	private GlitchFrame appFrame;
 	private Dimension currentSize;
 	private String startPath;
-	private final int MAX_MEMORY = 6; //in theory, this could be a greater number, but it has to stop somewhere
+	private final int MAX_MEMORY = 6; // in theory, this could be a greater number, but it has to stop somewhere
 	private boolean fileLoaded;
 	private int logTracker;
 	private String pictureTitle;
@@ -36,78 +36,27 @@ public class PixController
 		currentSize = new Dimension();
 		editStack = new ArrayList<Picture>();
 		appFrame = new GlitchFrame(this);
-		originalImage = new Picture();
+		appIO = new IOController(this);
+		print = new BasicDebug();
+		print.setState(true);
 		logTracker = 0;
 
 	}
 
 	public void start()
 	{
-
+		
 	}
-
-	// ===== IO Handling =====
-	/**
-	 * Allows user to open an image file
-	 */
+	
+	// ==== IO Handling ====
 	public void loadImage()
 	{
-		JFileChooser explorer = new JFileChooser(recentLoadPath);
-		explorer.setDialogTitle("What image do you want to load?");
-		int result = explorer.showOpenDialog(this.getFrame());
-		if (result == JFileChooser.APPROVE_OPTION)
-		{
-
-			String fileName = explorer.getSelectedFile().getAbsolutePath();
-			recentLoadPath = explorer.getCurrentDirectory().toString();
-			activeImage = new Picture(fileName);
-			originalImage = new Picture(fileName);
-			
-			clearStack();
-			addToStack(originalImage);
-			
-			extension = fileName.substring(fileName.lastIndexOf("."));
-			this.setPictureTitle(findActualFileName(fileName));
-			
-			appFrame.updateDisplay();
-			fileLoaded = true;
-		}
-
+		appIO.loadImage();
 	}
-
-	/**
-	 * Saves the current image into a selected directory
-	 */
+	
 	public void saveImage()
 	{
-		String[] option = { "Yes", "No" };
-		int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
-		if (save == 0)
-		{
-			JFileChooser explorer = new JFileChooser(recentSavePath);
-			explorer.setDialogTitle("Where do you want to save?");
-			String nameGlitch = getPictureTitle() + "-glitched" + extension;
-			File saveFile = new File(nameGlitch);
-			explorer.setSelectedFile(saveFile);
-
-			int result = explorer.showSaveDialog(this.getFrame());
-
-			if (result == JFileChooser.APPROVE_OPTION)
-			{
-				String writeTo = explorer.getSelectedFile().getAbsolutePath();
-
-				if (activeImage.write(writeTo))
-				{
-					recentSavePath = explorer.getCurrentDirectory().toString();
-					JOptionPane.showMessageDialog(this.getFrame(), "Save successful");
-				}
-				else
-				{
-					JOptionPane.showMessageDialog(this.getFrame(), "Error saving");
-				}
-			}
-
-		}
+		appIO.saveImage();
 	}
 
 	// ===== Image Altering =====
@@ -129,17 +78,17 @@ public class PixController
 	 */
 	public void make3D(int shiftValue)
 	{
-		Picture temp = new Picture (getLastEdit());
-		temp.make3D(0,shiftValue,0);
+		Picture temp = new Picture(getLastEdit());
+		temp.make3D(0, shiftValue, 0);
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 	}
 
-	private void addToStack(Picture editToAdd)
+	protected void addToStack(Picture editToAdd)
 	{
 		Picture temp = new Picture(editToAdd);
-		
-		temp.setTitle("temp"+logTracker);
+
+		temp.setTitle("temp" + logTracker);
 		logTracker++;
 		editStack.add(0, temp);
 
@@ -148,44 +97,59 @@ public class PixController
 			editStack.remove(getStackSize() - 1);
 		}
 	}
-	
+
 	public void restartStack()
 	{
 		clearStack();
-		
+
 		editStack.add(originalImage);
 	}
-	
-	private void clearStack()
+
+	public void clearStack()
 	{
-		for(int index = 0; index < editStack.size(); index++)
+		for (int index = 0; index < editStack.size(); index++)
 		{
 			editStack.remove(index);
 		}
 	}
 
-
 	public void updateDisplay()
 	{
 		appFrame.updateDisplay();
 	}
-	
+
 	public void recenter()
 	{
 		appFrame.recenter();
 	}
-	
-	private String findActualFileName(String path)
+
+	protected String findActualFileName(String path)
 	{
 		String directory = File.separator;
 		int start = path.lastIndexOf(directory);
 		int end = path.lastIndexOf(extension);
-		String name = path.substring(start+1,end);
-		
+		String name = path.substring(start + 1, end);
+
 		return name;
+	}
+	
+	public void print(String words)
+	{
+		print.out(words);
 	}
 
 	// ===== Get/Set =====
+
+	public String getRecentLoadPath()
+	{
+		return recentLoadPath;
+	}
+
+	public String getRecentSavePath()
+	{
+		return recentSavePath;
+	}
+
 	public Picture getCurrentImage()
 	{
 		return activeImage;
@@ -220,14 +184,19 @@ public class PixController
 		return editStack.size();
 	}
 
+	public String getExtension()
+	{
+		return extension;
+	}
+
+	public String getPictureTitle()
+	{
+		return pictureTitle;
+	}
+
 	public boolean isFileLoaded()
 	{
 		return fileLoaded;
-	}
-
-	public void setCurrentImage(Picture imageToDisplay)
-	{
-		activeImage = imageToDisplay;
 	}
 
 	public Dimension getPictureSize()
@@ -235,15 +204,62 @@ public class PixController
 		currentSize.setSize(activeImage.getWidth(), activeImage.getHeight());
 		return currentSize;
 	}
+
+	public void setRecentSavePath(String path)
+	{
+		if (path.contains(File.separator))
+		{
+			recentSavePath = path;
+		}
+
+	}
+
+	public void setRecentLoadPath(String path)
+	{
+
+		if (path.contains(File.separator))
+		{
+			recentLoadPath = path;
+		}
+
+	}
+
+	public void setFileLoaded(boolean state)
+	{
+		fileLoaded = state;
+	}
+	public void setCurrentImage(Picture imageToDisplay)
+	{
+		activeImage = new Picture(imageToDisplay);
+	}
 	
+	public void setCurrentImage(String imageToLoad)
+	{
+		activeImage = new Picture(imageToLoad);
+	}
+	
+	public void setOriginalImage(Picture image)
+	{
+		originalImage = new Picture(image);
+	}
+	
+	public void setOriginalImage(String imageToLoad)
+	{
+		originalImage = new Picture(imageToLoad);
+	}
+
+
 	public void setPictureTitle(String name)
 	{
 		pictureTitle = name;
 	}
-	
-	public String getPictureTitle()
+
+	public void setExtension(String end)
 	{
-		return pictureTitle;
+		if (end.trim().indexOf(".") == 0)
+		{
+			extension = end;
+		}
 	}
 
 	public GlitchFrame getFrame()

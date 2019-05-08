@@ -34,7 +34,7 @@ public class GlitchMasterPanel extends JPanel
 
 		setupPanel();
 		setupLayout();
-		setupScrollPane();
+		//setupScrollPane();
 	}
 
 	private void setupPanel()
@@ -42,13 +42,14 @@ public class GlitchMasterPanel extends JPanel
 		this.setLayout(appLayout);
 		this.add(displayImage);
 		this.add(controlPane);
+		this.add(tools);
 	}
 
 	private void setupLayout()
 	{
-		appLayout.putConstraint(SpringLayout.NORTH, controlPane, 0, SpringLayout.NORTH, displayImage);
-		appLayout.putConstraint(SpringLayout.WEST, controlPane, padding, SpringLayout.EAST, displayImage);
-		appLayout.putConstraint(SpringLayout.EAST, controlPane, -padding, SpringLayout.EAST, this);
+		appLayout.putConstraint(SpringLayout.NORTH, tools, 0, SpringLayout.NORTH, displayImage);
+		appLayout.putConstraint(SpringLayout.WEST, tools, padding, SpringLayout.EAST, displayImage);
+		appLayout.putConstraint(SpringLayout.EAST, tools, -padding, SpringLayout.EAST, this);
 		appLayout.putConstraint(SpringLayout.NORTH, displayImage, padding, SpringLayout.NORTH, this);
 		appLayout.putConstraint(SpringLayout.WEST, displayImage, padding, SpringLayout.WEST, this);
 		appLayout.putConstraint(SpringLayout.SOUTH, displayImage, -padding, SpringLayout.SOUTH, this);
