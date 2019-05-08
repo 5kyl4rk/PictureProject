@@ -135,8 +135,18 @@ public class GlitchControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				JOptionPane.showMessageDialog(app.getFrame(), sidebar, "3D Effect", JOptionPane.DEFAULT_OPTION);
-				editMade();
+				String[] option = {"Cancel","OK!" };
+				int result = JOptionPane.showOptionDialog(app.getFrame(), sidebar, "3D Effect?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+				if (result == 1)
+				{
+					app.addToStack(app.getCurrentImage());
+					editMade();
+				}
+				else
+				{
+					app.setCurrentImage(app.getLastEdit());
+					app.updateDisplay();
+				}
 			}
 		});
 
@@ -174,19 +184,19 @@ public class GlitchControlPanel extends JPanel
 			{
 				if (canEdit == true)
 				{
-					if(app.getCurrentStackIndex() < app.getStackSize()-1)
+					if (app.getCurrentStackIndex() < app.getStackSize() - 1)
 					{
-					app.goDownStack(); 
-					redo.setEnabled(true);
-					app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
+						app.goDownStack();
+						redo.setEnabled(true);
+						app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
 
 					}
-					
-					if(app.getCurrentStackIndex()  == app.getStackSize() - 1)
+
+					if (app.getCurrentStackIndex() == app.getStackSize() - 1)
 					{
 						undo.setEnabled(false);
 					}
-					
+
 					app.updateDisplay();
 					repaint();
 
@@ -200,18 +210,18 @@ public class GlitchControlPanel extends JPanel
 			{
 				if (canEdit == true)
 				{
-					if(app.getCurrentStackIndex()  > 0)
+					if (app.getCurrentStackIndex() > 0)
 					{
-					app.goUpStack();
-					undo.setEnabled(true);
-					app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
-					
+						app.goUpStack();
+						undo.setEnabled(true);
+						app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
+
 					}
-					if(app.getCurrentStackIndex()  == 0)
+					if (app.getCurrentStackIndex() == 0)
 					{
 						redo.setEnabled(false);
 					}
-					
+
 					app.updateDisplay();
 					repaint();
 				}
