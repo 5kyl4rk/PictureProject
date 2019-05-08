@@ -15,6 +15,9 @@ public class PixController
 	private String recentLoadPath;
 	private String recentSavePath;
 	private String extension;
+	/**
+	 * index 0 is the top of the stack
+	 */
 	private ArrayList<Picture> editStack;
 	private GlitchFrame appFrame;
 	private Dimension currentSize;
@@ -86,11 +89,22 @@ public class PixController
 		appFrame.updateDisplay();
 	}
 
+	// ==== Stack Management ===
+	/**
+	 * adds an image to the stack
+	 * @param editToAdd image to add to the stack
+	 */
 	public void addToStack(Picture editToAdd)
 	{
 		addToStack(0,editToAdd);
 	}
 
+	/**
+	 * adds an image to a specific index of the stack and removes anything on top of it,
+	 * making it the last placed item in the stack
+	 * @param index the slot where the image needs to go
+	 * @param editToAdd the image to add to the stack
+	 */
 	public void addToStack(int index, Picture editToAdd)
 	{
 		Picture temp = new Picture(editToAdd);
@@ -110,8 +124,32 @@ public class PixController
 			editStack.remove(getStackSize() - 1);
 		}
 	}
-
-
+	
+	/**
+	 * sets the currentStackindex back to the top (aka index = 0)
+	 */
+	public void restartStackIndex()
+	{
+		currentStackIndex = 0;
+	}
+	/**
+	 * traverse up the stack
+	 */
+	public void goUpStack()
+	{
+		currentStackIndex--;
+	}
+	/**
+	 * traverse down the stack
+	 */
+	public void goDownStack()
+	{
+		currentStackIndex++;
+	}
+	
+	/**
+	 * clears the stack, but adds back in the original image
+	 */
 	public void restartStack()
 	{
 		clearStack();
@@ -119,6 +157,9 @@ public class PixController
 		editStack.add(originalImage);
 	}
 
+	/**
+	 * Clear the stack
+	 */
 	public void clearStack()
 	{
 		for (int index = 0; index < editStack.size(); index++)
@@ -127,6 +168,7 @@ public class PixController
 		}
 	}
 
+	// ==== View Methods ====
 	public void updateDisplay()
 	{
 		appFrame.updateDisplay();
@@ -147,20 +189,6 @@ public class PixController
 		return name;
 	}
 	
-	public void restartStackIndex()
-	{
-		currentStackIndex = 0;
-	}
-	public void goUpStack()
-	{
-		currentStackIndex--;
-	}
-	
-	public void goDownStack()
-	{
-		currentStackIndex++;
-	}
-
 	public void print(String words)
 	{
 		print.out(words);
