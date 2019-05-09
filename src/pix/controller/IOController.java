@@ -58,9 +58,9 @@ public class IOController
 	 */
 	public void saveImage()
 	{
-		String[] option = { "Yes", "No" };
+		String[] option = {"No", "Yes" };
 		int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
-		if (save == 0)
+		if (save == 1)
 		{
 			JFileChooser explorer = new JFileChooser(app.getRecentSavePath());
 			explorer.setDialogTitle("Where do you want to save?");
