@@ -55,17 +55,18 @@ public class UniversalEditingTools extends JPanel
 		{
 			public void stateChanged(ChangeEvent slide)
 			{
-				shiftX.setText(xAxis.getValue() + "");
-				app.make3D(xAxis.getValue());
+				shiftX.setCurrentValue(xAxis.getValue());
+				app.make3D(xAxis.getValue()* -1);
 			}
 		});
 		
-		shiftX.getField().addActionListener(new ActionListener()
+		shiftX.getTextField().addActionListener(new ActionListener()
 				{
 			public void actionPerformed(ActionEvent enter)
 			{
+				shiftX.setCurrentValue(shiftX.getTextFieldText());
 				xAxis.setValue(shiftX.getCurrentValue());
-				app.make3D(shiftX.getCurrentValue());
+				app.make3D(shiftX.getCurrentValue() * -1);
 			}
 				});
 	}

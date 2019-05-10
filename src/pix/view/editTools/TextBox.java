@@ -25,7 +25,7 @@ public class TextBox extends JPanel
 		appLayout = new GridLayout(1,0);
 		currentValue = 0;
 		setupPanel();
-		setupListeners();
+		
 	}
 	
 	private void setupPanel()
@@ -36,18 +36,7 @@ public class TextBox extends JPanel
 		this.add(field);
 	}
 	
-	private void setupListeners()
-	{
-		field.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent enter)
-			{
-				setCurrentValue(Integer.parseInt(field.getText()));
-			}
-		});
-	}
-	
-	public JTextField getField()
+	public JTextField getTextField()
 	{
 		return field;
 	}
@@ -55,6 +44,18 @@ public class TextBox extends JPanel
 	public int getCurrentValue()
 	{
 		return currentValue;
+	}
+	
+	public void setCurrentValue(String input)
+	{
+		try
+		{
+			setCurrentValue(Integer.parseInt(input));
+		}
+		catch(NumberFormatException notInt)
+		{
+			setCurrentValue(currentValue);
+		}
 	}
 	
 	public void setCurrentValue(int num)
@@ -67,5 +68,11 @@ public class TextBox extends JPanel
 	{
 		text.setText(title);
 	}
+	
+	public String getTextFieldText()
+	{
+		return field.getText();
+	}
+	
 	
 }
