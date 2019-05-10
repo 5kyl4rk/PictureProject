@@ -70,7 +70,7 @@ public class PixController
 	 */
 	public void glitch()
 	{
-		Picture temp = new Picture(activeImage);
+		Picture temp = new Picture(getLastEdit());
 		temp.glitch();
 		addToStack(currentStackIndex, temp);
 		this.setCurrentImage(temp);
@@ -81,10 +81,11 @@ public class PixController
 	 * Uses the {@link pixLab.classes.Picture#make3D(int, int, int) make3D()} method
 	 * from Picture
 	 */
-	public void make3D(int shiftValue)
+	public void make3D(int shiftX, int shiftY, int color)
 	{
 		Picture temp = new Picture(getLastEdit());
-		temp.make3D(0, shiftValue, 0);
+		temp.make3D(color, shiftX, 0);
+		temp.make3D(color, shiftY, 1);
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 	}

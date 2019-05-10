@@ -511,13 +511,19 @@ public class Picture extends SimplePicture
 	 * @param baseColor
 	 *            the color of the first layer that doesn't shift
 	 *            <ul>
-	 *            <li><b>Red<b> = 0</li>
-	 *            <li><b>Green<b> = 1</li>
-	 *            <li><b>Blue<b> = 2</li>
-	 *            <li><b>Cyan<b> = 3</li>
-	 *            <li><b>Magenta<b> = 4</li>
-	 *            <li><b>Yellow<b> = 5</li>
+	 *            <li><b>Red</b> = 0</li>
+	 *            <li><b>Green</b> = 1</li>
+	 *            <li><b>Blue</b> = 2</li>
+	 *            <li><b>Cyan</b> = 3</li>
+	 *            <li><b>Magenta</b> = 4</li>
+	 *            <li><b>Yellow</b> = 5</li>
 	 *            </ul>
+	 * @param direction 
+	 * 			<ul>
+	 * 			<li>0 = Left/Right</li>
+	 * 			<li>1 = Up/Down</li>
+	 * 			<li>2 = Diagonal</li>
+	 * 			</ul>
 	 */
 	public void make3D(int baseColor, int shift, int direction)
 	{

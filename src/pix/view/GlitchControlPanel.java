@@ -8,7 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 import pix.controller.PixController;
-import pix.view.editTools.UniversalEditingTools;
+import pix.view.editTools.EditingTools;
 
 public class GlitchControlPanel extends JPanel
 {
@@ -26,7 +26,7 @@ public class GlitchControlPanel extends JPanel
 	private JButton redo;
 	private JButton restart;
 	private JButton make3D;
-	private UniversalEditingTools sidebar;//
+	private EditingTools sidebar;//
 	private SpringLayout appLayout;
 
 	public GlitchControlPanel(PixController app)
@@ -55,7 +55,7 @@ public class GlitchControlPanel extends JPanel
 		appLayout.putConstraint(SpringLayout.WEST, restart, 0, SpringLayout.WEST, compareChanges);
 		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
 		appLayout.putConstraint(SpringLayout.WEST, glitchPanel, 40, SpringLayout.WEST, this);
-		sidebar = new UniversalEditingTools(app);
+		sidebar = new EditingTools(app);
 
 		setupPanel();
 		setupLayout();
@@ -237,7 +237,6 @@ public class GlitchControlPanel extends JPanel
 			{
 				if (canEdit == true)
 				{
-
 					app.setCurrentImage(app.getOriginal());
 					app.restartStack();
 					app.updateDisplay();
