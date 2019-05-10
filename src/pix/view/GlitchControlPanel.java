@@ -138,7 +138,7 @@ public class GlitchControlPanel extends JPanel
 			{
 				String[] option = {"Cancel","OK!" };
 				sidebar.setMake3D();
-				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "3D Effect?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "3D Effect?", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]);
 				if (result == 1)
 				{
 					app.addToStack(app.getCurrentImage());
