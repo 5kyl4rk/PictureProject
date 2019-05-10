@@ -1,5 +1,6 @@
 package pix.view;
 
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
@@ -136,7 +137,8 @@ public class GlitchControlPanel extends JPanel
 			public void actionPerformed(ActionEvent click)
 			{
 				String[] option = {"Cancel","OK!" };
-				int result = JOptionPane.showOptionDialog(app.getFrame(), sidebar, "3D Effect?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
+				sidebar.setMake3D();
+				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "3D Effect?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 				if (result == 1)
 				{
 					app.addToStack(app.getCurrentImage());
@@ -144,6 +146,7 @@ public class GlitchControlPanel extends JPanel
 				}
 				else
 				{
+					sidebar.restartPanel();
 					app.setCurrentImage(app.getLastEdit());
 					app.updateDisplay();
 				}
@@ -276,6 +279,11 @@ public class GlitchControlPanel extends JPanel
 	public Dimension getControlSize()
 	{
 		return this.getPreferredSize();
+	}
+	
+	private Component getSelf()
+	{
+		return this;
 	}
 
 }
