@@ -26,6 +26,7 @@ public class GlitchControlPanel extends JPanel
 	private JButton redo;
 	private JButton restart;
 	private JButton make3D;
+	private JButton scanlines;
 	private EditingTools sidebar;//
 	private SpringLayout appLayout;
 
@@ -46,6 +47,7 @@ public class GlitchControlPanel extends JPanel
 		undo = new JButton("Undo");
 		redo = new JButton("Redo");
 		make3D = new JButton("3D");
+		scanlines = new JButton("Scanlines");
 		restart = new JButton("Restart");
 		compareChanges = new JButton("Show Original");
 		appLayout = new SpringLayout();
@@ -78,6 +80,7 @@ public class GlitchControlPanel extends JPanel
 		glitchPanel.add(glitch);
 		switchPanel.add(undo);
 		glitchPanel.add(make3D);
+		glitchPanel.add(scanlines);
 		switchPanel.add(redo);
 		this.add(restart);
 		compareChanges.setVisible(false);
@@ -138,7 +141,28 @@ public class GlitchControlPanel extends JPanel
 			{
 				String[] option = {"Cancel","OK!" };
 				sidebar.setMake3D();
-				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "3D Effect?", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]);
+				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "3D Effect", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]);
+				if (result == 1)
+				{
+					app.addToStack(app.getCurrentImage());
+					editMade();
+				}
+				else
+				{
+					sidebar.restartPanel();
+					app.setCurrentImage(app.getLastEdit());
+					app.updateDisplay();
+				}
+			}
+		});
+		
+		scanlines.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				String[] option = {"Cancel","OK!" };
+				sidebar.setScanline();
+				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "Scanlines", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]);
 				if (result == 1)
 				{
 					app.addToStack(app.getCurrentImage());
@@ -252,6 +276,7 @@ public class GlitchControlPanel extends JPanel
 	{
 		glitch.setVisible(state);
 		make3D.setVisible(state);
+		scanlines.setVisible(state);
 		undo.setVisible(state);
 		redo.setVisible(state);
 		repaint();

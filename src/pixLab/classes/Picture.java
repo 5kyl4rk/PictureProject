@@ -1652,8 +1652,7 @@ public class Picture extends SimplePicture
 				Picture image = new Picture(fileName);
 				String extention = fileName.substring(fileName.lastIndexOf("."));
 				image.explore();
-				image.scanlines();
-				image.make3D(1);
+				image.scanlines(1,2);
 				image.explore();
 				String[] option = { "Yes", "No" };
 				int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);

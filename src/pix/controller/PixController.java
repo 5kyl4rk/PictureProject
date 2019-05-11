@@ -1,5 +1,6 @@
 package pix.controller;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.io.*;
 import java.util.ArrayList;
@@ -90,21 +91,47 @@ public class PixController
 		appFrame.updateDisplay();
 	}
 
+	public void scanline(int thickness, int spread, Color color, int type)
+	{
+		Picture temp = new Picture(getLastEdit());
+		if (type == 1)
+		{
+			temp.verticalScanlines(spread, thickness, color);
+
+		}
+		if(type == 2)
+		{
+			temp.lcd(spread, thickness, color);
+		}
+		else
+		{
+			temp.scanlines(spread, thickness, color);
+		}
+		
+		this.setCurrentImage(temp);
+		appFrame.updateDisplay();
+	}
+
 	// ==== Stack Management ===
 	/**
 	 * adds an image to the stack
-	 * @param editToAdd image to add to the stack
+	 * 
+	 * @param editToAdd
+	 *            image to add to the stack
 	 */
 	public void addToStack(Picture editToAdd)
 	{
-		addToStack(0,editToAdd);
+		addToStack(0, editToAdd);
 	}
 
 	/**
-	 * adds an image to a specific index of the stack and removes anything on top of it,
-	 * making it the last placed item in the stack
-	 * @param index the slot where the image needs to go
-	 * @param editToAdd the image to add to the stack
+	 * adds an image to a specific index of the stack and removes anything on top of
+	 * it, making it the last placed item in the stack
+	 * 
+	 * @param index
+	 *            the slot where the image needs to go
+	 * @param editToAdd
+	 *            the image to add to the stack
 	 */
 	public void addToStack(int index, Picture editToAdd)
 	{
@@ -125,7 +152,7 @@ public class PixController
 			editStack.remove(getStackSize() - 1);
 		}
 	}
-	
+
 	/**
 	 * sets the currentStackindex back to the top (aka index = 0)
 	 */
@@ -133,6 +160,7 @@ public class PixController
 	{
 		currentStackIndex = 0;
 	}
+
 	/**
 	 * traverse up the stack
 	 */
@@ -140,6 +168,7 @@ public class PixController
 	{
 		currentStackIndex--;
 	}
+
 	/**
 	 * traverse down the stack
 	 */
@@ -147,7 +176,7 @@ public class PixController
 	{
 		currentStackIndex++;
 	}
-	
+
 	/**
 	 * clears the stack, but adds back in the original image
 	 */
@@ -189,7 +218,7 @@ public class PixController
 
 		return name;
 	}
-	
+
 	public void print(String words)
 	{
 		print.out(words);
@@ -261,7 +290,7 @@ public class PixController
 		currentSize.setSize(activeImage.getWidth(), activeImage.getHeight());
 		return currentSize;
 	}
-	
+
 	public int getCurrentStackIndex()
 	{
 		return currentStackIndex;
@@ -315,7 +344,6 @@ public class PixController
 	{
 		pictureTitle = name;
 	}
-	
 
 	public void setExtension(String end)
 	{
