@@ -173,15 +173,8 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent enter)
 			{
-				redBox.setCurrentValue(redBox.getTextFieldText());
-				if(redBox.getCurrentValue() < 0)
-				{
-					redBox.setCurrentValue(0);
-				}
-				else if(redBox.getCurrentValue() > 255)
-				{
-					redBox.setCurrentValue(255);
-				}
+				
+				updateColor();
 				applyEdit(currentEditMode);
 			}
 		});
@@ -190,15 +183,8 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent enter)
 			{
-				greenBox.setCurrentValue(greenBox.getTextFieldText());
-				if(greenBox.getCurrentValue() < 0)
-				{
-					greenBox.setCurrentValue(0);
-				}
-				else if(greenBox.getCurrentValue() > 255)
-				{
-					greenBox.setCurrentValue(255);
-				}
+			
+				updateColor();
 				applyEdit(currentEditMode);
 			}
 		});
@@ -207,15 +193,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent enter)
 			{
-				blueBox.setCurrentValue(blueBox.getTextFieldText());
-				if(blueBox.getCurrentValue() < 0)
-				{
-					blueBox.setCurrentValue(0);
-				}
-				else if(blueBox.getCurrentValue() > 255)
-				{
-					blueBox.setCurrentValue(255);
-				}
+				updateColor();
 				applyEdit(currentEditMode);
 			}
 		});
@@ -229,7 +207,7 @@ public class EditingTools extends JPanel
 			this.remove(index);
 		}
 		
-		updateColor();
+		refreshColor();
 		
 		this.repaint();
 		
@@ -243,7 +221,6 @@ public class EditingTools extends JPanel
 		}
 		else if(type == SCANLINE)
 		{
-			currentColor = new Color(redBox.getCurrentValue(),greenBox.getCurrentValue(), blueBox.getCurrentValue());
 			app.scanline(shiftX.getCurrentValue(), shiftY.getCurrentValue(),currentColor,HORIZONTAL);
 		}
 	}
@@ -271,7 +248,7 @@ public class EditingTools extends JPanel
 	
 	public void setScanline()
 	{
-		updateColor();
+		refreshColor();
 		shiftX.setText("Thickness:");
 		shiftY.setText("Spread:");
 		shiftX.setCurrentValue(1);
@@ -349,11 +326,47 @@ public class EditingTools extends JPanel
 		});
 	}
 	
-	private void updateColor()
+	private void refreshColor()
 	{
 		redBox.setCurrentValue(currentColor.getRed());
 		greenBox.setCurrentValue(currentColor.getGreen());
 		blueBox.setCurrentValue(currentColor.getBlue());
+	}
+	
+	private void updateColor()
+	{
+		
+		redBox.setCurrentValue(redBox.getTextFieldText());
+		if(redBox.getCurrentValue() < 0)
+		{
+			redBox.setCurrentValue(0);
+		}
+		else if(redBox.getCurrentValue() > 255)
+		{
+			redBox.setCurrentValue(255);
+		}
+		
+		greenBox.setCurrentValue(greenBox.getTextFieldText());
+		if(greenBox.getCurrentValue() < 0)
+		{
+			greenBox.setCurrentValue(0);
+		}
+		else if(greenBox.getCurrentValue() > 255)
+		{
+			greenBox.setCurrentValue(255);
+		}
+		
+		blueBox.setCurrentValue(blueBox.getTextFieldText());
+		if(blueBox.getCurrentValue() < 0)
+		{
+			blueBox.setCurrentValue(0);
+		}
+		else if(blueBox.getCurrentValue() > 255)
+		{
+			blueBox.setCurrentValue(255);
+		}
+		
+		currentColor = new Color(redBox.getCurrentValue(),greenBox.getCurrentValue(), blueBox.getCurrentValue());
 	}
 
 	public void updateDimensions()

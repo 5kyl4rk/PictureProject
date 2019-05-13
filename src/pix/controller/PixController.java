@@ -149,7 +149,7 @@ public class PixController
 		temp.setTitle("temp" + logTracker);
 		logTracker++;
 
-		for (int stackIndex = getStackSize()-1; stackIndex > index; stackIndex--)
+		for (int stackIndex = index - 1; stackIndex > 0; stackIndex--)
 		{
 			editStack.remove(stackIndex);
 		}
@@ -192,7 +192,7 @@ public class PixController
 	public void restartStack()
 	{
 		clearStack();
-
+		restartStackIndex();
 		editStack.add(originalImage);
 	}
 
