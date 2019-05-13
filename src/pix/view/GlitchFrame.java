@@ -22,9 +22,9 @@ public class GlitchFrame extends JFrame
 		this.setContentPane(appPanel);
 		this.setMinimumSize(appPanel.getToolPanelSize());
 		this.setLocationRelativeTo(null);
-
 		this.setResizable(true);
 		this.setVisible(true);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public void updateDisplay()
@@ -43,6 +43,8 @@ public class GlitchFrame extends JFrame
 		
 		appPanel.updateDisplay();
 	}
+	
+	
 	
 	public void recenter()
 	{
