@@ -20,6 +20,10 @@ public class GlitchMasterPanel extends JPanel
 	private int padding;
 	private JScrollPane controlPane;
 
+	/**
+	 * The main panel that will hold all sub panels and such
+	 * @param app
+	 */
 	public GlitchMasterPanel(PixController app)
 	{
 		super();
@@ -36,7 +40,10 @@ public class GlitchMasterPanel extends JPanel
 		setupLayout();
 		//setupScrollPane();
 	}
-
+	
+	/**
+	 * adds components to panel
+	 */
 	private void setupPanel()
 	{
 		this.setLayout(appLayout);
@@ -45,6 +52,9 @@ public class GlitchMasterPanel extends JPanel
 		this.add(tools);
 	}
 
+	/**
+	 * puts constraints on components
+	 */
 	private void setupLayout()
 	{
 		appLayout.putConstraint(SpringLayout.NORTH, tools, 0, SpringLayout.NORTH, displayImage);
@@ -53,10 +63,11 @@ public class GlitchMasterPanel extends JPanel
 		appLayout.putConstraint(SpringLayout.NORTH, displayImage, padding, SpringLayout.NORTH, this);
 		appLayout.putConstraint(SpringLayout.WEST, displayImage, padding, SpringLayout.WEST, this);
 		appLayout.putConstraint(SpringLayout.SOUTH, displayImage, -padding, SpringLayout.SOUTH, this);
-		
-		
 	}
 	
+	/**
+	 * changes the ImageIcon on the JLabel to be the current image selected by the controller
+	 */
 	private void updateImage()
 	{
 		image.setImage(app.getCurrentImage().getImage());
@@ -70,7 +81,9 @@ public class GlitchMasterPanel extends JPanel
 		controlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 	}
 	
-	
+	/**
+	 * calls {@link #updateImage() updateImage()} and {@link #repaint() repaint()} to "refresh" the panel and all it's components
+	 */
 	protected void updateDisplay()
 	{
 		updateImage();

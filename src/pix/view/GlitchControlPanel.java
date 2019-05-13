@@ -30,6 +30,10 @@ public class GlitchControlPanel extends JPanel
 	private EditingTools sidebar;//
 	private SpringLayout appLayout;
 
+	/**
+	 * the panel that will handle all button actions such as saving, loading, undo/redo, and image editing.
+	 * @param app
+	 */
 	public GlitchControlPanel(PixController app)
 	{
 		super();

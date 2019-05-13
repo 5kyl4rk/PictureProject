@@ -8,6 +8,10 @@ public class GlitchFrame extends JFrame
 {
 	private PixController app;
 	private GlitchMasterPanel appPanel;
+	/**
+	 * the main container for the program.  Where all the components will be displayed
+	 * @param app reference to the controller
+	 */
 	public GlitchFrame(PixController app)
 	{
 		super();
@@ -17,6 +21,9 @@ public class GlitchFrame extends JFrame
 		setupFrame();
 	}
 	
+	/**
+	 * sets up frame properties such as size and current panel
+	 */
 	private void setupFrame()
 	{
 		this.setContentPane(appPanel);
@@ -27,6 +34,9 @@ public class GlitchFrame extends JFrame
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
+	/**
+	 * resizes the frame to fit the current image size and calls the panel's {@link pix.view.GlitchMasterPanel#updateDisplay() updateDisplay()}
+	 */
 	public void updateDisplay()
 	{
 		int width = (int)(appPanel.getToolPanelSize().getWidth()+app.getPictureSize().width);
@@ -44,8 +54,9 @@ public class GlitchFrame extends JFrame
 		appPanel.updateDisplay();
 	}
 	
-	
-	
+	/**
+	 * puts the frame back to the center of the screen
+	 */
 	public void recenter()
 	{
 		this.setLocationRelativeTo(null);

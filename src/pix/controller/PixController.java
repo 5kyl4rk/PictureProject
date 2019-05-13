@@ -55,11 +55,19 @@ public class PixController
 	}
 
 	// ==== IO Handling ====
+	/**
+	 * Loads an image<br>
+	 * calls {@link pix.controller.IOController#loadImage() loadImage()}
+	 */
 	public void loadImage()
 	{
 		appIO.loadImage();
 	}
-
+	
+	/**
+	 * Saves an image<br>
+	 * calls {@link pix.controller.IOController#saveImage() saveImage}
+	 */
 	public void saveImage()
 	{
 		appIO.saveImage();
@@ -67,6 +75,7 @@ public class PixController
 
 	// ===== Image Altering =====
 	/**
+	 * 
 	 * Uses the {@link pixLab.classes.Picture#glitch() glitch()} method from Picture
 	 */
 	public void glitch()

@@ -42,6 +42,9 @@ public class EditingTools extends JPanel
 	private JButton cyanButton;
 	private JButton magentaButton;
 	private JButton yellowButton;
+	private JButton horizontalButton;
+	private JButton verticalButton;
+	private JButton lcdButton;
 	private int currentBaseColor;
 	private int currentDirection;
 	private final int MAKE3D = 0;
