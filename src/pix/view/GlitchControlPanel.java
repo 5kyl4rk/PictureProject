@@ -146,11 +146,13 @@ public class GlitchControlPanel extends JPanel
 				{
 					app.addToStack(app.getCurrentImage());
 					editMade();
+					sidebar.restartPanel();
+
 				}
 				else
 				{
 					sidebar.restartPanel();
-					app.setCurrentImage(app.getLastEdit());
+					app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
 					app.updateDisplay();
 				}
 			}
@@ -162,16 +164,19 @@ public class GlitchControlPanel extends JPanel
 			{
 				String[] option = {"Cancel","OK!" };
 				sidebar.setScanline();
+				
 				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "Scanlines", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]);
 				if (result == 1)
 				{
-					app.addToStack(app.getCurrentImage());
+					app.addToStack(app.getCurrentStackIndex(),app.getCurrentImage());
 					editMade();
+					sidebar.restartPanel();
+
 				}
 				else
 				{
 					sidebar.restartPanel();
-					app.setCurrentImage(app.getLastEdit());
+					app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
 					app.updateDisplay();
 				}
 			}

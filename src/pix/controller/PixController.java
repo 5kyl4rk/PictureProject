@@ -71,7 +71,7 @@ public class PixController
 	 */
 	public void glitch()
 	{
-		Picture temp = new Picture(getLastEdit());
+		Picture temp = new Picture(getLastEdit(currentStackIndex));
 		temp.glitch();
 		addToStack(currentStackIndex, temp);
 		this.setCurrentImage(temp);
@@ -84,7 +84,7 @@ public class PixController
 	 */
 	public void make3D(int shiftX, int shiftY, int color)
 	{
-		Picture temp = new Picture(getLastEdit());
+		Picture temp = new Picture(getLastEdit(currentStackIndex));
 		temp.make3D(color, shiftX, 0);
 		temp.make3D(color, shiftY, 1);
 		this.setCurrentImage(temp);
@@ -93,7 +93,7 @@ public class PixController
 
 	public void scanline(int thickness, int spread, Color color, int type)
 	{
-		Picture temp = new Picture(getLastEdit());
+		Picture temp = new Picture(getLastEdit(currentStackIndex));
 		if (type == 1)
 		{
 			temp.verticalScanlines(spread, thickness, color);
@@ -140,7 +140,7 @@ public class PixController
 		temp.setTitle("temp" + logTracker);
 		logTracker++;
 
-		for (int stackIndex = 0; stackIndex < index; stackIndex++)
+		for (int stackIndex = getStackSize()-1; stackIndex > index; stackIndex--)
 		{
 			editStack.remove(stackIndex);
 		}

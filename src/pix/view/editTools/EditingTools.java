@@ -67,7 +67,7 @@ public class EditingTools extends JPanel
 		currentDirection = HORIZONTAL;
 		currentEditMode = -1;
 		currentBaseColor = RED;
-		currentColor = new Color(255,255,255);
+		currentColor = new Color(0,0,0);
 		width = -99;
 		height = -99;
 		mainLayout = new GridLayout(0,1);
@@ -226,15 +226,9 @@ public class EditingTools extends JPanel
 			this.remove(index);
 		}
 		
-		xAxis.setValue(0);
-		yAxis.setValue(0);
+		updateColor();
 		
-		shiftX.setCurrentValue(0);
-		shiftY.setCurrentValue(0);
-		redBox.setCurrentValue(0);
-		greenBox.setCurrentValue(0);
-		blueBox.setCurrentValue(0);
-		
+		this.repaint();
 		
 	}
 	
@@ -252,8 +246,11 @@ public class EditingTools extends JPanel
 	}
 	public void setMake3D()
 	{
+		currentEditMode = MAKE3D;
 		shiftX.setText("x-Axis");
 		shiftY.setText("y-Axis");
+		shiftX.setCurrentValue(0);
+		shiftY.setCurrentValue(0);
 		
 		xAxis.setValue(0);
 		yAxis.setValue(0);
@@ -267,13 +264,18 @@ public class EditingTools extends JPanel
 		
 		this.add(make3DPanel,0);
 		this.add(buttonPanel,1);
-		currentEditMode = MAKE3D;
 	}
 	
 	public void setScanline()
 	{
+		updateColor();
 		shiftX.setText("Thickness:");
 		shiftY.setText("Spread:");
+		shiftX.setCurrentValue(1);
+		shiftY.setCurrentValue(1);
+		
+		xAxis.setValue(1);
+		yAxis.setValue(1);
 		
 		xAxis.setMinimum(1);
 		yAxis.setMinimum(1);
@@ -342,6 +344,13 @@ public class EditingTools extends JPanel
 
 			}
 		});
+	}
+	
+	private void updateColor()
+	{
+		redBox.setCurrentValue(currentColor.getRed());
+		greenBox.setCurrentValue(currentColor.getGreen());
+		blueBox.setCurrentValue(currentColor.getBlue());
 	}
 
 	public void updateDimensions()
