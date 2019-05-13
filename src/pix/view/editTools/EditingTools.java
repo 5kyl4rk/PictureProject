@@ -221,9 +221,9 @@ public class EditingTools extends JPanel
 
 	public void restartPanel()
 	{
-		for (Component current : this.getComponents())
+		for (int index = this.getComponentCount()-1; index >= 0; index--)
 		{
-			this.remove(current);
+			this.remove(index);
 		}
 		
 		xAxis.setValue(0);
@@ -255,6 +255,9 @@ public class EditingTools extends JPanel
 		shiftX.setText("x-Axis");
 		shiftY.setText("y-Axis");
 		
+		xAxis.setValue(0);
+		yAxis.setValue(0);
+		
 		xAxis.setMaximum(width / 2);
 		xAxis.setMinimum(-width / 2);
 
@@ -272,14 +275,15 @@ public class EditingTools extends JPanel
 		shiftX.setText("Thickness:");
 		shiftY.setText("Spread:");
 		
-		xAxis.setMinimum(0);
-		yAxis.setMinimum(0);
+		xAxis.setMinimum(1);
+		yAxis.setMinimum(1);
 		
 		xAxis.setMaximum(10); //TODO: find a consistent formula for finding a good amount
 		yAxis.setMaximum(10);
 		this.add(make3DPanel,0);
 		this.add(rgbPanel,1);
 		currentEditMode = SCANLINE;
+		this.applyEdit(currentEditMode);
 	}
 	
 	private void setupColorButtons()
