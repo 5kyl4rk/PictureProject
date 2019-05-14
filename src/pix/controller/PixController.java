@@ -108,7 +108,7 @@ public class PixController
 			temp.verticalScanlines(spread, thickness, color);
 
 		}
-		if(type == 2)
+		else if(type == 2)
 		{
 			temp.lcd(spread, thickness, color);
 		}

@@ -52,7 +52,7 @@ public class GlitchControlPanel extends JPanel
 		redo = new JButton("Redo");
 		make3D = new JButton("3D");
 		scanlines = new JButton("Scanlines");
-		restart = new JButton("Restart");
+		restart = new JButton("Clear");
 		compareChanges = new JButton("Show Original");
 		appLayout = new SpringLayout();
 		appLayout.putConstraint(SpringLayout.SOUTH, restart, -10, SpringLayout.NORTH, switchPanel);
@@ -274,11 +274,11 @@ public class GlitchControlPanel extends JPanel
 				if (canEdit == true)
 				{
 					app.setCurrentImage(app.getOriginal());
-					app.restartStack();
+					app.addToStack(app.getCurrentImage());
 					app.updateDisplay();
 					repaint();
 					restartUndoRedo();
-
+					updateUndoRedo();
 				}
 			}
 		});

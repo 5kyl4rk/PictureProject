@@ -75,6 +75,12 @@ public class EditingTools extends JPanel
 		height = -99;
 		mainLayout = new GridLayout(0,1);
 		make3DPanel = new JPanel(new GridLayout(0, 1));
+		scanPanel = new JPanel(new GridLayout(1,0));
+		
+		horizontalButton = new JButton("Horizontal");
+		verticalButton = new JButton("Vertical");
+		lcdButton = new JButton("LCD");
+		
 		shiftX = new TextBox(app, "x-Axis:");
 		shiftY = new TextBox(app, "y-Axis:");
 		redBox = new TextBox(app, "Red:");
@@ -123,6 +129,9 @@ public class EditingTools extends JPanel
 		make3DPanel.add(xAxisPanel, 0);
 		make3DPanel.add(yAxisPanel, 1);
 		
+		scanPanel.add(horizontalButton);
+		scanPanel.add(verticalButton);
+		scanPanel.add(lcdButton);
 
 
 	}
@@ -198,6 +207,36 @@ public class EditingTools extends JPanel
 			}
 		});
 		
+		horizontalButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				currentDirection = HORIZONTAL;
+				applyEdit(currentEditMode);
+
+			}
+		});
+		
+		verticalButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				currentDirection = VERTICAL;
+				applyEdit(currentEditMode);
+
+			}
+		});
+		
+		lcdButton.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				currentDirection = LCD;
+				applyEdit(currentEditMode);
+
+			}
+		});
+		
 	}
 
 	public void restartPanel()
@@ -221,7 +260,7 @@ public class EditingTools extends JPanel
 		}
 		else if(type == SCANLINE)
 		{
-			app.scanline(shiftX.getCurrentValue(), shiftY.getCurrentValue(),currentColor,HORIZONTAL);
+			app.scanline(shiftX.getCurrentValue(), shiftY.getCurrentValue(),currentColor,currentDirection);
 		}
 	}
 	public void setMake3D()
@@ -264,6 +303,7 @@ public class EditingTools extends JPanel
 		yAxis.setMaximum(10);
 		this.add(make3DPanel,0);
 		this.add(rgbPanel,1);
+		this.add(scanPanel,2);
 		currentEditMode = SCANLINE;
 		this.applyEdit(currentEditMode);
 	}
