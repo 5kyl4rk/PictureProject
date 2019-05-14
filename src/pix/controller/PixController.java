@@ -148,13 +148,15 @@ public class PixController
 
 		temp.setTitle("temp" + logTracker);
 		logTracker++;
+		
+		editStack.add(index, temp);
 
-		for (int stackIndex = index - 1; stackIndex > 0; stackIndex--)
+		for (int stackIndex = index - 1; stackIndex >= 0; stackIndex--)
 		{
 			editStack.remove(stackIndex);
 		}
 
-		editStack.add(0, temp);
+		
 
 		if (editStack.size() >= MAX_MEMORY)
 		{
