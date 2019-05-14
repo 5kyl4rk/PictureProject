@@ -4,7 +4,7 @@ import java.io.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-
+import java.util.Scanner;
 import pixLab.classes.Picture;
 
 public class IOController
@@ -67,7 +67,7 @@ public class IOController
 	 */
 	public void saveImage()
 	{
-		String[] option = {"No", "Yes" };
+		String[] option = { "No", "Yes" };
 		int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 		if (save == 1)
 		{
@@ -96,12 +96,41 @@ public class IOController
 
 		}
 	}
-	
+
 	public void loadConfig()
 	{
-		
+		Scanner configReader = new Scanner(startPath + "/pix.config");
+
+		while (configReader.hasNextLine())
+		{
+			String current = configReader.nextLine();
+			processInfo(current);
+		}
+
+		configReader.close();
 	}
-	
+
+	private void processInfo(String data)
+	{
+		int splitIndex = data.indexOf("=") + 1;
+		String keyData = data.substring(splitIndex);
+		if (data.contains("minimumSize"))
+		{
+			setMinimumSize(keyData);
+		}
+		else if (data.contains("saveFolder"))
+		{
+			setSaveFolder(keyData);
+		}
+		else if (data.contains("loadFolder"))
+		{
+			setLoadFolder(keyData);
+		}
+		else if (data.contains("maxStackMemory"))
+		{
+			// setMaxMemory(keyData);
+		}
+	}
 
 	private String findActualFileName(String path)
 	{
@@ -120,7 +149,67 @@ public class IOController
 			extension = end;
 		}
 	}
+
+	private void setSaveFolder(String data)
+	{
+		String path = "";
+		data = data.trim();
+		if (data.startsWith("."))
+		{
+			path = startPath + data.substring(1);
+		}
+		else
+		{
+			path = data;
+		}
+		recentSavePath = path;
+	}
+
+	private void setLoadFolder(String data)
+	{
+
+		String path = "";
+		data = data.trim();
+		if (data.startsWith("."))
+		{
+			path = startPath + data.substring(1);
+		}
+		else
+		{
+			path = data;
+		}
+		recentLoadPath = path;
+
+	}
 	
+	private void setMaxMemory(String data)
+	{
+		
+	}
+
+	private void setMinimumSize(String data)
+	{
+		data = data.trim().toLowerCase();
+		int width = (int) app.getToolPanelSize().getWidth();
+		int height = (int) app.getToolPanelSize().getHeight();
+		if (data.contains("x"))
+		{
+			int splitIndex = data.indexOf("x");
+			try
+			{
+				width = Integer.parseInt(data.substring(0, splitIndex));
+				height = Integer.parseInt(data.substring(splitIndex + 1));
+			}
+			catch (NumberFormatException wrong)
+			{
+
+			}
+		}
+
+		app.setMinimumSize(width, height);
+
+	}
+
 	public void setRecentLoadPath(String path)
 	{
 
@@ -130,7 +219,7 @@ public class IOController
 		}
 
 	}
-	
+
 	public void setRecentSavePath(String path)
 	{
 		if (path.contains(File.separator))
@@ -139,12 +228,12 @@ public class IOController
 		}
 
 	}
-	
+
 	public String getExtension()
 	{
 		return extension;
 	}
-	
+
 	public String getRecentLoadPath()
 	{
 		return recentLoadPath;
@@ -182,22 +271,21 @@ public class IOController
 		private String printExtensions()
 		{
 			String list = "";
-			
+
 			for (int index = 0; index < imageExtensions.length; index++)
 			{
-				list += "*"+imageExtensions[index];
-				if(index < imageExtensions.length - 1)
+				list += "*" + imageExtensions[index];
+				if (index < imageExtensions.length - 1)
 				{
-					list+=", ";
+					list += ", ";
 				}
 			}
-			
+
 			return list;
 		}
 
 		public String getDescription()
 		{
-			// TODO Auto-generated method stub
 			return printExtensions();
 		}
 

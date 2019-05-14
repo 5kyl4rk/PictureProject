@@ -27,7 +27,7 @@ public class GlitchFrame extends JFrame
 	private void setupFrame()
 	{
 		this.setContentPane(appPanel);
-		this.setMinimumSize(appPanel.getToolPanelSize());
+		this.setMinimumSize(app.getMinimumSize());
 		this.setLocationRelativeTo(null);
 		this.setResizable(true);
 		this.setVisible(true);
@@ -60,5 +60,10 @@ public class GlitchFrame extends JFrame
 	public void recenter()
 	{
 		this.setLocationRelativeTo(null);
+	}
+	
+	public Dimension getToolPanelSize()
+	{
+		return appPanel.getToolPanelSize();
 	}
 }

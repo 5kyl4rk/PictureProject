@@ -2,7 +2,6 @@ package pix.controller;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.io.*;
 import java.util.ArrayList;
 import pix.view.GlitchFrame;
 import pixLab.classes.*;
@@ -18,8 +17,9 @@ public class PixController
 	 */
 	private ArrayList<Picture> editStack;
 	private GlitchFrame appFrame;
-	private Dimension currentSize;
-	private final int MAX_MEMORY = 6; // in theory, this could be a greater number, but it has to stop somewhere
+	private Dimension currentImageSize;
+	private Dimension minimumFrameSize;
+	private int maxMemory; 
 	private boolean fileLoaded;
 	private int logTracker;
 	private int currentStackIndex;
@@ -31,7 +31,8 @@ public class PixController
 		
 		fileLoaded = false;
 		pictureTitle = "owo";
-		currentSize = new Dimension();
+		currentImageSize = new Dimension();
+		minimumFrameSize = new Dimension();
 		editStack = new ArrayList<Picture>();
 		appFrame = new GlitchFrame(this);
 		appIO = new IOController(this);
@@ -39,6 +40,8 @@ public class PixController
 		print.setState(true);
 		currentStackIndex = 0;
 		logTracker = 0;
+		
+		appIO.loadConfig();
 
 	}
 
@@ -151,7 +154,7 @@ public class PixController
 
 		
 
-		if (editStack.size() >= MAX_MEMORY)
+		if (editStack.size() >= maxMemory)
 		{
 			editStack.remove(getStackSize() - 1);
 		}
@@ -269,8 +272,8 @@ public class PixController
 
 	public Dimension getPictureSize()
 	{
-		currentSize.setSize(activeImage.getWidth(), activeImage.getHeight());
-		return currentSize;
+		currentImageSize.setSize(activeImage.getWidth(), activeImage.getHeight());
+		return currentImageSize;
 	}
 
 	public int getCurrentStackIndex()
@@ -307,9 +310,40 @@ public class PixController
 	{
 		pictureTitle = name;
 	}
+	
+	public void setMaxMemory(int value)
+	{
+		if(value > 25)
+		{
+			maxMemory = 25;
+		}
+		else if(value <= 0)
+		{
+			maxMemory = 2;
+		}
+		else
+		{
+			maxMemory = value;
+		}
+	}
 
 	public GlitchFrame getFrame()
 	{
 		return appFrame;
+	}
+	
+	public Dimension getToolPanelSize()
+	{
+		return appFrame.getToolPanelSize();
+	}
+	
+	public Dimension getMinimumSize()
+	{
+		return minimumFrameSize;
+	}
+	
+	public void setMinimumSize(int width, int height)
+	{
+		minimumFrameSize = new Dimension(width,height);
 	}
 }
