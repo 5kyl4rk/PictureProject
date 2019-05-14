@@ -136,6 +136,7 @@ public class GlitchControlPanel extends JPanel
 			{
 				app.glitch();
 				editMade();
+				updateUndoRedo();
 			}
 		});
 
@@ -151,6 +152,7 @@ public class GlitchControlPanel extends JPanel
 					app.addToStack(app.getCurrentImage());
 					editMade();
 					sidebar.restartPanel();
+					updateUndoRedo();
 
 				}
 				else
@@ -175,6 +177,7 @@ public class GlitchControlPanel extends JPanel
 					app.addToStack(app.getCurrentStackIndex(),app.getCurrentImage());
 					editMade();
 					sidebar.restartPanel();
+					updateUndoRedo();
 
 				}
 				else
@@ -295,6 +298,19 @@ public class GlitchControlPanel extends JPanel
 	{
 		revertMade = false;
 		undo.setEnabled(true);
+		repaint();
+	}
+	
+	private void updateUndoRedo()
+	{
+		if(app.getCurrentStackIndex() == 0)
+		{
+			redo.setEnabled(false);
+		}
+		else if(app.getCurrentStackIndex() == app.getStackSize() - 1)
+		{
+			undo.setEnabled(false);
+		}
 		repaint();
 	}
 
