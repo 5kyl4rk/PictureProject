@@ -13,6 +13,11 @@ public class IOController
 
 	private FileFilter filter;
 
+	private String startPath;
+	private String recentSavePath;
+	private String recentLoadPath;
+	private String extension;
+
 	/**
 	 * handles loading and saving
 	 * 
@@ -22,6 +27,10 @@ public class IOController
 	{
 		this.app = app;
 		filter = new ImageFilter();
+		startPath = System.getProperty("user.dir");
+		recentLoadPath = startPath + "/src/pixLab/images";
+		recentSavePath = startPath + "/savedImages/";
+		extension = ".jpg";
 	}
 
 	// ===== IO Handling =====
@@ -30,7 +39,7 @@ public class IOController
 	 */
 	public void loadImage()
 	{
-		JFileChooser explorer = new JFileChooser(app.getRecentLoadPath());
+		JFileChooser explorer = new JFileChooser(getRecentLoadPath());
 		explorer.setDialogTitle("What image do you want to load?");
 		explorer.setFileFilter(filter);
 		int result = explorer.showOpenDialog(app.getFrame());
@@ -38,14 +47,14 @@ public class IOController
 		{
 
 			String fileName = explorer.getSelectedFile().getAbsolutePath();
-			app.setRecentLoadPath(explorer.getCurrentDirectory().toString());
+			setRecentLoadPath(explorer.getCurrentDirectory().toString());
 			app.setCurrentImage(fileName);
 			app.setOriginalImage(fileName);
 
 			app.restartStack();
 
-			app.setExtension(fileName.substring(fileName.lastIndexOf(".")));
-			app.setPictureTitle(app.findActualFileName(fileName));
+			app.appIO.setExtension(fileName.substring(fileName.lastIndexOf(".")));
+			app.setPictureTitle(findActualFileName(fileName));
 
 			app.updateDisplay();
 			app.setFileLoaded(true);
@@ -62,9 +71,9 @@ public class IOController
 		int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);
 		if (save == 1)
 		{
-			JFileChooser explorer = new JFileChooser(app.getRecentSavePath());
+			JFileChooser explorer = new JFileChooser(getRecentSavePath());
 			explorer.setDialogTitle("Where do you want to save?");
-			String nameGlitch = app.getPictureTitle() + "-glitched" + app.getExtension();
+			String nameGlitch = app.getPictureTitle() + "-glitched" + getExtension();
 			File saveFile = new File(nameGlitch);
 			explorer.setSelectedFile(saveFile);
 
@@ -76,7 +85,7 @@ public class IOController
 
 				if (app.getCurrentImage().write(writeTo))
 				{
-					app.setRecentSavePath(explorer.getCurrentDirectory().toString());
+					setRecentSavePath(explorer.getCurrentDirectory().toString());
 					JOptionPane.showMessageDialog(app.getFrame(), "Save successful");
 				}
 				else
@@ -91,6 +100,59 @@ public class IOController
 	public void loadConfig()
 	{
 		
+	}
+	
+
+	private String findActualFileName(String path)
+	{
+		String directory = File.separator;
+		int start = path.lastIndexOf(directory);
+		int end = path.lastIndexOf(extension);
+		String name = path.substring(start + 1, end);
+
+		return name;
+	}
+
+	public void setExtension(String end)
+	{
+		if (end.trim().indexOf(".") == 0)
+		{
+			extension = end;
+		}
+	}
+	
+	public void setRecentLoadPath(String path)
+	{
+
+		if (path.contains(File.separator))
+		{
+			recentLoadPath = path;
+		}
+
+	}
+	
+	public void setRecentSavePath(String path)
+	{
+		if (path.contains(File.separator))
+		{
+			recentSavePath = path;
+		}
+
+	}
+	
+	public String getExtension()
+	{
+		return extension;
+	}
+	
+	public String getRecentLoadPath()
+	{
+		return recentLoadPath;
+	}
+
+	public String getRecentSavePath()
+	{
+		return recentSavePath;
 	}
 
 	private class ImageFilter extends FileFilter

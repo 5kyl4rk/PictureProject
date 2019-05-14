@@ -10,19 +10,15 @@ import pixLab.classes.*;
 public class PixController
 {
 	private BasicDebug print;
-	private IOController appIO;
+	IOController appIO;
 	private Picture activeImage;
 	private Picture originalImage;
-	private String recentLoadPath;
-	private String recentSavePath;
-	private String extension;
 	/**
 	 * index 0 is the top of the stack
 	 */
 	private ArrayList<Picture> editStack;
 	private GlitchFrame appFrame;
 	private Dimension currentSize;
-	private String startPath;
 	private final int MAX_MEMORY = 6; // in theory, this could be a greater number, but it has to stop somewhere
 	private boolean fileLoaded;
 	private int logTracker;
@@ -32,12 +28,9 @@ public class PixController
 	public PixController()
 	{
 
-		startPath = System.getProperty("user.dir");
-		recentLoadPath = startPath + "/src/pixLab/images";
-		recentSavePath = startPath + "/savedImages/";
+		
 		fileLoaded = false;
 		pictureTitle = "owo";
-		extension = ".jpg";
 		currentSize = new Dimension();
 		editStack = new ArrayList<Picture>();
 		appFrame = new GlitchFrame(this);
@@ -220,15 +213,6 @@ public class PixController
 		appFrame.recenter();
 	}
 
-	protected String findActualFileName(String path)
-	{
-		String directory = File.separator;
-		int start = path.lastIndexOf(directory);
-		int end = path.lastIndexOf(extension);
-		String name = path.substring(start + 1, end);
-
-		return name;
-	}
 
 	public void print(String words)
 	{
@@ -237,15 +221,6 @@ public class PixController
 
 	// ===== Get/Set =====
 
-	public String getRecentLoadPath()
-	{
-		return recentLoadPath;
-	}
-
-	public String getRecentSavePath()
-	{
-		return recentSavePath;
-	}
 
 	public Picture getCurrentImage()
 	{
@@ -281,10 +256,6 @@ public class PixController
 		return editStack.size();
 	}
 
-	public String getExtension()
-	{
-		return extension;
-	}
 
 	public String getPictureTitle()
 	{
@@ -305,25 +276,6 @@ public class PixController
 	public int getCurrentStackIndex()
 	{
 		return currentStackIndex;
-	}
-
-	public void setRecentSavePath(String path)
-	{
-		if (path.contains(File.separator))
-		{
-			recentSavePath = path;
-		}
-
-	}
-
-	public void setRecentLoadPath(String path)
-	{
-
-		if (path.contains(File.separator))
-		{
-			recentLoadPath = path;
-		}
-
 	}
 
 	public void setFileLoaded(boolean state)
@@ -354,14 +306,6 @@ public class PixController
 	public void setPictureTitle(String name)
 	{
 		pictureTitle = name;
-	}
-
-	public void setExtension(String end)
-	{
-		if (end.trim().indexOf(".") == 0)
-		{
-			extension = end;
-		}
 	}
 
 	public GlitchFrame getFrame()
