@@ -87,6 +87,11 @@ public class IOController
 
 		}
 	}
+	
+	public void loadConfig()
+	{
+		
+	}
 
 	private class ImageFilter extends FileFilter
 	{

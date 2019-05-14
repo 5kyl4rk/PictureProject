@@ -75,9 +75,8 @@ public class GlitchMasterPanel extends JPanel
 	
 	private void setupScrollPane()
 	{
-		controlPane.setPreferredSize(tools.getPreferredSize());
-		controlPane.setViewportView(tools);
-		controlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		controlPane.setViewportView(displayImage);
+		controlPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		controlPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
 	}
 	
