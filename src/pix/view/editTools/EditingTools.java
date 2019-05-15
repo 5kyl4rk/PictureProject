@@ -63,6 +63,10 @@ public class EditingTools extends JPanel
 	private int width;
 	private int height;
 
+	/**
+	 * Common editing components that will be reused
+	 * @param app a reference to the main controller
+	 */
 	public EditingTools(PixController app)
 	{
 		super();
@@ -102,12 +106,15 @@ public class EditingTools extends JPanel
 		
 		xAxis = new JSlider(JSlider.HORIZONTAL, -100, 100, 0);
 		yAxis = new JSlider(JSlider.HORIZONTAL, -100, 100, 0);
-		setupLayout();
+		setupPanel();
 		setupListeners();
 		
 	}
 
-	private void setupLayout()
+	/**
+	 * adds components to their necessary panels
+	 */
+	private void setupPanel()
 	{
 		this.setLayout(mainLayout);
 		xAxisPanel.add(shiftX, 0);
@@ -136,6 +143,9 @@ public class EditingTools extends JPanel
 
 	}
 
+	/**
+	 * sets up listener for buttons and sliders, can't be bias towards any particular editing methods, so they each have to call {@link #applyEdit(int)} instead 
+	 */
 	private void setupListeners()
 	{
 		setupColorButtons();
@@ -239,6 +249,9 @@ public class EditingTools extends JPanel
 		
 	}
 
+	/**
+	 * removes each component from the main panel, leaving it a blank slate
+	 */
 	public void restartPanel()
 	{
 		for (int index = this.getComponentCount()-1; index >= 0; index--)
@@ -246,12 +259,16 @@ public class EditingTools extends JPanel
 			this.remove(index);
 		}
 		
-		refreshColor();
+		reloadColor();
 		
 		this.repaint();
 		
 	}
 	
+	/**
+	 * gets values from certain components and calls the appropriate edit method based off those values
+	 * @param type what kind of edit it is
+	 */
 	private void applyEdit(int type)
 	{
 		if(type == MAKE3D)
@@ -263,6 +280,10 @@ public class EditingTools extends JPanel
 			app.scanline(shiftX.getCurrentValue(), shiftY.getCurrentValue(),currentColor,currentDirection);
 		}
 	}
+	
+	/**
+	 * sets the main panel to view components needed for {@link pix.controller.PixController#make3D(int, int, int) make3D()}
+	 */
 	public void setMake3D()
 	{
 		currentEditMode = MAKE3D;
@@ -285,9 +306,12 @@ public class EditingTools extends JPanel
 		this.add(buttonPanel,1);
 	}
 	
+	/**
+	 * sets the main panel to view components needed for {@link pix.controller.PixController#scanline(int, int, Color, int) scanline()}
+	 */
 	public void setScanline()
 	{
-		refreshColor();
+		reloadColor();
 		shiftX.setText("Thickness:");
 		shiftY.setText("Spread:");
 		shiftX.setCurrentValue(1);
@@ -308,6 +332,9 @@ public class EditingTools extends JPanel
 		this.applyEdit(currentEditMode);
 	}
 	
+	/**
+	 * setups listeners for basic color buttons that are used in {@link pix.controller.PixController#make3D(int, int, int) make3D()}
+	 */
 	private void setupColorButtons()
 	{
 		redButton.addActionListener(new ActionListener()
@@ -366,13 +393,19 @@ public class EditingTools extends JPanel
 		});
 	}
 	
-	private void refreshColor()
+	/**
+	 * sets the the values to be the currentColor's RGB values
+	 */
+	private void reloadColor()
 	{
 		redBox.setCurrentValue(currentColor.getRed());
 		greenBox.setCurrentValue(currentColor.getGreen());
 		blueBox.setCurrentValue(currentColor.getBlue());
 	}
 	
+	/**
+	 * sets the current color values
+	 */
 	private void updateColor()
 	{
 		
@@ -409,6 +442,9 @@ public class EditingTools extends JPanel
 		currentColor = new Color(redBox.getCurrentValue(),greenBox.getCurrentValue(), blueBox.getCurrentValue());
 	}
 
+	/**
+	 * sets the width and height to match that of the current image
+	 */
 	public void updateDimensions()
 	{
 		width = (int) app.getPictureSize().getWidth();

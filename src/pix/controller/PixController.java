@@ -19,36 +19,44 @@ public class PixController
 	private GlitchFrame appFrame;
 	private Dimension currentImageSize;
 	private Dimension minimumFrameSize;
-	private int maxMemory; 
+	private int maxMemory;
 	private boolean fileLoaded;
 	private int logTracker;
 	private int currentStackIndex;
 	private String pictureTitle;
 
+	/**
+	 * The main controller, handles all access between classes
+	 */
 	public PixController()
 	{
-
-		
-		fileLoaded = false;
-		pictureTitle = "owo";
 		print = new BasicDebug();
 		appFrame = new GlitchFrame(this);
 		currentImageSize = new Dimension();
-		minimumFrameSize = new Dimension();
+		minimumFrameSize = new Dimension(appFrame.getToolPanelSize());
 		editStack = new ArrayList<Picture>();
 		appIO = new IOController(this);
 		print.setState(true);
+
+		fileLoaded = false;
+		pictureTitle = "owo";
 		currentStackIndex = 0;
 		logTracker = 0;
+
 		appIO.loadConfig();
 		appFrame.setMinimumSize(getMinimumSize());
 		appFrame.setVisible(true);
 
 	}
 
+	/**
+	 * the method that gets called be the runner, would normally contain code that
+	 * would run on startup, but since the methods are being called by JPanels, it
+	 * will most likely remain empty
+	 */
 	public void start()
 	{
-		
+
 	}
 
 	// ==== IO Handling ====
@@ -60,7 +68,7 @@ public class PixController
 	{
 		appIO.loadImage();
 	}
-	
+
 	/**
 	 * Saves an image<br>
 	 * calls {@link pix.controller.IOController#saveImage() saveImage}
@@ -97,6 +105,10 @@ public class PixController
 		appFrame.updateDisplay();
 	}
 
+	/**
+	 * Uses the {@link pixLab.classes.Picture#scanlines(int, int, Color)
+	 * scanlines()} method and its varieties from Picture
+	 */
 	public void scanline(int thickness, int spread, Color color, int type)
 	{
 		Picture temp = new Picture(getLastEdit(currentStackIndex));
@@ -105,7 +117,7 @@ public class PixController
 			temp.verticalScanlines(spread, thickness, color);
 
 		}
-		else if(type == 2)
+		else if (type == 2)
 		{
 			temp.lcd(spread, thickness, color);
 		}
@@ -113,7 +125,7 @@ public class PixController
 		{
 			temp.scanlines(spread, thickness, color);
 		}
-		
+
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 	}
@@ -145,15 +157,13 @@ public class PixController
 
 		temp.setTitle("temp" + logTracker);
 		logTracker++;
-		
+
 		editStack.add(index, temp);
 
 		for (int stackIndex = index - 1; stackIndex >= 0; stackIndex--)
 		{
 			editStack.remove(stackIndex);
 		}
-
-		
 
 		if (editStack.size() >= maxMemory)
 		{
@@ -207,24 +217,35 @@ public class PixController
 	}
 
 	// ==== View Methods ====
+	/**
+	 * calls {@link pix.view.GlitchFrame#updateDisplay()
+	 * GlitchFrame.updateDisplay()} to "refresh" the panel
+	 */
 	public void updateDisplay()
 	{
 		appFrame.updateDisplay();
 	}
 
+	/**
+	 * Moves the frame back to the center of the screen
+	 */
 	public void recenter()
 	{
 		appFrame.recenter();
 	}
 
-
+	/**
+	 * a very basic console printer for quick debugging
+	 * 
+	 * @param words
+	 *            the phrase to print on console
+	 */
 	public void print(String words)
 	{
 		print.out(words);
 	}
 
 	// ===== Get/Set =====
-
 
 	public Picture getCurrentImage()
 	{
@@ -259,7 +280,6 @@ public class PixController
 	{
 		return editStack.size();
 	}
-
 
 	public String getPictureTitle()
 	{
@@ -311,14 +331,14 @@ public class PixController
 	{
 		pictureTitle = name;
 	}
-	
+
 	public void setMaxMemory(int value)
 	{
-		if(value > 25)
+		if (value > 25)
 		{
 			maxMemory = 25;
 		}
-		else if(value <= 0)
+		else if (value <= 0)
 		{
 			maxMemory = 2;
 		}
@@ -332,19 +352,19 @@ public class PixController
 	{
 		return appFrame;
 	}
-	
+
 	public Dimension getToolPanelSize()
 	{
 		return appFrame.getToolPanelSize();
 	}
-	
+
 	public Dimension getMinimumSize()
 	{
 		return minimumFrameSize;
 	}
-	
+
 	public void setMinimumSize(int width, int height)
 	{
-		minimumFrameSize = new Dimension(width,height);
+		minimumFrameSize = new Dimension(width, height);
 	}
 }

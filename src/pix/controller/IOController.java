@@ -99,9 +99,13 @@ public class IOController
 		}
 	}
 
+	/**
+	 * Loads a config file for the program, file must be found at the root of the
+	 * project and must be called "pix.config"
+	 */
 	public void loadConfig()
 	{
-		File configFile = new File(startPath + "/pix.config");
+		File configFile = new File(startPath + File.separator + "pix.config");
 		Scanner configReader;
 		try
 		{
@@ -114,15 +118,20 @@ public class IOController
 			}
 
 			configReader.close();
-		
+
 		}
 		catch (FileNotFoundException e)
 		{
-			this.setMinimumSize("");
+			JOptionPane.showMessageDialog(app.getFrame(), "Config file couldn't be read, reverting back to default settings");
 		}
 	}
-		
 
+	/**
+	 * takes lines given by the Scanner in {@link #loadConfig()} and determines what
+	 * helper methods to use to set data
+	 * 
+	 * @param data the line of String that contains info
+	 */
 	private void processInfo(String data)
 	{
 		int splitIndex = data.indexOf("=") + 1;
@@ -145,6 +154,11 @@ public class IOController
 		}
 	}
 
+	/**
+	 * takes a file path and determines what the selected files 'readable' name is 
+	 * @param path the path of the selected file
+	 * @return a readable name for the file
+	 */
 	private String findActualFileName(String path)
 	{
 		String directory = File.separator;
@@ -167,9 +181,9 @@ public class IOController
 	{
 		String path = "";
 		data = data.trim();
-		if(currentOS.startsWith("Windows"))
+		if (currentOS.startsWith("Windows"))
 		{
-			data = data.replaceAll("/",File.separator);
+			data = data.replaceAll("/", File.separator);
 
 		}
 		else
@@ -177,7 +191,7 @@ public class IOController
 			data = data.replaceAll("\\\\", File.separator);
 
 		}
-		
+
 		if (data.startsWith("."))
 		{
 			path = startPath + data.substring(1);
@@ -206,7 +220,7 @@ public class IOController
 		recentLoadPath = path;
 		app.print(path);
 	}
-	
+
 	private void setMaxMemory(String data)
 	{
 		data = data.trim();
@@ -214,9 +228,9 @@ public class IOController
 		{
 			app.setMaxMemory(Integer.parseInt(data));
 		}
-		catch(NumberFormatException wrong)
+		catch (NumberFormatException wrong)
 		{
-			
+
 		}
 	}
 
@@ -277,10 +291,18 @@ public class IOController
 		return recentSavePath;
 	}
 
+	/**
+	 * A simple image extension filter
+	 * @author Skylark
+	 *
+	 */
 	private class ImageFilter extends FileFilter
 	{
 		private String[] imageExtensions = { ".jpg", ".png", ".tiff", ".jpeg", ".bmp" };
-
+		
+		/**
+		 * A filter that contains only acceptable image files
+		 */
 		public ImageFilter()
 		{
 			super();
@@ -301,6 +323,10 @@ public class IOController
 			return fileOk;
 		}
 
+		/**
+		 * converts the list of extensions to a human-readable String
+		 * @return a readable String of extensions
+		 */
 		private String printExtensions()
 		{
 			String list = "";

@@ -21,7 +21,6 @@ public class GlitchControlPanel extends JPanel
 	private JButton glitch;// subjected to change, for testing purposes
 	private JButton compareChanges;
 	private boolean canEdit;
-	private boolean revertMade;
 	private JButton undo;
 	private JButton redo;
 	private JButton restart;
@@ -40,7 +39,6 @@ public class GlitchControlPanel extends JPanel
 
 		this.app = app;
 
-		revertMade = false;
 		canEdit = false;
 		saveLoadPanel = new JPanel(new GridLayout(1, 0));
 		glitchPanel = new JPanel(new GridLayout(0, 1));
@@ -68,6 +66,9 @@ public class GlitchControlPanel extends JPanel
 		setupListeners();
 	}
 
+	/**
+	 * setsup the panel by adding all needed components
+	 */
 	private void setupPanel()
 	{
 		this.setLayout(appLayout);
@@ -93,13 +94,19 @@ public class GlitchControlPanel extends JPanel
 		showTools(false);
 	}
 
+	/**
+	 * sets the constraints on key components
+	 */
 	private void setupLayout()
 	{
 		appLayout.putConstraint(SpringLayout.NORTH, glitchPanel, 30, SpringLayout.SOUTH, saveLoadPanel);
 		appLayout.putConstraint(SpringLayout.SOUTH, switchPanel, 0, SpringLayout.SOUTH, this);
 		appLayout.putConstraint(SpringLayout.EAST, switchPanel, 0, SpringLayout.EAST, saveLoadPanel);
 	}
-
+	
+	/**
+	 * adds listeners to buttons, the buttons will be linked to methods from the controller
+	 */
 	private void setupListeners()
 	{
 		load.addActionListener(new ActionListener()
@@ -202,7 +209,6 @@ public class GlitchControlPanel extends JPanel
 					showTools(false);
 					repaint();
 					canEdit = false;
-					restartUndoRedo();
 				}
 				else
 				{
@@ -277,13 +283,16 @@ public class GlitchControlPanel extends JPanel
 					app.addToStack(app.getCurrentImage());
 					app.updateDisplay();
 					repaint();
-					restartUndoRedo();
 					updateUndoRedo();
 				}
 			}
 		});
 	}
 
+	/**
+	 * shows/hides key components quickly and easily
+	 * @param state show tools or not
+	 */
 	private void showTools(boolean state)
 	{
 		glitch.setVisible(state);
@@ -293,14 +302,10 @@ public class GlitchControlPanel extends JPanel
 		redo.setVisible(state);
 		repaint();
 	}
-
-	private void restartUndoRedo()
-	{
-		revertMade = false;
-		undo.setEnabled(true);
-		repaint();
-	}
 	
+	/**
+	 * determines if undo/redo button should be enabled based on where it is currently in the stack
+	 */
 	private void updateUndoRedo()
 	{
 		if(app.getCurrentStackIndex() == 0)
@@ -314,6 +319,9 @@ public class GlitchControlPanel extends JPanel
 		repaint();
 	}
 
+	/**
+	 * shows certain components that only work if there was an edit made
+	 */
 	private void editMade()
 	{
 		compareChanges.setVisible(true);
@@ -321,8 +329,9 @@ public class GlitchControlPanel extends JPanel
 		save.setVisible(true);
 		canEdit = true;
 		app.restartStackIndex();
+		undo.setEnabled(true);
 		repaint();
-		restartUndoRedo();
+		
 	}
 
 	public Dimension getControlSize()
