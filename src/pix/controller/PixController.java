@@ -31,23 +31,24 @@ public class PixController
 		
 		fileLoaded = false;
 		pictureTitle = "owo";
+		print = new BasicDebug();
+		appFrame = new GlitchFrame(this);
 		currentImageSize = new Dimension();
 		minimumFrameSize = new Dimension();
 		editStack = new ArrayList<Picture>();
-		appFrame = new GlitchFrame(this);
 		appIO = new IOController(this);
-		print = new BasicDebug();
 		print.setState(true);
 		currentStackIndex = 0;
 		logTracker = 0;
-		
 		appIO.loadConfig();
+		appFrame.setMinimumSize(getMinimumSize());
+		appFrame.setVisible(true);
 
 	}
 
 	public void start()
 	{
-
+		
 	}
 
 	// ==== IO Handling ====

@@ -17,6 +17,7 @@ public class IOController
 	private String recentSavePath;
 	private String recentLoadPath;
 	private String extension;
+	private String currentOS;
 
 	/**
 	 * handles loading and saving
@@ -31,6 +32,7 @@ public class IOController
 		recentLoadPath = startPath + "/src/pixLab/images";
 		recentSavePath = startPath + "/savedImages/";
 		extension = ".jpg";
+		currentOS = System.getProperty("os.name");
 	}
 
 	// ===== IO Handling =====
@@ -99,16 +101,27 @@ public class IOController
 
 	public void loadConfig()
 	{
-		Scanner configReader = new Scanner(startPath + "/pix.config");
-
-		while (configReader.hasNextLine())
+		File configFile = new File(startPath + "/pix.config");
+		Scanner configReader;
+		try
 		{
-			String current = configReader.nextLine();
-			processInfo(current);
-		}
+			configReader = new Scanner(configFile);
+			while (configReader.hasNextLine())
+			{
+				String current = configReader.nextLine();
+				app.print(current);
+				processInfo(current);
+			}
 
-		configReader.close();
+			configReader.close();
+		
+		}
+		catch (FileNotFoundException e)
+		{
+			this.setMinimumSize("");
+		}
 	}
+		
 
 	private void processInfo(String data)
 	{
@@ -128,7 +141,7 @@ public class IOController
 		}
 		else if (data.contains("maxStackMemory"))
 		{
-			// setMaxMemory(keyData);
+			setMaxMemory(keyData);
 		}
 	}
 
@@ -154,6 +167,17 @@ public class IOController
 	{
 		String path = "";
 		data = data.trim();
+		if(currentOS.startsWith("Windows"))
+		{
+			data = data.replaceAll("/",File.separator);
+
+		}
+		else
+		{
+			data = data.replaceAll("\\\\", File.separator);
+
+		}
+		
 		if (data.startsWith("."))
 		{
 			path = startPath + data.substring(1);
@@ -163,6 +187,7 @@ public class IOController
 			path = data;
 		}
 		recentSavePath = path;
+		app.print(path);
 	}
 
 	private void setLoadFolder(String data)
@@ -179,12 +204,20 @@ public class IOController
 			path = data;
 		}
 		recentLoadPath = path;
-
+		app.print(path);
 	}
 	
 	private void setMaxMemory(String data)
 	{
-		
+		data = data.trim();
+		try
+		{
+			app.setMaxMemory(Integer.parseInt(data));
+		}
+		catch(NumberFormatException wrong)
+		{
+			
+		}
 	}
 
 	private void setMinimumSize(String data)
