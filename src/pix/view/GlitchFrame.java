@@ -27,6 +27,7 @@ public class GlitchFrame extends JFrame
 	private void setupFrame()
 	{
 		this.setContentPane(appPanel);
+		this.setTitle("Basic Glitch Image Editor");
 		this.setLocationRelativeTo(null);
 		this.setResizable(true);
 		this.setVisible(false);

@@ -26,6 +26,7 @@ public class EditingTools extends JPanel
 	private JSlider yAxis;
 	private GridLayout mainLayout;
 	private JPanel make3DPanel;
+	private JPanel grainPanel;
 	private JPanel xAxisPanel;
 	private JPanel yAxisPanel;
 	private JPanel scanPanel;
@@ -163,8 +164,8 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent enter)
 			{
-				shiftY.setCurrentValue(shiftY.getTextFieldText());
-				yAxis.setValue(shiftY.getCurrentValue());
+				shiftX.setCurrentValue(shiftX.getTextFieldText());
+				xAxis.setValue(shiftX.getCurrentValue());
 				applyEdit(currentEditMode);
 			}
 		});
@@ -258,6 +259,12 @@ public class EditingTools extends JPanel
 		{
 			this.remove(index);
 		}
+
+		shiftX.setCurrentValue(0);
+		shiftY.setCurrentValue(0);
+		
+		xAxis.setValue(0);
+		yAxis.setValue(0);
 		
 		reloadColor();
 		

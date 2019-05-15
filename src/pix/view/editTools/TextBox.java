@@ -50,7 +50,7 @@ public class TextBox extends JPanel
 	{
 		try
 		{
-			setCurrentValue(Integer.parseInt(input));
+			setCurrentValue(Integer.parseInt(input.trim()));
 		}
 		catch(NumberFormatException notInt)
 		{
