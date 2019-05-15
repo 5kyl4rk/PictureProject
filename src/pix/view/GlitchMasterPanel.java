@@ -73,6 +73,9 @@ public class GlitchMasterPanel extends JPanel
 		image.setImage(app.getCurrentImage().getImage());
 	}
 	
+	/**
+	 * Sets up a scroll pane, <b>Not Implemented</b>
+	 */
 	private void setupScrollPane()
 	{
 		controlPane.setViewportView(displayImage);
