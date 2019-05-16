@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.util.ArrayList;
 import pix.view.GlitchFrame;
 import pixLab.classes.*;
+import pix.model.*;
 
 public class PixController
 {
@@ -15,14 +16,12 @@ public class PixController
 	/**
 	 * index 0 is the top of the stack
 	 */
-	private ArrayList<Picture> editStack;
+	private ImageStack editStack;
 	private GlitchFrame appFrame;
 	private Dimension currentImageSize;
 	private Dimension minimumFrameSize;
 	private int maxMemory;
 	private boolean fileLoaded;
-	private int logTracker;
-	private int currentStackIndex;
 	private String pictureTitle;
 
 	/**
@@ -34,16 +33,14 @@ public class PixController
 		appFrame = new GlitchFrame(this);
 		currentImageSize = new Dimension();
 		minimumFrameSize = new Dimension(appFrame.getToolPanelSize());
-		editStack = new ArrayList<Picture>();
 		appIO = new IOController(this);
 		print.setState(true);
 
 		fileLoaded = false;
 		pictureTitle = "owo";
-		currentStackIndex = 0;
-		logTracker = 0;
 
 		appIO.loadConfig();
+		editStack = new ImageStack(maxMemory,this);
 		appFrame.setMinimumSize(getMinimumSize());
 		appFrame.setVisible(true);
 
@@ -85,9 +82,9 @@ public class PixController
 	 */
 	public void glitch()
 	{
-		Picture temp = new Picture(getLastEdit(currentStackIndex));
+		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
 		temp.glitch();
-		addToStack(currentStackIndex, temp);
+		addToStack(getCurrentStackIndex(), temp);
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 	}
@@ -98,7 +95,7 @@ public class PixController
 	 */
 	public void make3D(int shiftX, int shiftY, int color)
 	{
-		Picture temp = new Picture(getLastEdit(currentStackIndex));
+		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
 		temp.make3D(color, shiftX, 0);
 		temp.make3D(color, shiftY, 1);
 		this.setCurrentImage(temp);
@@ -111,7 +108,7 @@ public class PixController
 	 */
 	public void scanline(int thickness, int spread, Color color, int type)
 	{
-		Picture temp = new Picture(getLastEdit(currentStackIndex));
+		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
 		if (type == 1)
 		{
 			temp.verticalScanlines(spread, thickness, color);
@@ -132,7 +129,7 @@ public class PixController
 	
 	public void grain(int hardness)
 	{
-		Picture temp = new Picture(getLastEdit(currentStackIndex));
+		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
 		int expose = 0;
 		if(hardness < 0)
 		{
@@ -147,7 +144,7 @@ public class PixController
 	public void noise(int hardness, int percent, Color color)
 	{
 		
-		Picture temp = new Picture(getLastEdit(currentStackIndex));
+		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
 		temp.noise(color,(double) percent);
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
@@ -177,22 +174,7 @@ public class PixController
 	 */
 	public void addToStack(int index, Picture editToAdd)
 	{
-		Picture temp = new Picture(editToAdd);
-
-		temp.setTitle("temp" + logTracker);
-		logTracker++;
-
-		editStack.add(index, temp);
-
-		for (int stackIndex = index - 1; stackIndex >= 0; stackIndex--)
-		{
-			editStack.remove(stackIndex);
-		}
-
-		if (editStack.size() >= maxMemory)
-		{
-			editStack.remove(getStackSize() - 1);
-		}
+		editStack.addToStack(index, editToAdd);
 	}
 
 	/**
@@ -200,7 +182,7 @@ public class PixController
 	 */
 	public void restartStackIndex()
 	{
-		currentStackIndex = 0;
+		editStack.restartStackIndex();
 	}
 
 	/**
@@ -208,7 +190,7 @@ public class PixController
 	 */
 	public void goUpStack()
 	{
-		currentStackIndex--;
+		editStack.goUpStack();
 	}
 
 	/**
@@ -216,7 +198,7 @@ public class PixController
 	 */
 	public void goDownStack()
 	{
-		currentStackIndex++;
+		editStack.goDownStack();
 	}
 
 	/**
@@ -224,9 +206,7 @@ public class PixController
 	 */
 	public void restartStack()
 	{
-		clearStack();
-		restartStackIndex();
-		editStack.add(originalImage);
+		editStack.restartStack();
 	}
 
 	/**
@@ -234,10 +214,7 @@ public class PixController
 	 */
 	public void clearStack()
 	{
-		for (int index = 0; index < editStack.size(); index++)
-		{
-			editStack.remove(index);
-		}
+		editStack.clearStack();
 	}
 
 	// ==== View Methods ====
@@ -283,26 +260,17 @@ public class PixController
 
 	public Picture getLastEdit()
 	{
-		return editStack.get(0);
+		return editStack.getLastEdit();
 	}
 
 	public Picture getLastEdit(int index)
 	{
-		if (index < 0)
-		{
-			index = 0;
-		}
-		else if (index >= editStack.size())
-		{
-			index = editStack.size() - 1;
-		}
-
-		return editStack.get(index);
+		return editStack.getLastEdit(index);
 	}
 
 	public int getStackSize()
 	{
-		return editStack.size();
+		return editStack.getSize();
 	}
 
 	public String getPictureTitle()
@@ -323,7 +291,7 @@ public class PixController
 
 	public int getCurrentStackIndex()
 	{
-		return currentStackIndex;
+		return editStack.getCurrentIndex();
 	}
 
 	public void setFileLoaded(boolean state)
