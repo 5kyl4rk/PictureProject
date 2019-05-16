@@ -142,7 +142,6 @@ public class PixController
 	
 	public void noise(int hardness, int percent, Color color)
 	{
-		
 		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
 		temp.noise(color,(double) percent);
 		this.setCurrentImage(temp);
