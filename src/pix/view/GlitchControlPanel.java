@@ -200,7 +200,7 @@ public class GlitchControlPanel extends JPanel
 				}
 				else
 				{
-					app.setCurrentImage(app.getLastEdit());
+					app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
 					app.updateDisplay();
 					compareChanges.setText("Show Original");
 					save.setVisible(true);
