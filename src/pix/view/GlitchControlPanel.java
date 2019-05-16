@@ -18,9 +18,11 @@ public class GlitchControlPanel extends JPanel
 	private JPanel switchPanel;
 	private JButton load;
 	private JButton save;
-	private JButton glitch;// subjected to change, for testing purposes
+	private JButton glitch;
+	private JButton grain;
 	private JButton compareChanges;
 	private boolean canEdit;
+	private String[] genericOptions;
 	private JButton undo;
 	private JButton redo;
 	private JButton restart;
@@ -48,7 +50,8 @@ public class GlitchControlPanel extends JPanel
 		glitch = new JButton("Glitch");
 		undo = new JButton("Undo");
 		redo = new JButton("Redo");
-		make3D = new JButton("3D");
+		grain = new JButton("Grain");
+		make3D = new JButton("<html><font color=#ff0000>3</font><font color=#00ffff>D</font></html>");
 		scanlines = new JButton("Scanlines");
 		restart = new JButton("Clear");
 		compareChanges = new JButton("Show Original");
@@ -60,6 +63,7 @@ public class GlitchControlPanel extends JPanel
 		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
 		appLayout.putConstraint(SpringLayout.WEST, glitchPanel, 40, SpringLayout.WEST, this);
 		sidebar = new EditingTools(app);
+		genericOptions = new String[]{"Cancel","OK!" };
 
 		setupPanel();
 		setupLayout();
@@ -86,6 +90,7 @@ public class GlitchControlPanel extends JPanel
 		switchPanel.add(undo);
 		glitchPanel.add(make3D);
 		glitchPanel.add(scanlines);
+		glitchPanel.add(grain);
 		switchPanel.add(redo);
 		this.add(restart);
 		compareChanges.setVisible(false);
@@ -151,23 +156,9 @@ public class GlitchControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				String[] option = {"Cancel","OK!" };
 				sidebar.setMake3D();
-				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "3D Effect", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]);
-				if (result == 1)
-				{
-					app.addToStack(app.getCurrentImage());
-					editMade();
-					sidebar.restartPanel();
-					updateUndoRedo();
-
-				}
-				else
-				{
-					sidebar.restartPanel();
-					app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
-					app.updateDisplay();
-				}
+				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "3D Effect", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
+				processToolRequest(result);
 			}
 		});
 		
@@ -175,24 +166,21 @@ public class GlitchControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				String[] option = {"Cancel","OK!" };
-				sidebar.setScanline();
 				
-				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "Scanlines", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, option, option[0]);
-				if (result == 1)
-				{
-					app.addToStack(app.getCurrentStackIndex(),app.getCurrentImage());
-					editMade();
-					sidebar.restartPanel();
-					updateUndoRedo();
-
-				}
-				else
-				{
-					sidebar.restartPanel();
-					app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
-					app.updateDisplay();
-				}
+				sidebar.setScanline();
+				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "Scanlines", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
+				processToolRequest(result);
+			}
+		});
+		
+		grain.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				
+				sidebar.setGrain();
+				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "Grainy", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
+				processToolRequest(result);
 			}
 		});
 
@@ -295,11 +283,8 @@ public class GlitchControlPanel extends JPanel
 	 */
 	private void showTools(boolean state)
 	{
-		glitch.setVisible(state);
-		make3D.setVisible(state);
-		scanlines.setVisible(state);
-		undo.setVisible(state);
-		redo.setVisible(state);
+		glitchPanel.setVisible(state);
+		switchPanel.setVisible(state);
 		repaint();
 	}
 	
@@ -333,6 +318,25 @@ public class GlitchControlPanel extends JPanel
 		repaint();
 		
 	}
+	
+	private void processToolRequest(int result)
+	{
+		if (result == 1)
+		{
+			app.addToStack(app.getCurrentStackIndex(),app.getCurrentImage());
+			editMade();
+			sidebar.restartPanel();
+			updateUndoRedo();
+
+		}
+		else
+		{
+			sidebar.restartPanel();
+			app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
+			app.updateDisplay();
+		}
+	}
+
 
 	public Dimension getControlSize()
 	{

@@ -129,6 +129,30 @@ public class PixController
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 	}
+	
+	public void grain(int hardness)
+	{
+		Picture temp = new Picture(getLastEdit(currentStackIndex));
+		int expose = 0;
+		if(hardness < 0)
+		{
+			expose = 1;
+		}
+		temp.grain(hardness,expose);
+		this.setCurrentImage(temp);
+		appFrame.updateDisplay();
+
+	}
+	
+	public void noise(int hardness, int percent, Color color)
+	{
+		
+		Picture temp = new Picture(getLastEdit(currentStackIndex));
+		temp.noise(color,(double) percent);
+		this.setCurrentImage(temp);
+		appFrame.updateDisplay();
+				
+	}
 
 	// ==== Stack Management ===
 	/**
