@@ -99,6 +99,7 @@ public class IOController
 		}
 	}
 
+	// ===== Config loading =====
 	/**
 	 * Loads a config file for the program, file must be found at the root of the
 	 * project and must be called "pix.config"
@@ -122,7 +123,22 @@ public class IOController
 		}
 		catch (FileNotFoundException e)
 		{
-			JOptionPane.showMessageDialog(app.getFrame(), "Config file couldn't be read, reverting back to default settings");
+			JOptionPane.showMessageDialog(null, "Config file couldn't be read, reverting back to default settings");
+			try
+			{
+				PrintWriter defaultConfig = new PrintWriter(configFile);
+				defaultConfig.println("minimumSize=300x300");
+				defaultConfig.println("saveFolder=./savedImages/");
+				defaultConfig.println("loadFolder=./src/pixLab/images");
+				defaultConfig.println("maxStackMemory=10");
+				defaultConfig.close();
+			}
+			catch (IOException error)
+			{
+				JOptionPane.showMessageDialog(null, "Failed to create a config file");
+
+			}
+
 		}
 	}
 
@@ -130,7 +146,8 @@ public class IOController
 	 * takes lines given by the Scanner in {@link #loadConfig()} and determines what
 	 * helper methods to use to set data
 	 * 
-	 * @param data the line of String that contains info
+	 * @param data
+	 *            the line of String that contains info
 	 */
 	private void processInfo(String data)
 	{
@@ -155,8 +172,10 @@ public class IOController
 	}
 
 	/**
-	 * takes a file path and determines what the selected files 'readable' name is 
-	 * @param path the path of the selected file
+	 * takes a file path and determines what the selected files 'readable' name is
+	 * 
+	 * @param path
+	 *            the path of the selected file
 	 * @return a readable name for the file
 	 */
 	private String findActualFileName(String path)
@@ -293,13 +312,14 @@ public class IOController
 
 	/**
 	 * A simple image extension filter
+	 * 
 	 * @author Skylark
 	 *
 	 */
 	private class ImageFilter extends FileFilter
 	{
 		private String[] imageExtensions = { ".jpg", ".png", ".tiff", ".jpeg", ".bmp" };
-		
+
 		/**
 		 * A filter that contains only acceptable image files
 		 */
@@ -325,6 +345,7 @@ public class IOController
 
 		/**
 		 * converts the list of extensions to a human-readable String
+		 * 
 		 * @return a readable String of extensions
 		 */
 		private String printExtensions()

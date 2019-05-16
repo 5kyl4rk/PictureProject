@@ -827,6 +827,7 @@ public class Picture extends SimplePicture
 	{
 		Pixel[][] pixels = this.getPixels2D();
 		int negative = 1;
+		hardness = Math.abs(hardness);
 		if (hardness > 255)
 		{
 			hardness = 255;
@@ -1656,7 +1657,7 @@ public class Picture extends SimplePicture
 				Picture image = new Picture(fileName);
 				String extention = fileName.substring(fileName.lastIndexOf("."));
 				image.explore();
-				image.grain(255,1);
+				image.grain(255);
 				image.explore();
 				String[] option = { "Yes", "No" };
 				int save = JOptionPane.showOptionDialog(null, "Do you want to save this image?", "Save?", JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, option, option[0]);

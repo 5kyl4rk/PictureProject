@@ -57,12 +57,11 @@ public class TextBox extends JPanel
 			setCurrentValue(currentValue);
 		}
 	}
-	
 	public void setCurrentValue(int num)
 	{
 		field.setText(num+"");
 		currentValue = num;
-	}
+	}	
 	
 	public void setText(String title)
 	{
