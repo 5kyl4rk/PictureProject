@@ -1,22 +1,25 @@
 package pix.controller;
 
 import java.io.*;
-import javax.swing.filechooser.FileFilter;
+import java.util.Scanner;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import java.util.Scanner;
-import pixLab.classes.Picture;
+import javax.swing.filechooser.FileFilter;
+
+import pix.model.ImageStack;
 
 public class IOController
 {
 	private PixController app;
 
 	private FileFilter filter;
-
+	private boolean canRestore;
 	private String startPath;
 	private String recentSavePath;
 	private String recentLoadPath;
 	private String extension;
+	private String restoreSave;
 	private String currentOS;
 
 	/**
@@ -31,6 +34,8 @@ public class IOController
 		startPath = System.getProperty("user.dir");
 		recentLoadPath = startPath + "/src/pixLab/images";
 		recentSavePath = startPath + "/savedImages/";
+		restoreSave = "stack.pix";
+		canRestore = new File(startPath+File.separator+restoreSave).exists();
 		extension = ".jpg";
 		currentOS = System.getProperty("os.name");
 	}
@@ -97,6 +102,47 @@ public class IOController
 			}
 
 		}
+	}
+	
+	public void saveStack()
+	{
+		try
+		{
+			FileOutputStream saveStream = new FileOutputStream(restoreSave);
+			ObjectOutputStream output = new ObjectOutputStream(saveStream);
+			output.writeObject(app.getStack());
+			output.close();
+			saveStream.close();
+		}
+		catch (IOException error)
+		{
+			JOptionPane.showMessageDialog(null, error.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+
+	public ImageStack loadStack()
+	{
+		ImageStack saved = null;
+		try
+		{
+			FileInputStream inputStream = new FileInputStream(restoreSave);
+			ObjectInputStream input = new ObjectInputStream(inputStream);
+			saved = (ImageStack) input.readObject();
+			input.close();
+			inputStream.close();
+		
+		}
+		catch (IOException error)
+		{
+			JOptionPane.showMessageDialog(null, "No Save file", "Loading images", JOptionPane.INFORMATION_MESSAGE);
+
+		}
+		catch (ClassNotFoundException pokemonError)
+		{
+			JOptionPane.showMessageDialog(null, pokemonError.getMessage(), "Type Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		return saved;
 	}
 
 	// ===== Config loading =====
@@ -303,6 +349,11 @@ public class IOController
 	public String getRecentLoadPath()
 	{
 		return recentLoadPath;
+	}
+	
+	public Boolean canRestore()
+	{
+		return canRestore;
 	}
 
 	public String getRecentSavePath()

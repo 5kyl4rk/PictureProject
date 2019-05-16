@@ -39,7 +39,15 @@ public class PixController
 		pictureTitle = "owo";
 
 		appIO.loadConfig();
-		editStack = new ImageStack(maxMemory,this);
+		if(appIO.canRestore())
+		{
+			editStack = appIO.loadStack();
+		}
+		else
+		{
+			editStack = new ImageStack(maxMemory,this);
+
+		}
 		appFrame.setMinimumSize(getMinimumSize());
 		appFrame.setVisible(true);
 
@@ -341,6 +349,11 @@ public class PixController
 	public GlitchFrame getFrame()
 	{
 		return appFrame;
+	}
+	
+	public ImageStack getStack()
+	{
+		return editStack;
 	}
 
 	public Dimension getToolPanelSize()
