@@ -28,7 +28,7 @@ public class GlitchControlPanel extends JPanel
 	private JButton restart;
 	private JButton make3D;
 	private JButton scanlines;
-	private EditingTools sidebar;//
+	private EditingTools extraTools;//
 	private SpringLayout appLayout;
 
 	/**
@@ -62,7 +62,7 @@ public class GlitchControlPanel extends JPanel
 		appLayout.putConstraint(SpringLayout.WEST, restart, 0, SpringLayout.WEST, compareChanges);
 		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
 		appLayout.putConstraint(SpringLayout.WEST, glitchPanel, 40, SpringLayout.WEST, this);
-		sidebar = new EditingTools(app);
+		extraTools = new EditingTools(app);
 		genericOptions = new String[]{"Cancel","OK!" };
 
 		setupPanel();
@@ -128,7 +128,7 @@ public class GlitchControlPanel extends JPanel
 					redo.setEnabled(false);
 					compareChanges.setVisible(false);
 					showTools(true);
-					sidebar.updateDimensions();
+					extraTools.updateDimensions();
 
 				}
 			}
@@ -156,8 +156,12 @@ public class GlitchControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				sidebar.setMake3D();
-				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "3D Effect", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
+				extraTools.setMake3D();
+				JFrame test = new JFrame();
+				test.setContentPane(extraTools);
+				test.setResizable(false);
+				test.setVisible(true);
+				int result = JOptionPane.showOptionDialog(getSelf(), extraTools, "3D Effect", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
 				processToolRequest(result);
 			}
 		});
@@ -167,8 +171,8 @@ public class GlitchControlPanel extends JPanel
 			public void actionPerformed(ActionEvent click)
 			{
 				
-				sidebar.setScanline();
-				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "Scanlines", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
+				extraTools.setScanline();
+				int result = JOptionPane.showOptionDialog(getSelf(), extraTools, "Scanlines", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
 				processToolRequest(result);
 			}
 		});
@@ -178,8 +182,8 @@ public class GlitchControlPanel extends JPanel
 			public void actionPerformed(ActionEvent click)
 			{
 				
-				sidebar.setGrain();
-				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "Grainy", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
+				extraTools.setGrain();
+				int result = JOptionPane.showOptionDialog(getSelf(), extraTools, "Grainy", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
 				processToolRequest(result);
 			}
 		});
@@ -325,13 +329,13 @@ public class GlitchControlPanel extends JPanel
 		{
 			app.addToStack(app.getCurrentStackIndex(),app.getCurrentImage());
 			editMade();
-			sidebar.restartPanel();
+			extraTools.restartPanel();
 			updateUndoRedo();
 
 		}
 		else
 		{
-			sidebar.restartPanel();
+			extraTools.restartPanel();
 			app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
 			app.updateDisplay();
 		}
