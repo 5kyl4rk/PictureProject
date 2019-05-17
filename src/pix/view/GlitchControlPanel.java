@@ -268,7 +268,7 @@ public class GlitchControlPanel extends JPanel
 				if (canEdit == true)
 				{
 					app.setCurrentImage(app.getOriginal());
-					app.addToStack(app.getCurrentImage());
+					app.addToStack(app.getCurrentStackIndex(),app.getCurrentImage());
 					app.updateDisplay();
 					repaint();
 					updateUndoRedo();

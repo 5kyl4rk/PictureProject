@@ -1,22 +1,25 @@
 package pix.controller;
 
 import java.io.*;
-import javax.swing.filechooser.FileFilter;
+import java.util.Scanner;
+
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import java.util.Scanner;
-import pixLab.classes.Picture;
+import javax.swing.filechooser.FileFilter;
+
+import pix.model.ImageStack;
 
 public class IOController
 {
 	private PixController app;
 
 	private FileFilter filter;
-
+	private boolean canRestore;
 	private String startPath;
 	private String recentSavePath;
 	private String recentLoadPath;
 	private String extension;
+	private String restoreSave;
 	private String currentOS;
 
 	/**
@@ -31,6 +34,8 @@ public class IOController
 		startPath = System.getProperty("user.dir");
 		recentLoadPath = startPath + "/src/pixLab/images";
 		recentSavePath = startPath + "/savedImages/";
+		restoreSave = "stack.pix";
+		canRestore = new File(startPath+File.separator+restoreSave).exists();
 		extension = ".jpg";
 		currentOS = System.getProperty("os.name");
 	}
@@ -98,7 +103,49 @@ public class IOController
 
 		}
 	}
+	
+	public void saveStack()
+	{
+		try
+		{
+			FileOutputStream saveStream = new FileOutputStream(restoreSave);
+			ObjectOutputStream output = new ObjectOutputStream(saveStream);
+			output.writeObject(app.getStack());
+			output.close();
+			saveStream.close();
+		}
+		catch (IOException error)
+		{
+			JOptionPane.showMessageDialog(null, error.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
+		}
+	}
 
+	public ImageStack loadStack()
+	{
+		ImageStack saved = null;
+		try
+		{
+			FileInputStream inputStream = new FileInputStream(restoreSave);
+			ObjectInputStream input = new ObjectInputStream(inputStream);
+			saved = (ImageStack) input.readObject();
+			input.close();
+			inputStream.close();
+		
+		}
+		catch (IOException error)
+		{
+			JOptionPane.showMessageDialog(null, "No Save file", "Loading images", JOptionPane.INFORMATION_MESSAGE);
+
+		}
+		catch (ClassNotFoundException pokemonError)
+		{
+			JOptionPane.showMessageDialog(null, pokemonError.getMessage(), "Type Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		return saved;
+	}
+
+	// ===== Config loading =====
 	/**
 	 * Loads a config file for the program, file must be found at the root of the
 	 * project and must be called "pix.config"
@@ -122,7 +169,22 @@ public class IOController
 		}
 		catch (FileNotFoundException e)
 		{
-			JOptionPane.showMessageDialog(app.getFrame(), "Config file couldn't be read, reverting back to default settings");
+			JOptionPane.showMessageDialog(null, "Config file couldn't be read, reverting back to default settings");
+			try
+			{
+				PrintWriter defaultConfig = new PrintWriter(configFile);
+				defaultConfig.println("minimumSize=300x300");
+				defaultConfig.println("saveFolder=./savedImages/");
+				defaultConfig.println("loadFolder=./src/pixLab/images");
+				defaultConfig.println("maxStackMemory=10");
+				defaultConfig.close();
+			}
+			catch (IOException error)
+			{
+				JOptionPane.showMessageDialog(null, "Failed to create a config file");
+
+			}
+
 		}
 	}
 
@@ -130,7 +192,8 @@ public class IOController
 	 * takes lines given by the Scanner in {@link #loadConfig()} and determines what
 	 * helper methods to use to set data
 	 * 
-	 * @param data the line of String that contains info
+	 * @param data
+	 *            the line of String that contains info
 	 */
 	private void processInfo(String data)
 	{
@@ -155,8 +218,10 @@ public class IOController
 	}
 
 	/**
-	 * takes a file path and determines what the selected files 'readable' name is 
-	 * @param path the path of the selected file
+	 * takes a file path and determines what the selected files 'readable' name is
+	 * 
+	 * @param path
+	 *            the path of the selected file
 	 * @return a readable name for the file
 	 */
 	private String findActualFileName(String path)
@@ -285,6 +350,11 @@ public class IOController
 	{
 		return recentLoadPath;
 	}
+	
+	public Boolean canRestore()
+	{
+		return canRestore;
+	}
 
 	public String getRecentSavePath()
 	{
@@ -293,13 +363,14 @@ public class IOController
 
 	/**
 	 * A simple image extension filter
+	 * 
 	 * @author Skylark
 	 *
 	 */
 	private class ImageFilter extends FileFilter
 	{
 		private String[] imageExtensions = { ".jpg", ".png", ".tiff", ".jpeg", ".bmp" };
-		
+
 		/**
 		 * A filter that contains only acceptable image files
 		 */
@@ -325,6 +396,7 @@ public class IOController
 
 		/**
 		 * converts the list of extensions to a human-readable String
+		 * 
 		 * @return a readable String of extensions
 		 */
 		private String printExtensions()

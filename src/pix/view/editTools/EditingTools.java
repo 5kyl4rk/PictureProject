@@ -10,7 +10,8 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-
+import pix.model.EditProfile;
+import pix.model.Make3DProfile;
 import pix.controller.PixController;
 
 /**
@@ -48,20 +49,9 @@ public class EditingTools extends JPanel
 	private JButton lcdButton;
 	private int currentBaseColor;
 	private int currentDirection;
-	private final int MAKE3D = 0;
-	private final int SCANLINE = 1;
-	private final int GRAIN = 2;
-	private final int NOISE = 3;
-	private final int RED = 0;
-	private final int GREEN = 1;
-	private final int BLUE = 2;
-	private final int CYAN = 3;
-	private final int MAGENTA = 4;
-	private final int YELLOW = 5;
 	private final int HORIZONTAL = 0;
 	private final int VERTICAL = 1;
 	private final int LCD = 2;
-	private boolean asPercent;
 	private Color currentColor;
 	private int currentEditMode;
 	private int width;
@@ -79,11 +69,10 @@ public class EditingTools extends JPanel
 		this.app = app;
 		currentDirection = HORIZONTAL;
 		currentEditMode = -1;
-		currentBaseColor = RED;
+		currentBaseColor = Make3DProfile.RED;
 		currentColor = new Color(0, 0, 0);
 		width = -99;
 		height = -99;
-		asPercent = false;
 		mainLayout = new GridLayout(0, 1);
 		sliderPanel = new JPanel(new GridLayout(0, 1));
 		scanPanel = new JPanel(new GridLayout(1, 0));
@@ -291,22 +280,22 @@ public class EditingTools extends JPanel
 	 */
 	private void applyEdit(int type)
 	{
-		if (type == MAKE3D)
+		if (type == EditProfile.MAKE3D)
 		{
 			app.make3D((shiftX.getCurrentValue() * -1), (shiftY.getCurrentValue()), currentBaseColor);
 		}
-		else if (type == SCANLINE)
+		else if (type == EditProfile.SCANLINES)
 		{
 			app.scanline(shiftX.getCurrentValue(), shiftY.getCurrentValue(), currentColor, currentDirection);
 		}
-		else if (type == GRAIN)
+		else if (type == EditProfile.GRAIN)
 		{
 			app.grain(shiftX.getCurrentValue());
 		}
-		else if (type == NOISE)
-		{
-			app.noise(shiftX.getCurrentValue(), shiftY.getCurrentValue(), currentColor);
-		}
+//		else if (type == NOISE)
+//		{
+//			app.noise(shiftX.getCurrentValue(), shiftY.getCurrentValue(), currentColor);
+//		}
 	}
 
 	/**
@@ -315,7 +304,7 @@ public class EditingTools extends JPanel
 	 */
 	public void setMake3D()
 	{
-		currentEditMode = MAKE3D;
+		currentEditMode = EditProfile.MAKE3D;
 		shiftX.setText("x-Axis");
 		shiftY.setText("y-Axis");
 		shiftX.setCurrentValue(0);
@@ -358,7 +347,7 @@ public class EditingTools extends JPanel
 		this.add(sliderPanel, 0);
 		this.add(rgbPanel, 1);
 		this.add(scanPanel, 2);
-		currentEditMode = SCANLINE;
+		currentEditMode = EditProfile.SCANLINES;
 		this.applyEdit(currentEditMode);
 	}
 
@@ -371,7 +360,7 @@ public class EditingTools extends JPanel
 
 		xAxis.setMinimum(-255);
 		xAxis.setMaximum(255);
-		currentEditMode = GRAIN;
+		currentEditMode = EditProfile.GRAIN;
 		this.add(sliderPanel);
 
 	}
@@ -395,7 +384,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentBaseColor = RED;
+				currentBaseColor = Make3DProfile.RED;
 				applyEdit(currentEditMode);
 
 			}
@@ -404,7 +393,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentBaseColor = GREEN;
+				currentBaseColor = Make3DProfile.GREEN;
 				applyEdit(currentEditMode);
 
 			}
@@ -413,7 +402,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentBaseColor = BLUE;
+				currentBaseColor = Make3DProfile.BLUE;
 				applyEdit(currentEditMode);
 
 			}
@@ -422,7 +411,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentBaseColor = CYAN;
+				currentBaseColor = Make3DProfile.CYAN;
 				applyEdit(currentEditMode);
 
 			}
@@ -431,7 +420,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentBaseColor = MAGENTA;
+				currentBaseColor = Make3DProfile.MAGENTA;
 				applyEdit(currentEditMode);
 
 			}
@@ -440,7 +429,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentBaseColor = YELLOW;
+				currentBaseColor = Make3DProfile.YELLOW;
 				applyEdit(currentEditMode);
 
 			}

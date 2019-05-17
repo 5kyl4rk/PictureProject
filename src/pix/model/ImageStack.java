@@ -2,9 +2,14 @@ package pix.model;
 
 import pixLab.classes.Picture;
 import pix.controller.PixController;
+
 import java.util.ArrayList;
 
-public class ImageStack
+
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class ImageStack implements Serializable
 {
 	private int currentIndex;
 	private int maxMemory;

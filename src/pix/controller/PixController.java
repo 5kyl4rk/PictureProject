@@ -2,7 +2,6 @@ package pix.controller;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.ArrayList;
 import pix.view.GlitchFrame;
 import pixLab.classes.*;
 import pix.model.*;
@@ -40,7 +39,15 @@ public class PixController
 		pictureTitle = "owo";
 
 		appIO.loadConfig();
-		editStack = new ImageStack(maxMemory,this);
+		if(appIO.canRestore())
+		{
+			editStack = appIO.loadStack();
+		}
+		else
+		{
+			editStack = new ImageStack(maxMemory,this);
+
+		}
 		appFrame.setMinimumSize(getMinimumSize());
 		appFrame.setVisible(true);
 
@@ -143,7 +150,7 @@ public class PixController
 	
 	public void noise(int hardness, int percent, Color color)
 	{
-		
+
 		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
 		temp.noise(color,(double) percent);
 		this.setCurrentImage(temp);
@@ -343,6 +350,11 @@ public class PixController
 	public GlitchFrame getFrame()
 	{
 		return appFrame;
+	}
+	
+	public ImageStack getStack()
+	{
+		return editStack;
 	}
 
 	public Dimension getToolPanelSize()
