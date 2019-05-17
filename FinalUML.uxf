@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.2">
-  <zoom_level>10</zoom_level>
+  <zoom_level>7</zoom_level>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>0</x>
+      <x>406</x>
       <y>0</y>
-      <w>590</w>
-      <h>530</h>
+      <w>413</w>
+      <h>371</h>
     </coordinates>
     <panel_attributes>pixLab
 /(Original Source)/
@@ -21,10 +21,10 @@ bg=orange</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
-      <y>50</y>
-      <w>160</w>
-      <h>60</h>
+      <x>413</x>
+      <y>35</y>
+      <w>112</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>ColorChooser
 --
@@ -38,10 +38,10 @@ bg=cyan</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>10</x>
-      <y>120</y>
-      <w>340</w>
-      <h>350</h>
+      <x>413</x>
+      <y>84</y>
+      <w>238</w>
+      <h>245</h>
     </coordinates>
     <panel_attributes>&lt;&lt;interface&gt;&gt;
 DigitalPicture
@@ -71,10 +71,276 @@ transparency=0</panel_attributes>
   <element>
     <id>UMLPackage</id>
     <coordinates>
-      <x>660</x>
-      <y>90</y>
-      <w>320</w>
-      <h>430</h>
+      <x>1190</x>
+      <y>35</y>
+      <w>532</w>
+      <h>350</h>
+    </coordinates>
+    <panel_attributes>pix.model
+--
+bg=red
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1001</x>
+      <y>434</y>
+      <w>308</w>
+      <h>651</h>
+    </coordinates>
+    <panel_attributes>pix.controller::PixController
+--
+-print: BasicDebug
+~appIO: IOController
+-activeImage: Picture
+-originalImage: Picture
+-editStack: ImageStack
+-appFrame: GlitchFrame
+-currentImageSize: Dimension
+-minimumFrameSize: Dimension
+-maxMemory: int
+-fileLoaded: boolean
+-pictureTitle: String
+--
++PixController(): ctor
++start(): void
++loadImage(): void
++saveImage(): void
++glitch(): void
++make3D(int shiftX, int shiftY, int color): void
++scanline(int thickness, int spread, Color color, int type): void
++grain(int hardness): void
++noise(int hardness, int percent, Color color): void
++addToStack(Picture editToAdd): void
++addToStack(int index, Picture editToAdd): void
++restartStackIndex(): void
++goUpStack(): void
++goDownStack(): void
++restartStack(): void
++clearStack(): void
++updateDisplay(): void
++recenter(): void
++print(String words): void
++getCurrentImage(): Picture
++getOriginal(): Picture
++getLastEdit(): Picture
++getLastEdit(int index): Picture
++getStackSize(): int
++getPictureTitle(): String
++isFileLoaded(): boolean
++getPictureSize(): Dimension
++getCurrentStackIndex(): int
++setFileLoaded(boolean state): void
++setCurrentImage(Picture imageToDisplay): void
++setCurrentImage(String imageToLoad): void
++setOriginalImage(Picture image): void
++setOriginalImage(String imageToLoad): void
++setPictureTitle(String name): void
++setMaxMemory(int value): void
++getFrame(): GlitchFrame
++getStack(): ImageStack
++getToolPanelSize(): Dimension
++getMinimumSize(): Dimension
++setMinimumSize(int width, int height): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>784</x>
+      <y>700</y>
+      <w>196</w>
+      <h>378</h>
+    </coordinates>
+    <panel_attributes>pix.controller::IOController
+--
+-app: PixController
+-filter: FileFilter
+-canRestore: boolean
+-startPath: String
+-recentSavePath: String
+-recentLoadPath: String
+-extension: String
+-restoreSave: String
+-currentOS: String
+--
++IOController(PixController app): ctor
++loadImage(): void
++saveImage(): void
++saveStack(): void
++loadStack(): ImageStack
++loadConfig(): void
+-processInfo(String data): void
+-findActualFileName(String path): String
++setExtension(String end): void
+-setSaveFolder(String data): void
+-setLoadFolder(String data): void
+-setMaxMemory(String data): void
+-setMinimumSize(String data): void
++setRecentLoadPath(String path): void
++setRecentSavePath(String path): void
++getExtension(): String
++getRecentLoadPath(): String
++canRestore(): Boolean
++getRecentSavePath(): String
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>784</x>
+      <y>595</y>
+      <w>133</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>pix.controller::PixRunner
+--
+--
++main(String[] args): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>784</x>
+      <y>448</y>
+      <w>154</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>pix.controller::BasicDebug
+--
+-printOn: boolean
+--
++BasicDebug(): ctor
++setState(boolean state): void
++out(String phrase): void
+--
+group=2</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>770</x>
+      <y>399</y>
+      <w>560</w>
+      <h>707</h>
+    </coordinates>
+    <panel_attributes>pix.controller
+--
+group=2
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>98</x>
+      <y>819</y>
+      <w>518</w>
+      <h>441</h>
+    </coordinates>
+    <panel_attributes>pix.view
+--
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1484</x>
+      <y>63</y>
+      <w>231</w>
+      <h>245</h>
+    </coordinates>
+    <panel_attributes>pix.model::ImageStack
+--
+-currentIndex: int
+-maxMemory: int
+-editStack: ArrayList&lt;Picture&gt;
+-app: PixController
+--
++ImageStack(int size, PixController app): ctor
++addToStack(Picture editToAdd): void
++addToStack(int index, Picture editToAdd): void
++restartStackIndex(): void
++goUpStack(): void
++goDownStack(): void
++restartStack(): void
++clearStack(): void
++getSize(): int
++getCurrentIndex(): int
++getLastEdit(): Picture
++getLastEdit(int index): Picture
++setCurrentIndex(int index): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1197</x>
+      <y>63</y>
+      <w>280</w>
+      <h>210</h>
+    </coordinates>
+    <panel_attributes>pix.model::Make3DProfile
+--
++RED = 0: int
++GREEN = 1: int
++BLUE = 2: int
++CYAN = 3: int
++MAGENTA = 4: int
++YELLOW = 5: int
+-xAxis: int
+-yAxis: int
+-baseColor: int
+--
++Make3DProfile(int xAxis, int yAxis, int baseColor): ctor
++getType(): int
++getXAxis(): int
++getYAxis(): int
++getBaseColor(): int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1197</x>
+      <y>280</y>
+      <w>119</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;interface&gt;&gt;
+pix.model::EditProfile
+--
++MAKE3D = 0: int
++SCANLINES = 1: int
++GRAIN = 2: int
+--
++getType(): int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>868</x>
+      <y>42</y>
+      <w>238</w>
+      <h>350</h>
     </coordinates>
     <panel_attributes>pix
 --
@@ -84,14 +350,199 @@ bg=orange</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>680</x>
-      <y>140</y>
-      <w>180</w>
-      <h>60</h>
+      <x>112</x>
+      <y>875</y>
+      <w>224</w>
+      <h>378</h>
     </coordinates>
-    <panel_attributes>PixRunner
+    <panel_attributes>pix.view::GlitchControlPanel
 --
-_+ main(String []): void_
+-app: PixController
+-saveLoadPanel: JPanel
+-glitchPanel: JPanel
+-switchPanel: JPanel
+-load: JButton
+-save: JButton
+-glitch: JButton
+-grain: JButton
+-compareChanges: JButton
+-canEdit: boolean
+-genericOptions: String[]
+-undo: JButton
+-redo: JButton
+-restart: JButton
+-make3D: JButton
+-scanlines: JButton
+-sidebar: EditingTools
+-appLayout: SpringLayout
+--
++GlitchControlPanel(PixController app): ctor
+-setupPanel(): void
+-setupLayout(): void
+-setupListeners(): void
+-showTools(boolean state): void
+-updateUndoRedo(): void
+-editMade(): void
+-processToolRequest(int result): void
++getControlSize(): Dimension
+-getSelf(): Component
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>350</x>
+      <y>840</y>
+      <w>224</w>
+      <h>231</h>
+    </coordinates>
+    <panel_attributes>pix.view::GlitchMasterPanel
+--
+-app: PixController
+-displayImage: JLabel
+-image: ImageIcon
+-appLayout: SpringLayout
+-tools: GlitchControlPanel
+-current: Image
+-padding: int
+-controlPane: JScrollPane
+--
++GlitchMasterPanel(PixController app): ctor
+-setupPanel(): void
+-setupLayout(): void
+-updateImage(): void
+-setupScrollPane(): void
+#updateDisplay(): void
++getToolPanelSize(): Dimension
++getPadding(): int
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>357</x>
+      <y>1078</y>
+      <w>196</w>
+      <h>154</h>
+    </coordinates>
+    <panel_attributes>pix.view::GlitchFrame
+--
+-app: PixController
+-appPanel: GlitchMasterPanel
+--
++GlitchFrame(PixController app): ctor
+-setupFrame(): void
++updateDisplay(): void
++recenter(): void
++getToolPanelSize(): Dimension
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLPackage</id>
+    <coordinates>
+      <x>98</x>
+      <y>1274</y>
+      <w>616</w>
+      <h>651</h>
+    </coordinates>
+    <panel_attributes>pix.view.editTools
+--
+bg=orange</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>434</x>
+      <y>1295</y>
+      <w>196</w>
+      <h>616</h>
+    </coordinates>
+    <panel_attributes>pix.view.editTools::EditingTools
+--
+-app: PixController
+-xAxis: JSlider
+-yAxis: JSlider
+-mainLayout: GridLayout
+-sliderPanel: JPanel
+-grainPanel: JPanel
+-xAxisPanel: JPanel
+-yAxisPanel: JPanel
+-scanPanel: JPanel
+-rgbPanel: JPanel
+-redBox: TextBox
+-greenBox: TextBox
+-blueBox: TextBox
+-shiftX: TextBox
+-shiftY: TextBox
+-buttonPanel: JPanel
+-redButton: JButton
+-greenButton: JButton
+-blueButton: JButton
+-cyanButton: JButton
+-magentaButton: JButton
+-yellowButton: JButton
+-horizontalButton: JButton
+-verticalButton: JButton
+-lcdButton: JButton
+-currentBaseColor: int
+-currentDirection: int
+-HORIZONTAL = 0: int
+-VERTICAL = 1: int
+-LCD = 2: int
+-currentColor: Color
+-currentEditMode: int
+-width: int
+-height: int
+--
++EditingTools(PixController app): ctor
+-setupPanel(): void
+-setupListeners(): void
++restartPanel(): void
+-applyEdit(int type): void
++setMake3D(): void
++setScanline(): void
++setGrain(): void
+-showXAxis(boolean state): void
+-showYAxis(boolean state): void
+-setupColorButtons(): void
+-reloadColor(): void
+-updateColor(): void
++updateDimensions(): void
+--
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>140</x>
+      <y>1295</y>
+      <w>238</w>
+      <h>182</h>
+    </coordinates>
+    <panel_attributes>pix.view.editTools::TextBox
+--
+-text: JLabel
+-field: JTextField
+-currentValue: int
+-appLayout: GridLayout
+--
++TextBox(PixController app, String name): ctor
+-setupPanel(): void
++getTextField(): JTextField
++getCurrentValue(): int
++setCurrentValue(String input): void
++setCurrentValue(int num): void
++setText(String title): void
++getTextFieldText(): String
+--
 </panel_attributes>
     <additional_attributes/>
   </element>
