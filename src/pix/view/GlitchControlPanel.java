@@ -62,7 +62,7 @@ public class GlitchControlPanel extends JPanel
 		appLayout.putConstraint(SpringLayout.WEST, restart, 0, SpringLayout.WEST, compareChanges);
 		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
 		appLayout.putConstraint(SpringLayout.WEST, glitchPanel, 40, SpringLayout.WEST, this);
-		extraTools = new EditingTools(app);
+		extraTools = new SideFrame(app);
 		genericOptions = new String[]{"Cancel","OK!" };
 
 		setupPanel();
