@@ -92,6 +92,12 @@ public class GlitchMasterPanel extends JPanel
 		repaint();
 	}
 	
+	public void loadStack()
+	{
+		tools.loadStack();
+		updateDisplay();
+	}
+	
 	public Dimension getToolPanelSize()
 	{
 		return tools.getControlSize();

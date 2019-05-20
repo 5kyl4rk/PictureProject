@@ -42,12 +42,14 @@ public class PixController
 		if(appIO.canRestore())
 		{
 			editStack = appIO.loadStack();
+			this.setCurrentImage(editStack.getLastEdit());
+			appFrame.loadStack();
 		}
 		else
 		{
 			editStack = new ImageStack(maxMemory,this);
-
 		}
+		
 		appFrame.setMinimumSize(getMinimumSize());
 		appFrame.setVisible(true);
 
@@ -116,12 +118,12 @@ public class PixController
 	public void scanline(int thickness, int spread, Color color, int type)
 	{
 		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
-		if (type == 1)
+		if (type == ScanlinesProfile.VERTICAL)
 		{
 			temp.verticalScanlines(spread, thickness, color);
 
 		}
-		else if (type == 2)
+		else if (type == ScanlinesProfile.LCD)
 		{
 			temp.lcd(spread, thickness, color);
 		}

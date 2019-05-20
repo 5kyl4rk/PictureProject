@@ -108,6 +108,12 @@ public class GlitchControlPanel extends JPanel
 		appLayout.putConstraint(SpringLayout.SOUTH, switchPanel, 0, SpringLayout.SOUTH, this);
 		appLayout.putConstraint(SpringLayout.EAST, switchPanel, 0, SpringLayout.EAST, saveLoadPanel);
 	}
+	public void loadStack()
+	{
+		app.recenter();
+		showTools(true);
+		sidebar.updateDimensions();
+	}
 	
 	/**
 	 * adds listeners to buttons, the buttons will be linked to methods from the controller
