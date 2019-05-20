@@ -28,7 +28,9 @@ public class GlitchControlPanel extends JPanel
 	private JButton restart;
 	private JButton make3D;
 	private JButton scanlines;
+	private JPanel controlPanel;
 	private EditingTools extraTools;//
+	private SpringLayout controlLayout;
 	private SpringLayout appLayout;
 
 	/**
@@ -41,6 +43,9 @@ public class GlitchControlPanel extends JPanel
 
 		this.app = app;
 
+		controlPanel = new JPanel();
+		appLayout = new SpringLayout();
+		
 		canEdit = false;
 		saveLoadPanel = new JPanel(new GridLayout(1, 0));
 		glitchPanel = new JPanel(new GridLayout(0, 1));
@@ -55,14 +60,19 @@ public class GlitchControlPanel extends JPanel
 		scanlines = new JButton("Scanlines");
 		restart = new JButton("Clear");
 		compareChanges = new JButton("Show Original");
-		appLayout = new SpringLayout();
-		appLayout.putConstraint(SpringLayout.SOUTH, restart, -10, SpringLayout.NORTH, switchPanel);
-		appLayout.putConstraint(SpringLayout.SOUTH, compareChanges, 0, SpringLayout.NORTH, restart);
-		appLayout.putConstraint(SpringLayout.EAST, restart, 0, SpringLayout.EAST, compareChanges);
-		appLayout.putConstraint(SpringLayout.WEST, restart, 0, SpringLayout.WEST, compareChanges);
-		appLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
-		appLayout.putConstraint(SpringLayout.WEST, glitchPanel, 40, SpringLayout.WEST, this);
-		extraTools = new SideFrame(app);
+		controlLayout = new SpringLayout();
+		controlLayout.putConstraint(SpringLayout.SOUTH, switchPanel, 0, SpringLayout.SOUTH, controlPanel);
+		controlLayout.putConstraint(SpringLayout.SOUTH, restart, -10, SpringLayout.NORTH, switchPanel);
+		controlLayout.putConstraint(SpringLayout.SOUTH, compareChanges, 0, SpringLayout.NORTH, restart);
+		controlLayout.putConstraint(SpringLayout.EAST, restart, 0, SpringLayout.EAST, compareChanges);
+		controlLayout.putConstraint(SpringLayout.WEST, restart, 0, SpringLayout.WEST, compareChanges);
+		controlLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
+		controlLayout.putConstraint(SpringLayout.WEST, glitchPanel, 40, SpringLayout.WEST, this);
+		extraTools = new EditingTools(app);
+		appLayout.putConstraint(SpringLayout.NORTH, extraTools, 60, SpringLayout.NORTH, this);
+		appLayout.putConstraint(SpringLayout.WEST, extraTools, 85, SpringLayout.EAST, controlPanel);
+		appLayout.putConstraint(SpringLayout.SOUTH, extraTools, 78, SpringLayout.NORTH, this);
+		appLayout.putConstraint(SpringLayout.EAST, extraTools, -13, SpringLayout.EAST, controlPanel);
 		genericOptions = new String[]{"Cancel","OK!" };
 
 		setupPanel();
@@ -76,14 +86,17 @@ public class GlitchControlPanel extends JPanel
 	private void setupPanel()
 	{
 		this.setLayout(appLayout);
-		this.setPreferredSize(new Dimension(180, 350));
+		controlPanel.setLayout(controlLayout);
+		this.add(controlPanel);
+		this.add(extraTools);
+		controlPanel.setPreferredSize(new Dimension(180, 350));
 		switchPanel.setPreferredSize(new Dimension(180, 50));
 		glitchPanel.setPreferredSize(new Dimension(90, 100));
 		saveLoadPanel.setPreferredSize(new Dimension(180, 50));
-		this.add(switchPanel);
-		this.add(saveLoadPanel);
-		this.add(glitchPanel);
-		this.add(compareChanges);
+		controlPanel.add(switchPanel);
+		controlPanel.add(saveLoadPanel);
+		controlPanel.add(glitchPanel);
+		controlPanel.add(compareChanges);
 		saveLoadPanel.add(load);
 		saveLoadPanel.add(save);
 		glitchPanel.add(glitch);
@@ -92,7 +105,7 @@ public class GlitchControlPanel extends JPanel
 		glitchPanel.add(scanlines);
 		glitchPanel.add(grain);
 		switchPanel.add(redo);
-		this.add(restart);
+		controlPanel.add(restart);
 		compareChanges.setVisible(false);
 		save.setVisible(false);
 		restart.setVisible(false);
@@ -104,9 +117,17 @@ public class GlitchControlPanel extends JPanel
 	 */
 	private void setupLayout()
 	{
-		appLayout.putConstraint(SpringLayout.NORTH, glitchPanel, 30, SpringLayout.SOUTH, saveLoadPanel);
-		appLayout.putConstraint(SpringLayout.SOUTH, switchPanel, 0, SpringLayout.SOUTH, this);
-		appLayout.putConstraint(SpringLayout.EAST, switchPanel, 0, SpringLayout.EAST, saveLoadPanel);
+		controlLayout.putConstraint(SpringLayout.NORTH, glitchPanel, 30, SpringLayout.SOUTH, saveLoadPanel);
+		controlLayout.putConstraint(SpringLayout.EAST, switchPanel, 0, SpringLayout.EAST, saveLoadPanel);
+
+		controlLayout.putConstraint(SpringLayout.SOUTH, restart, -10, SpringLayout.NORTH, switchPanel);
+		controlLayout.putConstraint(SpringLayout.SOUTH, compareChanges, 0, SpringLayout.NORTH, restart);
+		controlLayout.putConstraint(SpringLayout.EAST, restart, 0, SpringLayout.EAST, compareChanges);
+		controlLayout.putConstraint(SpringLayout.WEST, restart, 0, SpringLayout.WEST, compareChanges);
+		controlLayout.putConstraint(SpringLayout.WEST, compareChanges, 20, SpringLayout.WEST, this);
+		controlLayout.putConstraint(SpringLayout.WEST, glitchPanel, 40, SpringLayout.WEST, this);
+		appLayout.putConstraint(SpringLayout.NORTH, extraTools, 0, SpringLayout.NORTH, this);
+		appLayout.putConstraint(SpringLayout.WEST, extraTools, 10, SpringLayout.EAST, controlPanel);
 	}
 	
 	/**
@@ -157,12 +178,8 @@ public class GlitchControlPanel extends JPanel
 			public void actionPerformed(ActionEvent click)
 			{
 				extraTools.setMake3D();
-				JFrame test = new JFrame();
-				test.setContentPane(extraTools);
-				test.setResizable(false);
-				test.setVisible(true);
-				int result = JOptionPane.showOptionDialog(getSelf(), extraTools, "3D Effect", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
-				processToolRequest(result);
+				repaint();
+				processToolRequest(1);
 			}
 		});
 		
@@ -344,7 +361,7 @@ public class GlitchControlPanel extends JPanel
 
 	public Dimension getControlSize()
 	{
-		return this.getPreferredSize();
+		return controlPanel.getPreferredSize();
 	}
 	
 	private Component getSelf()
