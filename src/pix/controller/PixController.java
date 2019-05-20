@@ -11,6 +11,7 @@ public class PixController
 	private BasicDebug print;
 	IOController appIO;
 	private Picture activeImage;
+	private Picture originalImage;
 	/**
 	 * index 0 is the top of the stack
 	 */
@@ -38,7 +39,6 @@ public class PixController
 		pictureTitle = "owo";
 
 		appIO.loadConfig();
-		
 		if(appIO.canRestore())
 		{
 			editStack = appIO.loadStack();
@@ -262,7 +262,7 @@ public class PixController
 
 	public Picture getOriginal()
 	{
-		return editStack.getOriginalImage();
+		return originalImage;
 	}
 
 	public Picture getLastEdit()
@@ -318,12 +318,12 @@ public class PixController
 
 	public void setOriginalImage(Picture image)
 	{
-		editStack.setOriginalImage(image);;
+		originalImage = new Picture(image);
 	}
 
 	public void setOriginalImage(String imageToLoad)
 	{
-		editStack.setOriginalImage(imageToLoad);;
+		originalImage = new Picture(imageToLoad);
 	}
 
 	public void setPictureTitle(String name)

@@ -169,7 +169,7 @@ public class IOController
 		}
 		catch (FileNotFoundException e)
 		{
-			JOptionPane.showMessageDialog(null, "Config file couldn't be read, reverting back to default settings","Loading...",JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Config file couldn't be read, reverting back to default settings");
 			try
 			{
 				PrintWriter defaultConfig = new PrintWriter(configFile);
@@ -178,7 +178,6 @@ public class IOController
 				defaultConfig.println("loadFolder=./src/pixLab/images");
 				defaultConfig.println("maxStackMemory=10");
 				defaultConfig.close();
-				loadConfig();
 			}
 			catch (IOException error)
 			{

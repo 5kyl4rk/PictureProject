@@ -15,7 +15,6 @@ public class ImageStack implements Serializable
 	private int maxMemory;
 	private ArrayList<Picture> editStack;
 	private PixController app;
-	private Picture originalImage;
 	
 	public ImageStack(int size, PixController app)
 	{
@@ -147,21 +146,6 @@ public class ImageStack implements Serializable
 			}
 			
 			currentIndex = index;
-		}
-		
-		public Picture getOriginalImage()
-		{
-			return originalImage;
-		}
-		
-		public void setOriginalImage(Picture image)
-		{
-			originalImage = new Picture(image);
-		}
-
-		public void setOriginalImage(String imageToLoad)
-		{
-			originalImage = new Picture(imageToLoad);
 		}
 
 }
