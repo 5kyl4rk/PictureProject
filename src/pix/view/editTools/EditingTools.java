@@ -25,13 +25,14 @@ public class EditingTools extends JPanel
 	private PixController app;
 	private JSlider xAxis;
 	private JSlider yAxis;
-	private GridLayout mainLayout;
+	private SpringLayout mainLayout;
+	private JPanel mainPanel;
 	private JPanel sliderPanel;
-	private JPanel grainPanel;
 	private JPanel xAxisPanel;
 	private JPanel yAxisPanel;
 	private JPanel scanPanel;
 	private JPanel rgbPanel;
+	private JPanel optionPanel;
 	private TextBox redBox;
 	private TextBox greenBox;
 	private TextBox blueBox;
@@ -47,6 +48,8 @@ public class EditingTools extends JPanel
 	private JButton horizontalButton;
 	private JButton verticalButton;
 	private JButton lcdButton;
+	private JButton okButton;
+	private JButton cancelButton;
 	private int currentBaseColor;
 	private int currentDirection;
 	private final int HORIZONTAL = 0;
@@ -67,13 +70,24 @@ public class EditingTools extends JPanel
 	{
 		super();
 		this.app = app;
+		
+		mainLayout = new SpringLayout();
 		currentDirection = HORIZONTAL;
 		currentEditMode = -1;
 		currentBaseColor = Make3DProfile.RED;
 		currentColor = new Color(0, 0, 0);
 		width = -99;
 		height = -99;
-		mainLayout = new GridLayout(0, 1);
+		optionPanel = new JPanel(new GridLayout(1,0));
+		mainLayout.putConstraint(SpringLayout.WEST, optionPanel, 250, SpringLayout.WEST, this);
+		mainLayout.putConstraint(SpringLayout.SOUTH, optionPanel, -10, SpringLayout.SOUTH, this);
+		mainLayout.putConstraint(SpringLayout.EAST, optionPanel, -10, SpringLayout.EAST, this);
+		mainPanel = new JPanel(new GridLayout(0, 1));
+		mainLayout.putConstraint(SpringLayout.NORTH, optionPanel, 15, SpringLayout.SOUTH, mainPanel);
+		mainLayout.putConstraint(SpringLayout.NORTH, mainPanel, 10, SpringLayout.NORTH, this);
+		mainLayout.putConstraint(SpringLayout.WEST, mainPanel, 10, SpringLayout.WEST, this);
+		mainLayout.putConstraint(SpringLayout.SOUTH, mainPanel, 310, SpringLayout.NORTH, this);
+		mainLayout.putConstraint(SpringLayout.EAST, mainPanel, -10, SpringLayout.EAST, this);
 		sliderPanel = new JPanel(new GridLayout(0, 1));
 		scanPanel = new JPanel(new GridLayout(1, 0));
 
@@ -102,8 +116,22 @@ public class EditingTools extends JPanel
 
 		xAxis = new JSlider(JSlider.HORIZONTAL, -100, 100, 0);
 		yAxis = new JSlider(JSlider.HORIZONTAL, -100, 100, 0);
+		
+		okButton = new JButton("OK!");
+		cancelButton = new JButton("Cancel");
+		mainLayout.putConstraint(SpringLayout.NORTH, okButton, 0, SpringLayout.NORTH, cancelButton);
+		mainLayout.putConstraint(SpringLayout.EAST, okButton, -6, SpringLayout.WEST, cancelButton);
+		mainLayout.putConstraint(SpringLayout.SOUTH, cancelButton, -10, SpringLayout.SOUTH, this);
+		mainLayout.putConstraint(SpringLayout.EAST, cancelButton, -10, SpringLayout.EAST, this);
+		
 		setupPanel();
+		setupLayout();
 		setupListeners();
+
+	}
+	
+	private void setupLayout()
+	{
 
 	}
 
@@ -113,6 +141,12 @@ public class EditingTools extends JPanel
 	private void setupPanel()
 	{
 		this.setLayout(mainLayout);
+		this.add(mainPanel);
+		mainPanel.setPreferredSize(new Dimension(350,150));
+		optionPanel.add(okButton);
+		optionPanel.add(cancelButton);
+		this.add(optionPanel);
+		
 		xAxisPanel.add(shiftX, 0);
 		xAxisPanel.add(xAxis, 1);
 		yAxisPanel.add(shiftY, 0);
@@ -252,9 +286,9 @@ public class EditingTools extends JPanel
 	 */
 	public void restartPanel()
 	{
-		for (int index = this.getComponentCount() - 1; index >= 0; index--)
+		for (int index = mainPanel.getComponentCount() - 1; index >= 0; index--)
 		{
-			this.remove(index);
+			mainPanel.remove(index);
 		}
 		showXAxis(true);
 		showYAxis(true);
@@ -319,8 +353,8 @@ public class EditingTools extends JPanel
 		yAxis.setMinimum(-height / 2);
 		yAxis.setMaximum(height / 2);
 
-		this.add(sliderPanel, 0);
-		this.add(buttonPanel, 1);
+		mainPanel.add(sliderPanel, 0);
+		mainPanel.add(buttonPanel, 1);
 	}
 
 	/**
@@ -344,9 +378,9 @@ public class EditingTools extends JPanel
 
 		xAxis.setMaximum(10); // TODO: find a consistent formula for finding a good amount
 		yAxis.setMaximum(10);
-		this.add(sliderPanel, 0);
-		this.add(rgbPanel, 1);
-		this.add(scanPanel, 2);
+		mainPanel.add(sliderPanel, 0);
+		mainPanel.add(rgbPanel, 1);
+		mainPanel.add(scanPanel, 2);
 		currentEditMode = EditProfile.SCANLINES;
 		this.applyEdit(currentEditMode);
 	}
@@ -361,7 +395,7 @@ public class EditingTools extends JPanel
 		xAxis.setMinimum(-255);
 		xAxis.setMaximum(255);
 		currentEditMode = EditProfile.GRAIN;
-		this.add(sliderPanel);
+		mainPanel.add(sliderPanel);
 
 	}
 	
