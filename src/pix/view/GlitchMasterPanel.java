@@ -33,7 +33,6 @@ public class GlitchMasterPanel extends JPanel
 		displayImage = new JLabel(image);
 		padding = 10;
 		tools = new GlitchControlPanel(app);
-		appLayout.putConstraint(SpringLayout.SOUTH, tools, 0, SpringLayout.SOUTH, displayImage);
 		
 		controlPane = new JScrollPane();
 
@@ -49,7 +48,7 @@ public class GlitchMasterPanel extends JPanel
 	{
 		this.setLayout(appLayout);
 		this.add(displayImage);
-//		this.add(controlPane);
+		this.add(controlPane);
 		this.add(tools);
 	}
 
