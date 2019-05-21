@@ -402,7 +402,13 @@ public class EditingTools extends JPanel
 		}
 		else if (type == EditProfile.SCANLINES)
 		{
+			app.print("thickness:" + shiftX.getCurrentValue());
+			app.print("Spread: " + shiftY.getCurrentValue());
 			app.scanline(shiftX.getCurrentValue(), shiftY.getCurrentValue(), currentColor, currentDirection);
+			
+
+			app.print("thickness:" + shiftX.getCurrentValue());
+			app.print("Spread: " + shiftY.getCurrentValue());
 		}
 		else if (type == EditProfile.GRAIN)
 		{

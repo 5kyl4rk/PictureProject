@@ -132,6 +132,9 @@ public class PixController
 			temp.scanlines(spread, thickness, color);
 		}
 
+		print("app spread: "+spread);
+		print("app thickness: " + thickness);
+		
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 	}

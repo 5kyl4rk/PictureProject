@@ -351,6 +351,10 @@ public class Picture extends SimplePicture
 		{
 			spread = 1;
 		}
+		if(thickness < 1)
+		{
+			thickness = 1;
+		}
 		if (spread > this.getHeight())
 		{
 			spread = this.getHeight();
