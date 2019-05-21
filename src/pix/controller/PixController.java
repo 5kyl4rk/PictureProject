@@ -159,6 +159,22 @@ public class PixController
 		appFrame.updateDisplay();
 				
 	}
+	
+	public void bleed(int point, int direction)
+	{
+		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
+		if(direction == BleedProfile.LEFT || direction == BleedProfile.RIGHT)
+		{
+			temp.bleed(point, direction);
+		}
+		else
+		{
+			temp.verticalBleed(point, direction);
+		}
+		this.setCurrentImage(temp);
+		appFrame.updateDisplay();
+		
+	}
 
 	// ==== Stack Management ===
 	/**

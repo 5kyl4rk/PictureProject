@@ -10,8 +10,11 @@ import java.awt.event.ActionListener;
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+
+import pix.model.BleedProfile;
 import pix.model.EditProfile;
 import pix.model.Make3DProfile;
+import pix.model.ScanlinesProfile;
 import pix.controller.PixController;
 
 /**
@@ -32,7 +35,7 @@ public class EditingTools extends JPanel
 	private JPanel yAxisPanel;
 	private JPanel scanPanel;
 	private JPanel rgbPanel;
-	private JPanel optionPanel;
+	private JPanel bleedDirectionPanel;
 	private TextBox redBox;
 	private TextBox greenBox;
 	private TextBox blueBox;
@@ -48,18 +51,18 @@ public class EditingTools extends JPanel
 	private JButton horizontalButton;
 	private JButton verticalButton;
 	private JButton lcdButton;
-	private JButton okButton;
-	private JButton cancelButton;
+	private JButton left;
+	private JButton right;
+	private JButton up;
+	private JButton down;
 	private int currentBaseColor;
 	private int currentDirection;
-	private final int HORIZONTAL = 0;
-	private final int VERTICAL = 1;
-	private final int LCD = 2;
 	private Color currentColor;
 	private int currentEditMode;
 	private int width;
 	private int height;
 	private GridLayout toolLayout;
+	private int currentPoint;
 
 	/**
 	 * Common editing components that will be reused
@@ -74,13 +77,14 @@ public class EditingTools extends JPanel
 		
 		toolLayout = new GridLayout(0,1);
 		mainPanel = new JPanel(new GridLayout(0, 1));
-		currentDirection = HORIZONTAL;
+		currentDirection = ScanlinesProfile.HORIZONTAL;
 		currentEditMode = -1;
 		currentBaseColor = Make3DProfile.RED;
 		currentColor = new Color(0, 0, 0);
 		width = -99;
 		height = -99;
-		optionPanel = new JPanel(new GridLayout(1,0));
+		currentPoint = 0;
+		bleedDirectionPanel = new JPanel(new GridLayout(1,0));
 		sliderPanel = new JPanel(new GridLayout(0, 1));
 		scanPanel = new JPanel(new GridLayout(1, 0));
 		mainLayout = new SpringLayout();
@@ -110,8 +114,11 @@ public class EditingTools extends JPanel
 		xAxis = new JSlider(JSlider.HORIZONTAL, -100, 100, 0);
 		yAxis = new JSlider(JSlider.HORIZONTAL, -100, 100, 0);
 		
-		okButton = new JButton("OK!");
-		cancelButton = new JButton("Cancel");
+		left = new JButton("Left");
+		right = new JButton("Right");
+		up = new JButton("Up");
+		down = new JButton("Down");
+		
 
 
 		setupPanel();
@@ -123,18 +130,14 @@ public class EditingTools extends JPanel
 	private void setupLayout()
 	{
 
-		mainLayout.putConstraint(SpringLayout.WEST, optionPanel, 250, SpringLayout.WEST, this);
-		mainLayout.putConstraint(SpringLayout.SOUTH, optionPanel, -10, SpringLayout.SOUTH, this);
-		mainLayout.putConstraint(SpringLayout.EAST, optionPanel, -10, SpringLayout.EAST, this);
-		mainLayout.putConstraint(SpringLayout.NORTH, optionPanel, 15, SpringLayout.SOUTH, mainPanel);
+		mainLayout.putConstraint(SpringLayout.WEST, bleedDirectionPanel, 250, SpringLayout.WEST, this);
+		mainLayout.putConstraint(SpringLayout.SOUTH, bleedDirectionPanel, -10, SpringLayout.SOUTH, this);
+		mainLayout.putConstraint(SpringLayout.EAST, bleedDirectionPanel, -10, SpringLayout.EAST, this);
+		mainLayout.putConstraint(SpringLayout.NORTH, bleedDirectionPanel, 15, SpringLayout.SOUTH, mainPanel);
 		mainLayout.putConstraint(SpringLayout.NORTH, mainPanel, 10, SpringLayout.NORTH, this);
 		mainLayout.putConstraint(SpringLayout.WEST, mainPanel, 10, SpringLayout.WEST, this);
 		mainLayout.putConstraint(SpringLayout.SOUTH, mainPanel, 310, SpringLayout.NORTH, this);
 		mainLayout.putConstraint(SpringLayout.EAST, mainPanel, -10, SpringLayout.EAST, this);
-		mainLayout.putConstraint(SpringLayout.NORTH, okButton, 0, SpringLayout.NORTH, cancelButton);
-		mainLayout.putConstraint(SpringLayout.EAST, okButton, -6, SpringLayout.WEST, cancelButton);
-		mainLayout.putConstraint(SpringLayout.SOUTH, cancelButton, -10, SpringLayout.SOUTH, this);
-		mainLayout.putConstraint(SpringLayout.EAST, cancelButton, -10, SpringLayout.EAST, this);
 	}
 
 	/**
@@ -143,10 +146,11 @@ public class EditingTools extends JPanel
 	private void setupPanel()
 	{
 		this.setLayout(toolLayout);
-//		this.add(mainPanel);
-//		optionPanel.add(okButton);
-//		optionPanel.add(cancelButton);
-//		this.add(optionPanel);
+
+		bleedDirectionPanel.add(left);
+		bleedDirectionPanel.add(right);
+		bleedDirectionPanel.add(up);
+		bleedDirectionPanel.add(down);
 		
 		xAxisPanel.add(shiftX, 0);
 		xAxisPanel.add(xAxis, 1);
@@ -181,6 +185,8 @@ public class EditingTools extends JPanel
 	private void setupListeners()
 	{
 		setupColorButtons();
+		
+		setupDirection();
 
 		xAxis.addChangeListener(new ChangeListener()
 		{
@@ -196,7 +202,20 @@ public class EditingTools extends JPanel
 			public void actionPerformed(ActionEvent enter)
 			{
 				shiftX.setCurrentValue(shiftX.getTextFieldText());
-				xAxis.setValue(shiftX.getCurrentValue());
+				if(shiftX.getCurrentValue() > xAxis.getMaximum())
+				{
+					shiftX.setCurrentValue(xAxis.getMaximum());
+					xAxis.setValue(xAxis.getMaximum());
+				}
+				else if (shiftX.getCurrentValue() < xAxis.getMinimum())
+				{
+					shiftX.setCurrentValue(xAxis.getMinimum());
+					xAxis.setValue(xAxis.getMinimum());
+				}
+				else
+				{
+					xAxis.setValue(shiftX.getCurrentValue());
+				}
 
 				applyEdit(currentEditMode);
 			}
@@ -215,8 +234,22 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent enter)
 			{
+			
 				shiftY.setCurrentValue(shiftY.getTextFieldText());
-				yAxis.setValue(shiftY.getCurrentValue());
+				if(shiftY.getCurrentValue() > yAxis.getMaximum())
+				{
+					shiftY.setCurrentValue(yAxis.getMaximum());
+					yAxis.setValue(yAxis.getMaximum());
+				}
+				else if (shiftY.getCurrentValue() < yAxis.getMinimum())
+				{
+					shiftY.setCurrentValue(yAxis.getMinimum());
+					yAxis.setValue(yAxis.getMinimum());
+				}
+				else
+				{
+					yAxis.setValue(shiftY.getCurrentValue());
+				}
 				applyEdit(currentEditMode);
 			}
 		});
@@ -254,7 +287,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentDirection = HORIZONTAL;
+				currentDirection = ScanlinesProfile.HORIZONTAL;
 				applyEdit(currentEditMode);
 
 			}
@@ -264,7 +297,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentDirection = VERTICAL;
+				currentDirection = ScanlinesProfile.VERTICAL;
 				applyEdit(currentEditMode);
 
 			}
@@ -274,12 +307,60 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentDirection = LCD;
+				currentDirection = ScanlinesProfile.LCD;
 				applyEdit(currentEditMode);
 
 			}
 		});
 
+	}
+	
+	private void setupDirection()
+	{
+		up.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				showXAxis(false);
+				showYAxis(true);
+				currentDirection = BleedProfile.UP;
+				applyEdit(currentEditMode);
+
+			}
+		});
+		down.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				showXAxis(false);
+				showYAxis(true);
+				currentDirection = BleedProfile.DOWN;
+				applyEdit(currentEditMode);
+
+			}
+		});
+		left.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				showXAxis(true);
+				showYAxis(false);
+				currentDirection = BleedProfile.LEFT;
+				applyEdit(currentEditMode);
+
+			}
+		});
+		right.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				showXAxis(true);
+				showYAxis(false);
+				currentDirection = BleedProfile.RIGHT;
+				applyEdit(currentEditMode);
+
+			}
+		});
 	}
 
 	/**
@@ -326,6 +407,19 @@ public class EditingTools extends JPanel
 		else if (type == EditProfile.GRAIN)
 		{
 			app.grain(shiftX.getCurrentValue());
+		}
+		else if(type == EditProfile.BLEED)
+		{
+			if(currentDirection == BleedProfile.LEFT || currentDirection == BleedProfile.RIGHT)
+			{
+				currentPoint = shiftX.getCurrentValue();
+			}
+			else
+			{
+				currentPoint = shiftY.getCurrentValue();
+			}
+			
+			app.bleed(currentPoint,currentDirection);
 		}
 //		else if (type == NOISE)
 //		{
@@ -398,6 +492,26 @@ public class EditingTools extends JPanel
 		currentEditMode = EditProfile.GRAIN;
 		this.add(sliderPanel);
 
+	}
+	
+	public void setBleed()
+	{
+		showYAxis(false);
+		this.add(sliderPanel);
+		this.add(bleedDirectionPanel);
+		shiftX.setText("x-Pos:");
+		shiftY.setText("y-Pos:");
+		shiftX.setCurrentValue(0);
+		shiftY.setCurrentValue(0);
+		
+		xAxis.setValue(0);
+		yAxis.setValue(0);
+		xAxis.setMinimum(0);
+		xAxis.setMaximum(width-1);
+		yAxis.setMinimum(0);
+		yAxis.setMaximum(height-1);
+		currentEditMode = EditProfile.BLEED;
+		
 	}
 	
 	private void showXAxis(boolean state)
