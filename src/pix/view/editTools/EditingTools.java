@@ -315,6 +315,9 @@ public class EditingTools extends JPanel
 
 	}
 	
+	/**
+	 * sets up buttons used for Scanlines direction
+	 */
 	private void setupDirection()
 	{
 		up.addActionListener(new ActionListener()

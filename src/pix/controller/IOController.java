@@ -94,6 +94,7 @@ public class IOController
 				{
 					setRecentSavePath(explorer.getCurrentDirectory().toString());
 					JOptionPane.showMessageDialog(app.getFrame(), "Save successful");
+//					saveStack();
 				}
 				else
 				{
@@ -116,7 +117,7 @@ public class IOController
 		}
 		catch (IOException error)
 		{
-			JOptionPane.showMessageDialog(null, error.getMessage(), "File Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "error occured while saving stack", "File Error", JOptionPane.ERROR_MESSAGE);
 		}
 	}
 
@@ -137,9 +138,9 @@ public class IOController
 			JOptionPane.showMessageDialog(null, "No Save file", "Loading images", JOptionPane.INFORMATION_MESSAGE);
 
 		}
-		catch (ClassNotFoundException pokemonError)
+		catch (ClassNotFoundException notFound)
 		{
-			JOptionPane.showMessageDialog(null, pokemonError.getMessage(), "Type Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, notFound.getMessage(), "Type Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
 		return saved;

@@ -32,7 +32,7 @@ public class PixController
 		currentImageSize = new Dimension();
 		minimumFrameSize = new Dimension(appFrame.getToolPanelSize());
 		appIO = new IOController(this);
-		print.setState(true);
+		print.setState(false);
 
 		fileLoaded = false;
 		pictureTitle = "owo";
@@ -42,8 +42,15 @@ public class PixController
 		if(appIO.canRestore())
 		{
 			editStack = appIO.loadStack();
+			if(editStack != null)
+			{
 			this.setCurrentImage(editStack.getLastEdit());
 			appFrame.loadStack();
+			}
+			else
+			{
+				editStack = new ImageStack(maxMemory,this);
+			}
 		}
 		else
 		{
