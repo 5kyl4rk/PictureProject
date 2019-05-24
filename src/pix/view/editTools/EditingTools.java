@@ -489,6 +489,11 @@ public class EditingTools extends JPanel
 		this.applyEdit(currentEditMode);
 	}
 
+	/**
+	 * sets the main panel to view components needed for
+	 * {@link pix.controller.PixController#grain(int)
+	 * grain()}
+	 */
 	public void setGrain()
 	{
 		showYAxis(false);
@@ -503,6 +508,10 @@ public class EditingTools extends JPanel
 
 	}
 	
+	/**
+	 * sets the main panel to view components needed for
+	 * {@link pix.controller.PixController#bleed(int, int) bleed()}
+	 */
 	public void setBleed()
 	{
 		showYAxis(false);

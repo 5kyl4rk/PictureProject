@@ -146,6 +146,10 @@ public class PixController
 		appFrame.updateDisplay();
 	}
 	
+	/**
+	 * Uses the {@link pixLab.classes.Picture#grain(int, int)
+	 * grain()} method to make the image look grainy
+	 */
 	public void grain(int hardness)
 	{
 		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
@@ -159,7 +163,9 @@ public class PixController
 		appFrame.updateDisplay();
 
 	}
-	
+	/**
+	 * <i><b>Not Implemented Yet</b></i><br> Uses the {@link pixLab.classes.Picture#noise(Color, double) noise()} method to make the image have 'noise'
+	 */
 	public void noise(int hardness, int percent, Color color)
 	{
 
@@ -170,6 +176,9 @@ public class PixController
 				
 	}
 	
+	/**
+	 * Uses the {@link pixLab.classes.Picture#bleed(int, int) bleed()} method to stretch a section of the image
+	 */
 	public void bleed(int point, int direction)
 	{
 		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));

@@ -17,6 +17,11 @@ public class ImageStack implements Serializable
 	private PixController app;
 	private Picture originalImage;
 	
+	/**
+	 * A modified ArrayList that functions as a stack for storing images
+	 * @param size the maximum size allowed, shouldn't be to big to avoid wasteful storage/memory
+	 * @param app reference to the main controller
+	 */
 	public ImageStack(int size, PixController app)
 	{
 		editStack = new ArrayList<Picture>();

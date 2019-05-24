@@ -339,6 +339,10 @@ public class GlitchControlPanel extends JPanel
 		
 	}
 	
+	/**
+	 * determines if it should save the current image/activate other components
+	 * @param result 
+	 */
 	private void processToolRequest(int result)
 	{
 		if (result == 1)
