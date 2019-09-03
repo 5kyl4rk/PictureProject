@@ -106,7 +106,7 @@ public class ImageStack implements Serializable
 		 */
 		public void clearStack()
 		{
-			for (int index = 0; index < editStack.size(); index++)
+			for (int index = editStack.size() -1; index >= 0 ; index--)
 			{
 				editStack.remove(index);
 			}
