@@ -11,15 +11,18 @@ public class PixController
 	private BasicDebug print;
 	IOController appIO;
 	private Picture activeImage;
+	private Picture originalImage;
 	/**
 	 * index 0 is the top of the stack
 	 */
 	private EditStack editStack;
+	private EditProfile currentProfile;
 	private GlitchFrame appFrame;
 	private Dimension currentImageSize;
 	private Dimension minimumFrameSize;
-	//EditStack will only hold information, which shouldn't cause too much data overflow
-	//TODO: set a cap for EditStack (100 should be enough?)
+	// EditStack will only hold information, which shouldn't cause too much data
+	// overflow
+	// TODO: set a cap for EditStack (100 should be enough?)
 	private int maxMemory;
 	private boolean fileLoaded;
 	private String pictureTitle;
@@ -30,6 +33,8 @@ public class PixController
 	public PixController()
 	{
 		print = new BasicDebug();
+		editStack = new EditStack(this);
+		currentProfile =(EditProfile) new OriginalProfile();
 		appFrame = new GlitchFrame(this);
 		currentImageSize = new Dimension();
 		minimumFrameSize = new Dimension(appFrame.getToolPanelSize());
@@ -40,7 +45,7 @@ public class PixController
 		pictureTitle = "owo";
 
 		appIO.loadConfig();
-		
+
 		appFrame.setMinimumSize(getMinimumSize());
 		appFrame.setVisible(true);
 
@@ -80,103 +85,135 @@ public class PixController
 	 * 
 	 * Uses the {@link pixLab.classes.Picture#glitch() glitch()} method from Picture
 	 */
-	public void glitch()
+
+	public Picture recreateEdits(int stackIndex)
 	{
-		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
-		temp.glitch();
-		addToStack(getCurrentStackIndex(), temp);
-		this.setCurrentImage(temp);
-		appFrame.updateDisplay();
+		Picture temp = originalImage;
+
+		for (int index = 0; index <= stackIndex; index++)
+		{
+			temp = this.applyEditProfile(editStack.getLastEdit(index), temp);
+		}
+
+		return temp;
 	}
+
+	public Picture applyEditProfile(EditProfile profile, Picture imageToApply)
+	{
+		Picture temp = imageToApply;
+
+		switch (profile.getType())
+		{
+		case EditProfile.GLITCH:
+			temp.glitch();
+			break;
+		case EditProfile.BLEED:
+			temp = this.bleed(temp, ((BleedProfile) profile).getStartPoint(), ((BleedProfile) profile).getDirection());
+			break;
+		case EditProfile.MAKE3D:
+			temp = this.make3D(temp, ((Make3DProfile) profile).getXAxis(), ((Make3DProfile) profile).getYAxis(), ((Make3DProfile) profile).getBaseColor());
+			break;
+		case EditProfile.SCANLINES:
+			temp = this.scanline(temp,((ScanlinesProfile) profile).getThickness(), ((ScanlinesProfile) profile).getSpread(), ((ScanlinesProfile) profile).getColor(),
+					((ScanlinesProfile) profile).getDirection());
+			break;
+		case EditProfile.GRAIN:
+			temp = this.grain(temp,((GrainProfile) profile).getHardness());
+		default:
+			break;
+		}
+
+		return temp;
+	}
+
 
 	/**
 	 * Uses the {@link pixLab.classes.Picture#make3D(int, int, int) make3D()} method
 	 * from Picture
 	 */
-	public void make3D(int shiftX, int shiftY, int color)
+	public Picture make3D(Picture imageToEdit, int shiftX, int shiftY, int color)
 	{
-		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
-		temp.make3D(color, shiftX, 0);
-		temp.make3D(color, shiftY, 1);
-		this.setCurrentImage(temp);
-		appFrame.updateDisplay();
+		imageToEdit.make3D(color, shiftX, 0);
+		imageToEdit.make3D(color, shiftY, 1);
+		return imageToEdit;
 	}
 
 	/**
 	 * Uses the {@link pixLab.classes.Picture#scanlines(int, int, Color)
 	 * scanlines()} method and its varieties from Picture
 	 */
-	public void scanline(int thickness, int spread, Color color, int type)
+	public Picture scanline(Picture imageToEdit, int thickness, int spread, Color color, int type)
 	{
-		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
 		if (type == ScanlinesProfile.VERTICAL)
 		{
-			temp.verticalScanlines(spread, thickness, color);
+			imageToEdit.verticalScanlines(spread, thickness, color);
 
 		}
 		else if (type == ScanlinesProfile.LCD)
 		{
-			temp.lcd(spread, thickness, color);
+			imageToEdit.lcd(spread, thickness, color);
 		}
 		else
 		{
-			temp.scanlines(spread, thickness, color);
+			imageToEdit.scanlines(spread, thickness, color);
 		}
 
-		print("app spread: "+spread);
+		//DEBUG STUFF
+		print("app spread: " + spread);
 		print("app thickness: " + thickness);
 		
-		this.setCurrentImage(temp);
-		appFrame.updateDisplay();
+		return imageToEdit;
+
+		
 	}
-	
+
 	/**
-	 * Uses the {@link pixLab.classes.Picture#grain(int, int)
-	 * grain()} method to make the image look grainy
+	 * Uses the {@link pixLab.classes.Picture#grain(int, int) grain()} method to
+	 * make the image look grainy
 	 */
-	public void grain(int hardness)
+	public Picture grain(Picture imageToEdit, int hardness)
 	{
-		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
 		int expose = 0;
-		if(hardness < 0)
+		if (hardness < 0)
 		{
 			expose = 1;
 		}
-		temp.grain(hardness,expose);
-		this.setCurrentImage(temp);
-		appFrame.updateDisplay();
-
-	}
-	/**
-	 * <i><b>Not Implemented Yet</b></i><br> Uses the {@link pixLab.classes.Picture#noise(Color, double) noise()} method to make the image have 'noise'
-	 */
-	public void noise(int hardness, int percent, Color color)
-	{
-
-		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
-		temp.noise(color,(double) percent);
-		this.setCurrentImage(temp);
-		appFrame.updateDisplay();
-				
-	}
+		imageToEdit.grain(hardness, expose);
 	
+		return imageToEdit;
+
+	}
+
 	/**
-	 * Uses the {@link pixLab.classes.Picture#bleed(int, int) bleed()} method to stretch a section of the image
+	 * <i><b>Not Implemented Yet</b></i><br>
+	 * Uses the {@link pixLab.classes.Picture#noise(Color, double) noise()} method
+	 * to make the image have 'noise'
 	 */
-	public void bleed(int point, int direction)
+	public Picture noise(Picture imageToEdit, int hardness, int percent, Color color)
 	{
-		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
-		if(direction == BleedProfile.LEFT || direction == BleedProfile.RIGHT)
+
+		imageToEdit.noise(color, (double) percent);
+		return imageToEdit;
+
+	}
+
+	/**
+	 * Uses the {@link pixLab.classes.Picture#bleed(int, int) bleed()} method to
+	 * stretch a section of the image
+	 */
+	public Picture bleed(Picture imageToEdit, int point, int direction)
+	{
+		if (direction == BleedProfile.LEFT || direction == BleedProfile.RIGHT)
 		{
-			temp.bleed(point, direction);
+			imageToEdit.bleed(point, direction);
 		}
 		else
 		{
-			temp.verticalBleed(point, direction);
+			imageToEdit.verticalBleed(point, direction);
 		}
-		this.setCurrentImage(temp);
-		appFrame.updateDisplay();
 		
+		return imageToEdit;
+
 	}
 
 	// ==== Stack Management ===
@@ -186,7 +223,7 @@ public class PixController
 	 * @param editToAdd
 	 *            image to add to the stack
 	 */
-	public void addToStack(Picture editToAdd)
+	public void addToStack(EditProfile editToAdd)
 	{
 		addToStack(0, editToAdd);
 	}
@@ -200,7 +237,7 @@ public class PixController
 	 * @param editToAdd
 	 *            the image to add to the stack
 	 */
-	public void addToStack(int index, Picture editToAdd)
+	public void addToStack(int index, EditProfile editToAdd)
 	{
 		editStack.addToStack(index, editToAdd);
 	}
@@ -280,20 +317,25 @@ public class PixController
 	{
 		return activeImage;
 	}
+	
+	public EditProfile getCurrentProfile()
+	{
+		return currentProfile;
+	}
 
 	public Picture getOriginal()
 	{
-		return editStack.getOriginalImage();
+		return originalImage;
 	}
 
-	public Picture getLastEdit()
+	public EditProfile getLastEdit()
 	{
-		return editStack.getLastEdit();
+		return getLastEdit(editStack.getCurrentIndex());
 	}
 
-	public Picture getLastEdit(int index)
+	public EditProfile getLastEdit(int stackIndex)
 	{
-		return editStack.getLastEdit(index);
+		return editStack.getLastEdit(stackIndex);
 	}
 
 	public int getStackSize()
@@ -336,15 +378,20 @@ public class PixController
 	{
 		activeImage = new Picture(imageToLoad);
 	}
+	
+	public void setCurrentProfile(EditProfile profile)
+	{
+		currentProfile = profile;
+	}
 
 	public void setOriginalImage(Picture image)
 	{
-		editStack.setOriginalImage(image);;
+		originalImage = new Picture(image);
 	}
 
 	public void setOriginalImage(String imageToLoad)
 	{
-		editStack.setOriginalImage(imageToLoad);;
+		originalImage = new Picture(imageToLoad);
 	}
 
 	public void setPictureTitle(String name)
@@ -372,8 +419,8 @@ public class PixController
 	{
 		return appFrame;
 	}
-	
-	public ImageStack getStack()
+
+	public EditStack getStack()
 	{
 		return editStack;
 	}

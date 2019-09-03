@@ -79,6 +79,8 @@ public class EditStack
 	{
 		clearStack();
 		restartStackIndex();
+		OriginalProfile og = new OriginalProfile();
+		editList.add((EditProfile)og);
 	}
 	
 	public int getSize()

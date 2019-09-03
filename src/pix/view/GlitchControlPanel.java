@@ -156,7 +156,7 @@ public class GlitchControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				app.glitch();
+				app.setCurrentProfile((EditProfile)new GlitchProfile());
 				editMade();
 				updateUndoRedo();
 			}
@@ -220,7 +220,7 @@ public class GlitchControlPanel extends JPanel
 				}
 				else
 				{
-					app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
+					app.setCurrentImage(app.recreateEdits(app.getCurrentStackIndex()));
 					app.updateDisplay();
 					compareChanges.setText("Show Original");
 					save.setVisible(true);
@@ -241,7 +241,7 @@ public class GlitchControlPanel extends JPanel
 					{
 						app.goDownStack();
 						redo.setEnabled(true);
-						app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
+						app.setCurrentImage(app.recreateEdits(app.getCurrentStackIndex()));
 
 					}
 
@@ -267,7 +267,7 @@ public class GlitchControlPanel extends JPanel
 					{
 						app.goUpStack();
 						undo.setEnabled(true);
-						app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
+						app.setCurrentImage(app.recreateEdits(app.getCurrentStackIndex()));
 
 					}
 					if (app.getCurrentStackIndex() == 0)
@@ -288,7 +288,7 @@ public class GlitchControlPanel extends JPanel
 				if (canEdit == true)
 				{
 					app.setCurrentImage(app.getOriginal());
-					app.addToStack(app.getCurrentStackIndex(),app.getCurrentImage());
+					app.addToStack(app.getCurrentStackIndex(),app.getLastEdit());
 					app.updateDisplay();
 					repaint();
 					updateUndoRedo();
@@ -347,7 +347,7 @@ public class GlitchControlPanel extends JPanel
 	{
 		if (result == 1)
 		{
-			app.addToStack(app.getCurrentStackIndex(),app.getCurrentImage());
+			app.addToStack(app.getCurrentStackIndex(),app.getCurrentProfile());
 			editMade();
 			sidebar.restartPanel();
 			updateUndoRedo();
@@ -356,7 +356,7 @@ public class GlitchControlPanel extends JPanel
 		else
 		{
 			sidebar.restartPanel();
-			app.setCurrentImage(app.getLastEdit(app.getCurrentStackIndex()));
+			app.setCurrentImage(app.recreateEdits(app.getCurrentStackIndex()));
 			app.updateDisplay();
 		}
 	}
