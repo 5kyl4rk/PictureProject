@@ -61,6 +61,11 @@ public class GlitchFrame extends JFrame
 	{
 		this.setLocationRelativeTo(null);
 	}
+	
+	public void loadStack()
+	{
+		appPanel.loadStack();
+	}
 	public Dimension getToolPanelSize()
 	{
 		return appPanel.getToolPanelSize();

@@ -30,6 +30,8 @@ public class GlitchControlPanel extends JPanel
 	private JButton scanlines;
 	private EditingTools sidebar;//
 	private SpringLayout appLayout;
+	private JButton bleed;
+	
 
 	/**
 	 * the panel that will handle all button actions such as saving, loading, undo/redo, and image editing.
@@ -48,6 +50,7 @@ public class GlitchControlPanel extends JPanel
 		load = new JButton("Load");
 		save = new JButton("Save");
 		glitch = new JButton("Glitch");
+		bleed = new JButton("Bleed");
 		undo = new JButton("Undo");
 		redo = new JButton("Redo");
 		grain = new JButton("Grain");
@@ -92,6 +95,7 @@ public class GlitchControlPanel extends JPanel
 		glitchPanel.add(scanlines);
 		glitchPanel.add(grain);
 		switchPanel.add(redo);
+		glitchPanel.add(bleed);
 		this.add(restart);
 		compareChanges.setVisible(false);
 		save.setVisible(false);
@@ -107,6 +111,12 @@ public class GlitchControlPanel extends JPanel
 		appLayout.putConstraint(SpringLayout.NORTH, glitchPanel, 30, SpringLayout.SOUTH, saveLoadPanel);
 		appLayout.putConstraint(SpringLayout.SOUTH, switchPanel, 0, SpringLayout.SOUTH, this);
 		appLayout.putConstraint(SpringLayout.EAST, switchPanel, 0, SpringLayout.EAST, saveLoadPanel);
+	}
+	public void loadStack()
+	{
+		app.recenter();
+		showTools(true);
+		sidebar.updateDimensions();
 	}
 	
 	/**
@@ -180,6 +190,16 @@ public class GlitchControlPanel extends JPanel
 				
 				sidebar.setGrain();
 				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "Grainy", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
+				processToolRequest(result);
+			}
+		});
+		
+		bleed.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent click)
+			{
+				sidebar.setBleed();
+				int result = JOptionPane.showOptionDialog(getSelf(), sidebar, "Bleed", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, genericOptions, genericOptions[0]);
 				processToolRequest(result);
 			}
 		});
@@ -319,6 +339,10 @@ public class GlitchControlPanel extends JPanel
 		
 	}
 	
+	/**
+	 * determines if it should save the current image/activate other components
+	 * @param result 
+	 */
 	private void processToolRequest(int result)
 	{
 		if (result == 1)

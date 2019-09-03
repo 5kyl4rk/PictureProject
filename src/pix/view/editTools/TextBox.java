@@ -16,6 +16,11 @@ public class TextBox extends JPanel
 	private int currentValue;
 	private GridLayout appLayout;
 	
+	/**
+	 * a reusable text field that provides a JLabel as a 'title' and a JTextField for input.  It will parse the value and store it for easy access.
+	 * @param app reference to the main controller
+	 * @param name what the 'title' should be
+	 */
 	public TextBox(PixController app, String name)
 	{
 		super();

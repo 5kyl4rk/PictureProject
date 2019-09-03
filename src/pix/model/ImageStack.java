@@ -3,6 +3,9 @@ package pix.model;
 import pixLab.classes.Picture;
 import pix.controller.PixController;
 
+import java.util.ArrayList;
+
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
@@ -12,7 +15,13 @@ public class ImageStack implements Serializable
 	private int maxMemory;
 	private ArrayList<Picture> editStack;
 	private PixController app;
+	private Picture originalImage;
 	
+	/**
+	 * A modified ArrayList that functions as a stack for storing images
+	 * @param size the maximum size allowed, shouldn't be to big to avoid wasteful storage/memory
+	 * @param app reference to the main controller
+	 */
 	public ImageStack(int size, PixController app)
 	{
 		editStack = new ArrayList<Picture>();
@@ -143,6 +152,21 @@ public class ImageStack implements Serializable
 			}
 			
 			currentIndex = index;
+		}
+		
+		public Picture getOriginalImage()
+		{
+			return originalImage;
+		}
+		
+		public void setOriginalImage(Picture image)
+		{
+			originalImage = new Picture(image);
+		}
+
+		public void setOriginalImage(String imageToLoad)
+		{
+			originalImage = new Picture(imageToLoad);
 		}
 
 }

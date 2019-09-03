@@ -48,7 +48,7 @@ public class GlitchMasterPanel extends JPanel
 	{
 		this.setLayout(appLayout);
 		this.add(displayImage);
-		this.add(controlPane);
+//		this.add(controlPane);
 		this.add(tools);
 	}
 
@@ -74,7 +74,7 @@ public class GlitchMasterPanel extends JPanel
 	}
 	
 	/**
-	 * Sets up a scroll pane, <b>Not Implemented</b>
+	 * Sets up a scroll pane, <b>Not Implemented Yet</b>
 	 */
 	private void setupScrollPane()
 	{
@@ -90,6 +90,12 @@ public class GlitchMasterPanel extends JPanel
 	{
 		updateImage();
 		repaint();
+	}
+	
+	public void loadStack()
+	{
+		tools.loadStack();
+		updateDisplay();
 	}
 	
 	public Dimension getToolPanelSize()

@@ -351,6 +351,10 @@ public class Picture extends SimplePicture
 		{
 			spread = 1;
 		}
+		if(thickness < 1)
+		{
+			thickness = 1;
+		}
 		if (spread > this.getHeight())
 		{
 			spread = this.getHeight();
@@ -1396,6 +1400,13 @@ public class Picture extends SimplePicture
 		}
 	}
 
+	/**
+	 * repeats the pixels up to a certain point
+	 * @param point the spot you want to repeat up to
+	 * @param direction <ul> <li>0 = to the left of the point</li>
+	 * <li> 1 = to the right of the start point</li></ul>
+	 * 
+	 */
 	public void bleed(int point, int direction)
 	{
 		Pixel[][] pixels = this.getPixels2D();
@@ -1424,6 +1435,11 @@ public class Picture extends SimplePicture
 		}
 	}
 
+	/**
+	 * repeats the pixels up to a certain point, but vertically
+	 * @param point the spot you want to repeat to 
+	 * @param direction <ul><li>0 = up</li><li>1 = down</li></ul>
+	 */
 	public void verticalBleed(int point, int direction)
 	{
 		Pixel[][] pixels = this.getPixels2D();

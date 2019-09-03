@@ -11,7 +11,6 @@ public class PixController
 	private BasicDebug print;
 	IOController appIO;
 	private Picture activeImage;
-	private Picture originalImage;
 	/**
 	 * index 0 is the top of the stack
 	 */
@@ -33,21 +32,31 @@ public class PixController
 		currentImageSize = new Dimension();
 		minimumFrameSize = new Dimension(appFrame.getToolPanelSize());
 		appIO = new IOController(this);
-		print.setState(true);
+		print.setState(false);
 
 		fileLoaded = false;
 		pictureTitle = "owo";
 
 		appIO.loadConfig();
+		
 		if(appIO.canRestore())
 		{
 			editStack = appIO.loadStack();
+			if(editStack != null)
+			{
+			this.setCurrentImage(editStack.getLastEdit());
+			appFrame.loadStack();
+			}
+			else
+			{
+				editStack = new ImageStack(maxMemory,this);
+			}
 		}
 		else
 		{
 			editStack = new ImageStack(maxMemory,this);
-
 		}
+		
 		appFrame.setMinimumSize(getMinimumSize());
 		appFrame.setVisible(true);
 
@@ -116,12 +125,12 @@ public class PixController
 	public void scanline(int thickness, int spread, Color color, int type)
 	{
 		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
-		if (type == 1)
+		if (type == ScanlinesProfile.VERTICAL)
 		{
 			temp.verticalScanlines(spread, thickness, color);
 
 		}
-		else if (type == 2)
+		else if (type == ScanlinesProfile.LCD)
 		{
 			temp.lcd(spread, thickness, color);
 		}
@@ -130,10 +139,17 @@ public class PixController
 			temp.scanlines(spread, thickness, color);
 		}
 
+		print("app spread: "+spread);
+		print("app thickness: " + thickness);
+		
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 	}
 	
+	/**
+	 * Uses the {@link pixLab.classes.Picture#grain(int, int)
+	 * grain()} method to make the image look grainy
+	 */
 	public void grain(int hardness)
 	{
 		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
@@ -147,14 +163,36 @@ public class PixController
 		appFrame.updateDisplay();
 
 	}
-	
+	/**
+	 * <i><b>Not Implemented Yet</b></i><br> Uses the {@link pixLab.classes.Picture#noise(Color, double) noise()} method to make the image have 'noise'
+	 */
 	public void noise(int hardness, int percent, Color color)
 	{
+
 		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
 		temp.noise(color,(double) percent);
 		this.setCurrentImage(temp);
 		appFrame.updateDisplay();
 				
+	}
+	
+	/**
+	 * Uses the {@link pixLab.classes.Picture#bleed(int, int) bleed()} method to stretch a section of the image
+	 */
+	public void bleed(int point, int direction)
+	{
+		Picture temp = new Picture(getLastEdit(getCurrentStackIndex()));
+		if(direction == BleedProfile.LEFT || direction == BleedProfile.RIGHT)
+		{
+			temp.bleed(point, direction);
+		}
+		else
+		{
+			temp.verticalBleed(point, direction);
+		}
+		this.setCurrentImage(temp);
+		appFrame.updateDisplay();
+		
 	}
 
 	// ==== Stack Management ===
@@ -261,7 +299,7 @@ public class PixController
 
 	public Picture getOriginal()
 	{
-		return originalImage;
+		return editStack.getOriginalImage();
 	}
 
 	public Picture getLastEdit()
@@ -317,12 +355,12 @@ public class PixController
 
 	public void setOriginalImage(Picture image)
 	{
-		originalImage = new Picture(image);
+		editStack.setOriginalImage(image);;
 	}
 
 	public void setOriginalImage(String imageToLoad)
 	{
-		originalImage = new Picture(imageToLoad);
+		editStack.setOriginalImage(imageToLoad);;
 	}
 
 	public void setPictureTitle(String name)
