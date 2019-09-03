@@ -105,6 +105,7 @@ public class IOController
 		}
 	}
 	
+	/*TODO: fix saving/loading workspace
 	public void saveStack()
 	{
 		try
@@ -145,6 +146,7 @@ public class IOController
 		
 		return saved;
 	}
+	*/
 
 	// ===== Config loading =====
 	/**

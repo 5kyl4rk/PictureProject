@@ -14,10 +14,12 @@ public class PixController
 	/**
 	 * index 0 is the top of the stack
 	 */
-	private ImageStack editStack;
+	private EditStack editStack;
 	private GlitchFrame appFrame;
 	private Dimension currentImageSize;
 	private Dimension minimumFrameSize;
+	//EditStack will only hold information, which shouldn't cause too much data overflow
+	//TODO: set a cap for EditStack (100 should be enough?)
 	private int maxMemory;
 	private boolean fileLoaded;
 	private String pictureTitle;
@@ -38,24 +40,6 @@ public class PixController
 		pictureTitle = "owo";
 
 		appIO.loadConfig();
-		
-		if(appIO.canRestore())
-		{
-			editStack = appIO.loadStack();
-			if(editStack != null)
-			{
-			this.setCurrentImage(editStack.getLastEdit());
-			appFrame.loadStack();
-			}
-			else
-			{
-				editStack = new ImageStack(maxMemory,this);
-			}
-		}
-		else
-		{
-			editStack = new ImageStack(maxMemory,this);
-		}
 		
 		appFrame.setMinimumSize(getMinimumSize());
 		appFrame.setVisible(true);
