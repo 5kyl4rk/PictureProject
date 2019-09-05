@@ -14,7 +14,7 @@ import javax.swing.event.ChangeListener;
 import pix.model.BleedProfile;
 import pix.model.EditProfile;
 import pix.model.Make3DProfile;
-import pix.model.ScanlinesProfile;
+import pix.model.ScanlineProfile;
 import pix.controller.PixController;
 
 /**
@@ -77,7 +77,7 @@ public class EditingTools extends JPanel
 		
 		toolLayout = new GridLayout(0,1);
 		mainPanel = new JPanel(new GridLayout(0, 1));
-		currentDirection = ScanlinesProfile.HORIZONTAL;
+		currentDirection = ScanlineProfile.HORIZONTAL;
 		currentEditMode = -1;
 		currentBaseColor = Make3DProfile.RED;
 		currentColor = new Color(0, 0, 0);
@@ -287,7 +287,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentDirection = ScanlinesProfile.HORIZONTAL;
+				currentDirection = ScanlineProfile.HORIZONTAL;
 				applyEdit(currentEditMode);
 
 			}
@@ -297,7 +297,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentDirection = ScanlinesProfile.VERTICAL;
+				currentDirection = ScanlineProfile.VERTICAL;
 				applyEdit(currentEditMode);
 
 			}
@@ -307,7 +307,7 @@ public class EditingTools extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				currentDirection = ScanlinesProfile.LCD;
+				currentDirection = ScanlineProfile.LCD;
 				applyEdit(currentEditMode);
 
 			}
@@ -401,13 +401,13 @@ public class EditingTools extends JPanel
 	{
 		if (type == EditProfile.MAKE3D)
 		{
-			app.make3D((shiftX.getCurrentValue() * -1), (shiftY.getCurrentValue()), currentBaseColor);
+			app.createMake3DProfile((shiftX.getCurrentValue() * -1), (shiftY.getCurrentValue()), currentBaseColor);
 		}
 		else if (type == EditProfile.SCANLINES)
 		{
 			app.print("thickness:" + shiftX.getCurrentValue());
 			app.print("Spread: " + shiftY.getCurrentValue());
-			app.scanline(shiftX.getCurrentValue(), shiftY.getCurrentValue(), currentColor, currentDirection);
+			app.createScanlineProfile(shiftX.getCurrentValue(), shiftY.getCurrentValue(), currentColor, currentDirection);
 			
 
 			app.print("thickness:" + shiftX.getCurrentValue());
@@ -415,7 +415,7 @@ public class EditingTools extends JPanel
 		}
 		else if (type == EditProfile.GRAIN)
 		{
-			app.grain(shiftX.getCurrentValue());
+			app.createGrainProfile(shiftX.getCurrentValue());
 		}
 		else if(type == EditProfile.BLEED)
 		{
@@ -428,7 +428,7 @@ public class EditingTools extends JPanel
 				currentPoint = shiftY.getCurrentValue();
 			}
 			
-			app.bleed(currentPoint,currentDirection);
+			app.createBleedProfile(currentPoint,currentDirection);
 		}
 //		else if (type == NOISE)
 //		{

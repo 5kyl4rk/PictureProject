@@ -114,8 +114,8 @@ public class PixController
 			temp = this.make3D(temp, ((Make3DProfile) profile).getXAxis(), ((Make3DProfile) profile).getYAxis(), ((Make3DProfile) profile).getBaseColor());
 			break;
 		case EditProfile.SCANLINES:
-			temp = this.scanline(temp,((ScanlinesProfile) profile).getThickness(), ((ScanlinesProfile) profile).getSpread(), ((ScanlinesProfile) profile).getColor(),
-					((ScanlinesProfile) profile).getDirection());
+			temp = this.scanline(temp,((ScanlineProfile) profile).getThickness(), ((ScanlineProfile) profile).getSpread(), ((ScanlineProfile) profile).getColor(),
+					((ScanlineProfile) profile).getDirection());
 			break;
 		case EditProfile.GRAIN:
 			temp = this.grain(temp,((GrainProfile) profile).getHardness());
@@ -144,12 +144,12 @@ public class PixController
 	 */
 	public Picture scanline(Picture imageToEdit, int thickness, int spread, Color color, int type)
 	{
-		if (type == ScanlinesProfile.VERTICAL)
+		if (type == ScanlineProfile.VERTICAL)
 		{
 			imageToEdit.verticalScanlines(spread, thickness, color);
 
 		}
-		else if (type == ScanlinesProfile.LCD)
+		else if (type == ScanlineProfile.LCD)
 		{
 			imageToEdit.lcd(spread, thickness, color);
 		}
@@ -214,6 +214,36 @@ public class PixController
 		
 		return imageToEdit;
 
+	}
+	
+	public GlitchProfile createGlitchProfile()
+	{
+		GlitchProfile temp = new GlitchProfile();
+		return temp;
+	}
+	
+	public Make3DProfile createMake3DProfile(int shiftX, int shiftY, int color)
+	{
+		Make3DProfile temp = new Make3DProfile(shiftX,shiftY,color);
+		return temp;
+	}
+	
+	public ScanlineProfile createScanlineProfile(int thickness, int spread, Color color, int type)
+	{
+		ScanlineProfile temp = new ScanlineProfile(thickness,spread,type,color);
+		return temp;
+	}
+	
+	public BleedProfile createBleedProfile(int point, int direction)
+	{
+		BleedProfile temp = new BleedProfile(point, direction);
+		return temp;
+	}
+	
+	public GrainProfile createGrainProfile(int hardness)
+	{
+		GrainProfile temp = new GrainProfile(hardness);
+		return temp;
 	}
 
 	// ==== Stack Management ===

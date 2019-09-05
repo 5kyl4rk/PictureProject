@@ -156,7 +156,7 @@ public class GlitchControlPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				app.setCurrentProfile((EditProfile)new GlitchProfile());
+				app.setCurrentProfile(app.createGlitchProfile());
 				editMade();
 				updateUndoRedo();
 			}

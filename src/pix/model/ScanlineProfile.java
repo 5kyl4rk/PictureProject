@@ -2,7 +2,7 @@ package pix.model;
 
 import java.awt.Color;
 
-public class ScanlinesProfile implements EditProfile
+public class ScanlineProfile implements EditProfile
 {
 	
 	public static final int HORIZONTAL = 0;
@@ -15,7 +15,7 @@ public class ScanlinesProfile implements EditProfile
 	private Color color;
 	
 	
-	public ScanlinesProfile(int thickness, int spread, int direction, Color color)
+	public ScanlineProfile(int thickness, int spread, int direction, Color color)
 	{
 		this.setThickness(thickness);
 		this.setSpread(spread);
