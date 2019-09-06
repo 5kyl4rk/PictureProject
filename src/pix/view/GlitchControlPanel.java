@@ -132,6 +132,7 @@ public class GlitchControlPanel extends JPanel
 				app.loadImage();
 				if (app.isFileLoaded())
 				{
+					app.addToStack(app.createOriginalProfile());
 					app.recenter();
 					app.restartStack();
 					undo.setEnabled(false);
@@ -157,6 +158,9 @@ public class GlitchControlPanel extends JPanel
 			public void actionPerformed(ActionEvent click)
 			{
 				app.setCurrentProfile(app.createGlitchProfile());
+				app.loadCurrentProfile();
+				app.addToStack(app.getCurrentProfile());
+				app.updateDisplay();
 				editMade();
 				updateUndoRedo();
 			}
@@ -220,7 +224,7 @@ public class GlitchControlPanel extends JPanel
 				}
 				else
 				{
-					app.setCurrentImage(app.recreateEdits(app.getCurrentStackIndex()));
+					app.setCurrentImage(app.getCurrentImage());
 					app.updateDisplay();
 					compareChanges.setText("Show Original");
 					save.setVisible(true);

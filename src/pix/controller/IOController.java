@@ -252,12 +252,25 @@ public class IOController
 		data = data.trim();
 		if (currentOS.startsWith("Windows"))
 		{
+			try {
 			data = data.replaceAll("/", File.separator);
+			}
+			catch (Exception e)
+			{
+				
+			}
 
 		}
 		else
 		{
+			try
+			{
 			data = data.replaceAll("\\\\", File.separator);
+			}
+			catch (Exception e)
+			{
+				
+			}
 
 		}
 

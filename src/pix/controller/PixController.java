@@ -216,34 +216,46 @@ public class PixController
 
 	}
 	
-	public GlitchProfile createGlitchProfile()
+	public EditProfile createOriginalProfile()
+	{
+		OriginalProfile temp = new OriginalProfile();
+		return temp;
+	}
+	
+	public EditProfile createGlitchProfile()
 	{
 		GlitchProfile temp = new GlitchProfile();
 		return temp;
 	}
 	
-	public Make3DProfile createMake3DProfile(int shiftX, int shiftY, int color)
+	public EditProfile createMake3DProfile(int shiftX, int shiftY, int color)
 	{
 		Make3DProfile temp = new Make3DProfile(shiftX,shiftY,color);
 		return temp;
 	}
 	
-	public ScanlineProfile createScanlineProfile(int thickness, int spread, Color color, int type)
+	public EditProfile createScanlineProfile(int thickness, int spread, Color color, int type)
 	{
 		ScanlineProfile temp = new ScanlineProfile(thickness,spread,type,color);
 		return temp;
 	}
 	
-	public BleedProfile createBleedProfile(int point, int direction)
+	public EditProfile createBleedProfile(int point, int direction)
 	{
 		BleedProfile temp = new BleedProfile(point, direction);
 		return temp;
 	}
 	
-	public GrainProfile createGrainProfile(int hardness)
+	public EditProfile createGrainProfile(int hardness)
 	{
 		GrainProfile temp = new GrainProfile(hardness);
 		return temp;
+	}
+	
+	public void loadCurrentProfile()
+	{
+		activeImage = this.recreateEdits(this.getCurrentStackIndex());
+		this.setCurrentImage(this.applyEditProfile(currentProfile,activeImage));
 	}
 
 	// ==== Stack Management ===
